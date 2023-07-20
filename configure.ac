@@ -232,4 +232,5 @@ AC_SUBST(OPENMPFLAGS)
 
 AM_CONDITIONAL(ENABLE_SHARED, test x$enable_shared = xyes)
 
-AC_OUTPUT(Makefile)
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
