@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rscal(INTEGER const n, REAL const da, REAL *dx, INTEGER const incx) {
+void Rscal(mplapackint const n, dd_real const da, dd_real *dx, mplapackint const incx) {
     //
     //  -- Reference BLAS level1 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -48,10 +48,10 @@ void Rscal(INTEGER const n, REAL const da, REAL *dx, INTEGER const incx) {
     if (n <= 0 || incx <= 0) {
         return;
     }
-    INTEGER m = 0;
-    INTEGER i = 0;
-    INTEGER mp1 = 0;
-    INTEGER nincx = 0;
+    mplapackint m = 0;
+    mplapackint i = 0;
+    mplapackint mp1 = 0;
+    mplapackint nincx = 0;
     if (incx == 1) {
         //
         //        code for increment equal to 1

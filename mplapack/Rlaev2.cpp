@@ -29,17 +29,17 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlaev2(REAL const a, REAL const b, REAL const c, REAL &rt1, REAL &rt2, REAL &cs1, REAL &sn1) {
+void Rlaev2(dd_real const a, dd_real const b, dd_real const c, dd_real &rt1, dd_real &rt2, dd_real &cs1, dd_real &sn1) {
     //
     //     Compute the eigenvalues
     //
-    REAL sm = a + c;
-    REAL df = a - c;
-    REAL adf = abs(df);
-    REAL tb = b + b;
-    REAL ab = abs(tb);
-    REAL acmx = 0.0;
-    REAL acmn = 0.0;
+    dd_real sm = a + c;
+    dd_real df = a - c;
+    dd_real adf = abs(df);
+    dd_real tb = b + b;
+    dd_real ab = abs(tb);
+    dd_real acmx = 0.0;
+    dd_real acmn = 0.0;
     if (abs(a) > abs(c)) {
         acmx = a;
         acmn = c;
@@ -47,9 +47,9 @@ void Rlaev2(REAL const a, REAL const b, REAL const c, REAL &rt1, REAL &rt2, REAL
         acmx = c;
         acmn = a;
     }
-    const REAL one = 1.0;
-    REAL rt = 0.0;
-    const REAL two = 2.0;
+    const dd_real one = 1.0;
+    dd_real rt = 0.0;
+    const dd_real two = 2.0;
     if (adf > ab) {
         rt = adf * sqrt(one + pow2((ab / adf)));
     } else if (adf < ab) {
@@ -60,9 +60,9 @@ void Rlaev2(REAL const a, REAL const b, REAL const c, REAL &rt1, REAL &rt2, REAL
         //
         rt = ab * sqrt(two);
     }
-    const REAL zero = 0.0;
-    const REAL half = 0.5e0;
-    INTEGER sgn1 = 0;
+    const dd_real zero = 0.0;
+    const dd_real half = 0.5e0;
+    mplapackint sgn1 = 0;
     if (sm < zero) {
         rt1 = half * (sm - rt);
         sgn1 = -1;
@@ -92,8 +92,8 @@ void Rlaev2(REAL const a, REAL const b, REAL const c, REAL &rt1, REAL &rt2, REAL
     //
     //     Compute the eigenvector
     //
-    REAL cs = 0.0;
-    INTEGER sgn2 = 0;
+    dd_real cs = 0.0;
+    mplapackint sgn2 = 0;
     if (df >= zero) {
         cs = df + rt;
         sgn2 = 1;
@@ -101,9 +101,9 @@ void Rlaev2(REAL const a, REAL const b, REAL const c, REAL &rt1, REAL &rt2, REAL
         cs = df - rt;
         sgn2 = -1;
     }
-    REAL acs = abs(cs);
-    REAL ct = 0.0;
-    REAL tn = 0.0;
+    dd_real acs = abs(cs);
+    dd_real ct = 0.0;
+    dd_real tn = 0.0;
     if (acs > ab) {
         ct = -tb / cs;
         sn1 = one / sqrt(one + ct * ct);

@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha, REAL *a, INTEGER const lda, REAL *x, INTEGER const incx, REAL const beta, REAL *y, INTEGER const incy) {
+void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *x, mplapackint const incx, dd_real const beta, dd_real *y, mplapackint const incy) {
     //
     //  -- Reference BLAS level2 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -54,14 +54,14 @@ void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha
     //
     //     Test the input parameters.
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if (!Mlsame(trans, "N") && !Mlsame(trans, "T") && !Mlsame(trans, "C")) {
         info = 1;
     } else if (m < 0) {
         info = 2;
     } else if (n < 0) {
         info = 3;
-    } else if (lda < max((INTEGER)1, m)) {
+    } else if (lda < max((mplapackint)1, m)) {
         info = 6;
     } else if (incx == 0) {
         info = 8;
@@ -75,8 +75,8 @@ void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha
     //
     //     Quick return if possible.
     //
-    const REAL zero = 0.0;
-    const REAL one = 1.0;
+    const dd_real zero = 0.0;
+    const dd_real one = 1.0;
     if ((m == 0) || (n == 0) || ((alpha == zero) && (beta == one))) {
         return;
     }
@@ -84,8 +84,8 @@ void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha
     //     Set  LENX  and  LENY, the lengths of the vectors x and y, and set
     //     up the start points in  X  and  Y.
     //
-    INTEGER lenx = 0;
-    INTEGER leny = 0;
+    mplapackint lenx = 0;
+    mplapackint leny = 0;
     if (Mlsame(trans, "N")) {
         lenx = n;
         leny = m;
@@ -93,13 +93,13 @@ void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha
         lenx = m;
         leny = n;
     }
-    INTEGER kx = 0;
+    mplapackint kx = 0;
     if (incx > 0) {
         kx = 1;
     } else {
         kx = 1 - (lenx - 1) * incx;
     }
-    INTEGER ky = 0;
+    mplapackint ky = 0;
     if (incy > 0) {
         ky = 1;
     } else {
@@ -111,8 +111,8 @@ void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha
     //
     //     First form  y := beta*y.
     //
-    INTEGER i = 0;
-    INTEGER iy = 0;
+    mplapackint i = 0;
+    mplapackint iy = 0;
     if (beta != one) {
         if (incy == 1) {
             if (beta == zero) {
@@ -142,11 +142,11 @@ void Rgemv(const char *trans, INTEGER const m, INTEGER const n, REAL const alpha
     if (alpha == zero) {
         return;
     }
-    INTEGER jx = 0;
-    INTEGER j = 0;
-    REAL temp = 0.0;
-    INTEGER jy = 0;
-    INTEGER ix = 0;
+    mplapackint jx = 0;
+    mplapackint j = 0;
+    dd_real temp = 0.0;
+    mplapackint jy = 0;
+    mplapackint ix = 0;
     if (Mlsame(trans, "N")) {
         //
         //        Form  y := alpha*A*x + y.

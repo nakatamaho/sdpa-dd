@@ -29,22 +29,22 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlasrt(const char *id, INTEGER const n, REAL *d, INTEGER &info) {
-    INTEGER dir = 0;
-    INTEGER stkpnt = 0;
-    INTEGER stacklen = 32;
-    INTEGER stack[2 * stacklen];
-    INTEGER ldstack = 2;
-    INTEGER start = 0;
-    INTEGER endd = 0;
-    const INTEGER select = 20;
-    INTEGER i = 0;
-    INTEGER j = 0;
-    REAL dmnmx = 0.0;
-    REAL d1 = 0.0;
-    REAL d2 = 0.0;
-    REAL d3 = 0.0;
-    REAL tmp = 0.0;
+void Rlasrt(const char *id, mplapackint const n, dd_real *d, mplapackint &info) {
+    mplapackint dir = 0;
+    mplapackint stkpnt = 0;
+    mplapackint stacklen = 32;
+    mplapackint stack[2 * stacklen];
+    mplapackint ldstack = 2;
+    mplapackint start = 0;
+    mplapackint endd = 0;
+    const mplapackint select = 20;
+    mplapackint i = 0;
+    mplapackint j = 0;
+    dd_real dmnmx = 0.0;
+    dd_real d1 = 0.0;
+    dd_real d2 = 0.0;
+    dd_real d3 = 0.0;
+    dd_real tmp = 0.0;
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --

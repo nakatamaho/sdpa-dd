@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rsyr2k(const char *uplo, const char *trans, INTEGER const n, INTEGER const k, REAL const alpha, REAL *a, INTEGER const lda, REAL *b, INTEGER const ldb, REAL const beta, REAL *c, INTEGER const ldc) {
+void Rsyr2k(const char *uplo, const char *trans, mplapackint const n, mplapackint const k, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *b, mplapackint const ldb, dd_real const beta, dd_real *c, mplapackint const ldc) {
     //
     //  -- Reference BLAS level3 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -54,7 +54,7 @@ void Rsyr2k(const char *uplo, const char *trans, INTEGER const n, INTEGER const 
     //
     //     Test the input parameters.
     //
-    INTEGER nrowa = 0;
+    mplapackint nrowa = 0;
     if (Mlsame(trans, "N")) {
         nrowa = n;
     } else {
@@ -62,7 +62,7 @@ void Rsyr2k(const char *uplo, const char *trans, INTEGER const n, INTEGER const 
     }
     bool upper = Mlsame(uplo, "U");
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if ((!upper) && (!Mlsame(uplo, "L"))) {
         info = 1;
     } else if ((!Mlsame(trans, "N")) && (!Mlsame(trans, "T")) && (!Mlsame(trans, "C"))) {
@@ -71,11 +71,11 @@ void Rsyr2k(const char *uplo, const char *trans, INTEGER const n, INTEGER const 
         info = 3;
     } else if (k < 0) {
         info = 4;
-    } else if (lda < max((INTEGER)1, nrowa)) {
+    } else if (lda < max((mplapackint)1, nrowa)) {
         info = 7;
-    } else if (ldb < max((INTEGER)1, nrowa)) {
+    } else if (ldb < max((mplapackint)1, nrowa)) {
         info = 9;
-    } else if (ldc < max((INTEGER)1, n)) {
+    } else if (ldc < max((mplapackint)1, n)) {
         info = 12;
     }
     if (info != 0) {
@@ -85,16 +85,16 @@ void Rsyr2k(const char *uplo, const char *trans, INTEGER const n, INTEGER const 
     //
     //     Quick return if possible.
     //
-    const REAL zero = 0.0;
-    const REAL one = 1.0;
+    const dd_real zero = 0.0;
+    const dd_real one = 1.0;
     if ((n == 0) || (((alpha == zero) || (k == 0)) && (beta == one))) {
         return;
     }
     //
     //     And when  alpha.eq.zero.
     //
-    INTEGER j = 0;
-    INTEGER i = 0;
+    mplapackint j = 0;
+    mplapackint i = 0;
     if (alpha == zero) {
         if (upper) {
             if (beta == zero) {
@@ -130,9 +130,9 @@ void Rsyr2k(const char *uplo, const char *trans, INTEGER const n, INTEGER const 
     //
     //     Start the operations.
     //
-    INTEGER l = 0;
-    REAL temp1 = 0.0;
-    REAL temp2 = 0.0;
+    mplapackint l = 0;
+    dd_real temp1 = 0.0;
+    dd_real temp2 = 0.0;
     if (Mlsame(trans, "N")) {
         //
         //        Form  C := alpha*A*B**T + alpha*B*A**T + C.

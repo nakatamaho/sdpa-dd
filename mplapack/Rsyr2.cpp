@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rsyr2(const char *uplo, INTEGER const n, REAL const alpha, REAL *x, INTEGER const incx, REAL *y, INTEGER const incy, REAL *a, INTEGER const lda) {
+void Rsyr2(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *x, mplapackint const incx, dd_real *y, mplapackint const incy, dd_real *a, mplapackint const lda) {
     //
     //  -- Reference BLAS level2 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -54,7 +54,7 @@ void Rsyr2(const char *uplo, INTEGER const n, REAL const alpha, REAL *x, INTEGER
     //
     //     Test the input parameters.
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if (!Mlsame(uplo, "U") && !Mlsame(uplo, "L")) {
         info = 1;
     } else if (n < 0) {
@@ -63,7 +63,7 @@ void Rsyr2(const char *uplo, INTEGER const n, REAL const alpha, REAL *x, INTEGER
         info = 5;
     } else if (incy == 0) {
         info = 7;
-    } else if (lda < max((INTEGER)1, n)) {
+    } else if (lda < max((mplapackint)1, n)) {
         info = 9;
     }
     if (info != 0) {
@@ -73,7 +73,7 @@ void Rsyr2(const char *uplo, INTEGER const n, REAL const alpha, REAL *x, INTEGER
     //
     //     Quick return if possible.
     //
-    const REAL zero = 0.0;
+    const dd_real zero = 0.0;
     if ((n == 0) || (alpha == zero)) {
         return;
     }
@@ -81,10 +81,10 @@ void Rsyr2(const char *uplo, INTEGER const n, REAL const alpha, REAL *x, INTEGER
     //     Set up the start points in X and Y if the increments are not both
     //     unity.
     //
-    INTEGER kx = 0;
-    INTEGER ky = 0;
-    INTEGER jx = 0;
-    INTEGER jy = 0;
+    mplapackint kx = 0;
+    mplapackint ky = 0;
+    mplapackint jx = 0;
+    mplapackint jy = 0;
     if ((incx != 1) || (incy != 1)) {
         if (incx > 0) {
             kx = 1;
@@ -104,12 +104,12 @@ void Rsyr2(const char *uplo, INTEGER const n, REAL const alpha, REAL *x, INTEGER
     //     accessed sequentially with one pass through the triangular part
     //     of A.
     //
-    INTEGER j = 0;
-    REAL temp1 = 0.0;
-    REAL temp2 = 0.0;
-    INTEGER i = 0;
-    INTEGER ix = 0;
-    INTEGER iy = 0;
+    mplapackint j = 0;
+    dd_real temp1 = 0.0;
+    dd_real temp2 = 0.0;
+    mplapackint i = 0;
+    mplapackint ix = 0;
+    mplapackint iy = 0;
     if (Mlsame(uplo, "U")) {
         //
         //        Form  A  when A is stored in the upper triangle.

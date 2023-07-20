@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlarft(const char *direct, const char *storev, INTEGER const n, INTEGER const k, REAL *v, INTEGER const ldv, REAL *tau, REAL *t, INTEGER const ldt) {
+void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapackint const k, dd_real *v, mplapackint const ldv, dd_real *tau, dd_real *t, mplapackint const ldt) {
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -58,12 +58,12 @@ void Rlarft(const char *direct, const char *storev, INTEGER const n, INTEGER con
         return;
     }
     //
-    INTEGER prevlastv = 0;
-    INTEGER i = 0;
-    const REAL zero = 0.0;
-    INTEGER j = 0;
-    INTEGER lastv = 0;
-    const REAL one = 1.0;
+    mplapackint prevlastv = 0;
+    mplapackint i = 0;
+    const dd_real zero = 0.0;
+    mplapackint j = 0;
+    mplapackint lastv = 0;
+    const dd_real one = 1.0;
     if (Mlsame(direct, "F")) {
         prevlastv = n;
         for (i = 1; i <= k; i = i + 1) {

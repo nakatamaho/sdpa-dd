@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rger(INTEGER const m, INTEGER const n, REAL const alpha, REAL *x, INTEGER const incx, REAL *y, INTEGER const incy, REAL *a, INTEGER const lda) {
+void Rger(mplapackint const m, mplapackint const n, dd_real const alpha, dd_real *x, mplapackint const incx, dd_real *y, mplapackint const incy, dd_real *a, mplapackint const lda) {
     //
     //  -- Reference BLAS level2 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -52,7 +52,7 @@ void Rger(INTEGER const m, INTEGER const n, REAL const alpha, REAL *x, INTEGER c
     //
     //     Test the input parameters.
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if (m < 0) {
         info = 1;
     } else if (n < 0) {
@@ -61,7 +61,7 @@ void Rger(INTEGER const m, INTEGER const n, REAL const alpha, REAL *x, INTEGER c
         info = 5;
     } else if (incy == 0) {
         info = 7;
-    } else if (lda < max((INTEGER)1, m)) {
+    } else if (lda < max((mplapackint)1, m)) {
         info = 9;
     }
     if (info != 0) {
@@ -71,7 +71,7 @@ void Rger(INTEGER const m, INTEGER const n, REAL const alpha, REAL *x, INTEGER c
     //
     //     Quick return if possible.
     //
-    const REAL zero = 0.0;
+    const dd_real zero = 0.0;
     if ((m == 0) || (n == 0) || (alpha == zero)) {
         return;
     }
@@ -79,17 +79,17 @@ void Rger(INTEGER const m, INTEGER const n, REAL const alpha, REAL *x, INTEGER c
     //     Start the operations. In this version the elements of A are
     //     accessed sequentially with one pass through A.
     //
-    INTEGER jy = 0;
+    mplapackint jy = 0;
     if (incy > 0) {
         jy = 1;
     } else {
         jy = 1 - (n - 1) * incy;
     }
-    INTEGER j = 0;
-    REAL temp = 0.0;
-    INTEGER i = 0;
-    INTEGER kx = 0;
-    INTEGER ix = 0;
+    mplapackint j = 0;
+    dd_real temp = 0.0;
+    mplapackint i = 0;
+    mplapackint kx = 0;
+    mplapackint ix = 0;
     if (incx == 1) {
         for (j = 1; j <= n; j = j + 1) {
             if (y[jy - 1] != zero) {

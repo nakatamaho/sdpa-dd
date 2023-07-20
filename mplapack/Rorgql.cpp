@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rorgql(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER const lda, REAL *tau, REAL *work, INTEGER const lwork, INTEGER &info) {
+void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info) {
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -64,12 +64,12 @@ void Rorgql(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
         info = -2;
     } else if (k < 0 || k > n) {
         info = -3;
-    } else if (lda < max((INTEGER)1, m)) {
+    } else if (lda < max((mplapackint)1, m)) {
         info = -5;
     }
     //
-    INTEGER lwkopt = 0;
-    INTEGER nb = 0;
+    mplapackint lwkopt = 0;
+    mplapackint nb = 0;
     if (info == 0) {
         if (n == 0) {
             lwkopt = 1;
@@ -79,7 +79,7 @@ void Rorgql(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
         }
         work[1 - 1] = lwkopt;
         //
-        if (lwork < max((INTEGER)1, n) && !lquery) {
+        if (lwork < max((mplapackint)1, n) && !lquery) {
             info = -8;
         }
     }
@@ -97,15 +97,15 @@ void Rorgql(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
         return;
     }
     //
-    INTEGER nbmin = 2;
-    INTEGER nx = 0;
-    INTEGER iws = n;
-    INTEGER ldwork = 0;
+    mplapackint nbmin = 2;
+    mplapackint nx = 0;
+    mplapackint iws = n;
+    mplapackint ldwork = 0;
     if (nb > 1 && nb < k) {
         //
         //        Determine when to cross over from blocked to unblocked code.
         //
-        nx = max((INTEGER)0, iMlaenv(3, "Rorgql", " ", m, n, k, -1));
+        nx = max((mplapackint)0, iMlaenv(3, "Rorgql", " ", m, n, k, -1));
         if (nx < k) {
             //
             //           Determine if workspace is large enough for blocked code.
@@ -118,15 +118,15 @@ void Rorgql(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
                 //              determine the minimum value of NB.
                 //
                 nb = lwork / ldwork;
-                nbmin = max((INTEGER)2, iMlaenv(2, "Rorgql", " ", m, n, k, -1));
+                nbmin = max((mplapackint)2, iMlaenv(2, "Rorgql", " ", m, n, k, -1));
             }
         }
     }
     //
-    INTEGER kk = 0;
-    INTEGER j = 0;
-    INTEGER i = 0;
-    const REAL zero = 0.0;
+    mplapackint kk = 0;
+    mplapackint j = 0;
+    mplapackint i = 0;
+    const dd_real zero = 0.0;
     if (nb >= nbmin && nb < k && nx < k) {
         //
         //        Use blocked code after the first block.
@@ -147,11 +147,11 @@ void Rorgql(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
     //
     //     Use unblocked code for the first or only block.
     //
-    INTEGER iinfo = 0;
+    mplapackint iinfo = 0;
     Rorg2l(m - kk, n - kk, k - kk, a, lda, tau, work, iinfo);
     //
-    INTEGER ib = 0;
-    INTEGER l = 0;
+    mplapackint ib = 0;
+    mplapackint l = 0;
     if (kk > 0) {
         //
         //        Use blocked code

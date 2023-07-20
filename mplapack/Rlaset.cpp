@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlaset(const char *uplo, INTEGER const m, INTEGER const n, REAL const alpha, REAL const beta, REAL *a, INTEGER const lda) {
+void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real const alpha, dd_real const beta, dd_real *a, mplapackint const lda) {
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -50,8 +50,8 @@ void Rlaset(const char *uplo, INTEGER const m, INTEGER const n, REAL const alpha
     //     ..
     //     .. Executable Statements ..
     //
-    INTEGER j = 0;
-    INTEGER i = 0;
+    mplapackint j = 0;
+    mplapackint i = 0;
     if (Mlsame(uplo, "U")) {
         //
         //        Set the strictly upper triangular or trapezoidal part of the

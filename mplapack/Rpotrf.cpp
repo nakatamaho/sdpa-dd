@@ -29,12 +29,12 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rpotrf(const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, INTEGER &info) {
+void Rpotrf(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info) {
     bool upper = false;
-    INTEGER nb = 0;
-    INTEGER j = 0;
-    INTEGER jb = 0;
-    const REAL one = 1.0;
+    mplapackint nb = 0;
+    mplapackint j = 0;
+    mplapackint jb = 0;
+    const dd_real one = 1.0;
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -67,7 +67,7 @@ void Rpotrf(const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, INTEG
         info = -1;
     } else if (n < 0) {
         info = -2;
-    } else if (lda < max((INTEGER)1, n)) {
+    } else if (lda < max((mplapackint)1, n)) {
         info = -4;
     }
     if (info != 0) {

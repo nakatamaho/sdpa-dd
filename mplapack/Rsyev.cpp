@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rsyev(const char *jobz, const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, REAL *w, REAL *work, INTEGER const lwork, INTEGER &info) {
+void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *w, dd_real *work, mplapackint const lwork, mplapackint &info) {
     //
     //     Test the input parameters.
     //
@@ -44,18 +44,18 @@ void Rsyev(const char *jobz, const char *uplo, INTEGER const n, REAL *a, INTEGER
         info = -2;
     } else if (n < 0) {
         info = -3;
-    } else if (lda < max((INTEGER)1, n)) {
+    } else if (lda < max((mplapackint)1, n)) {
         info = -5;
     }
     //
-    INTEGER nb = 0;
-    INTEGER lwkopt = 0;
+    mplapackint nb = 0;
+    mplapackint lwkopt = 0;
     if (info == 0) {
         nb = iMlaenv(1, "Rsytrd", uplo, n, -1, -1, -1);
-        lwkopt = max((INTEGER)1, (nb + 2) * n);
+        lwkopt = max((mplapackint)1, (nb + 2) * n);
         work[1 - 1] = lwkopt;
         //
-        if (lwork < max((INTEGER)1, 3 * n - 1) && !lquery) {
+        if (lwork < max((mplapackint)1, 3 * n - 1) && !lquery) {
             info = -8;
         }
     }
@@ -73,7 +73,7 @@ void Rsyev(const char *jobz, const char *uplo, INTEGER const n, REAL *a, INTEGER
         return;
     }
     //
-    const REAL one = 1.0;
+    const dd_real one = 1.0;
     if (n == 1) {
         w[1 - 1] = a[(1 - 1)];
         work[1 - 1] = 2;
@@ -85,19 +85,19 @@ void Rsyev(const char *jobz, const char *uplo, INTEGER const n, REAL *a, INTEGER
     //
     //     Get machine constants.
     //
-    REAL safmin = Rlamch("Safe minimum");
-    REAL eps = Rlamch("Precision");
-    REAL smlnum = safmin / eps;
-    REAL bignum = one / smlnum;
-    REAL rmin = sqrt(smlnum);
-    REAL rmax = sqrt(bignum);
+    dd_real safmin = Rlamch("Safe minimum");
+    dd_real eps = Rlamch("Precision");
+    dd_real smlnum = safmin / eps;
+    dd_real bignum = one / smlnum;
+    dd_real rmin = sqrt(smlnum);
+    dd_real rmax = sqrt(bignum);
     //
     //     Scale matrix to allowable range, if necessary.
     //
-    REAL anrm = Rlansy("M", uplo, n, a, lda, work);
-    INTEGER iscale = 0;
-    const REAL zero = 0.0;
-    REAL sigma = 0.0;
+    dd_real anrm = Rlansy("M", uplo, n, a, lda, work);
+    mplapackint iscale = 0;
+    const dd_real zero = 0.0;
+    dd_real sigma = 0.0;
     if (anrm > zero && anrm < rmin) {
         iscale = 1;
         sigma = rmin / anrm;
@@ -111,11 +111,11 @@ void Rsyev(const char *jobz, const char *uplo, INTEGER const n, REAL *a, INTEGER
     //
     //     Call Rsytrd to reduce symmetric matrix to tridiagonal form.
     //
-    INTEGER inde = 1;
-    INTEGER indtau = inde + n;
-    INTEGER indwrk = indtau + n;
-    INTEGER llwork = lwork - indwrk + 1;
-    INTEGER iinfo = 0;
+    mplapackint inde = 1;
+    mplapackint indtau = inde + n;
+    mplapackint indwrk = indtau + n;
+    mplapackint llwork = lwork - indwrk + 1;
+    mplapackint iinfo = 0;
     Rsytrd(uplo, n, a, lda, w, &work[inde - 1], &work[indtau - 1], &work[indwrk - 1], llwork, iinfo);
     //
     //     For eigenvalues only, call Rsterf.  For eigenvectors, first call
@@ -130,7 +130,7 @@ void Rsyev(const char *jobz, const char *uplo, INTEGER const n, REAL *a, INTEGER
     //
     //     If matrix was scaled, then rescale eigenvalues appropriately.
     //
-    INTEGER imax = 0;
+    mplapackint imax = 0;
     if (iscale == 1) {
         if (info == 0) {
             imax = n;

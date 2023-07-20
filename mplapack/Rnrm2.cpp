@@ -28,8 +28,8 @@
 
 #include <mpblas.h>
 
-REAL Rnrm2(INTEGER const n, REAL *x, INTEGER const incx) {
-    REAL return_value = 0.0;
+dd_real Rnrm2(mplapackint const n, dd_real *x, mplapackint const incx) {
+    dd_real return_value = 0.0;
     //
     //  -- Reference BLAS level1 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -48,13 +48,13 @@ REAL Rnrm2(INTEGER const n, REAL *x, INTEGER const incx) {
     //     ..
     //     .. Intrinsic Functions ..
     //     ..
-    const REAL zero = 0.0;
-    REAL norm = 0.0;
-    REAL scale = 0.0;
-    const REAL one = 1.0;
-    REAL ssq = 0.0;
-    INTEGER ix = 0;
-    REAL absxi = 0.0;
+    const dd_real zero = 0.0;
+    dd_real norm = 0.0;
+    dd_real scale = 0.0;
+    const dd_real one = 1.0;
+    dd_real ssq = 0.0;
+    mplapackint ix = 0;
+    dd_real absxi = 0.0;
     if (n < 1 || incx < 1) {
         norm = zero;
     } else if (n == 1) {

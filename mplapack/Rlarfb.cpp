@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlarfb(const char *side, const char *trans, const char *direct, const char *storev, INTEGER const m, INTEGER const n, INTEGER const k, REAL *v, INTEGER const ldv, REAL *t, INTEGER const ldt, REAL *c, INTEGER const ldc, REAL *work, INTEGER const ldwork) {
+void Rlarfb(const char *side, const char *trans, const char *direct, const char *storev, mplapackint const m, mplapackint const n, mplapackint const k, dd_real *v, mplapackint const ldv, dd_real *t, mplapackint const ldt, dd_real *c, mplapackint const ldc, dd_real *work, mplapackint const ldwork) {
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -65,9 +65,9 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
         transt = 'N';
     }
     //
-    INTEGER j = 0;
-    const REAL one = 1.0;
-    INTEGER i = 0;
+    mplapackint j = 0;
+    const dd_real one = 1.0;
+    mplapackint i = 0;
     if (Mlsame(storev, "C")) {
         //
         if (Mlsame(direct, "F")) {

@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlarf(const char *side, INTEGER const m, INTEGER const n, REAL *v, INTEGER const incv, REAL const tau, REAL *c, INTEGER const ldc, REAL *work) {
+void Rlarf(const char *side, mplapackint const m, mplapackint const n, dd_real *v, mplapackint const incv, dd_real const tau, dd_real *c, mplapackint const ldc, dd_real *work) {
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -53,10 +53,10 @@ void Rlarf(const char *side, INTEGER const m, INTEGER const n, REAL *v, INTEGER 
     //     .. Executable Statements ..
     //
     bool applyleft = Mlsame(side, "L");
-    INTEGER lastv = 0;
-    INTEGER lastc = 0;
-    const REAL zero = 0.0;
-    INTEGER i = 0;
+    mplapackint lastv = 0;
+    mplapackint lastc = 0;
+    const dd_real zero = 0.0;
+    mplapackint i = 0;
     if (tau != zero) {
         //     Set up variables for scanning V.  LASTV begins pointing to the end
         //     of V.
@@ -85,7 +85,7 @@ void Rlarf(const char *side, INTEGER const m, INTEGER const n, REAL *v, INTEGER 
     }
     //     Note that lastc.eq.0 renders the BLAS operations null; no special
     //     case is needed at this level.
-    const REAL one = 1.0;
+    const dd_real one = 1.0;
     if (applyleft) {
         //
         //        Form  H * C

@@ -29,8 +29,8 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-REAL Rlapy2(REAL const x, REAL const y) {
-    REAL return_value = 0.0;
+dd_real Rlapy2(dd_real const x, dd_real const y) {
+    dd_real return_value = 0.0;
     //
     bool x_is_nan = Risnan(x);
     bool y_is_nan = Risnan(y);
@@ -41,12 +41,12 @@ REAL Rlapy2(REAL const x, REAL const y) {
         return_value = y;
     }
     //
-    REAL xabs = 0.0;
-    REAL yabs = 0.0;
-    REAL w = 0.0;
-    REAL z = 0.0;
-    const REAL zero = 0.0;
-    const REAL one = 1.0;
+    dd_real xabs = 0.0;
+    dd_real yabs = 0.0;
+    dd_real w = 0.0;
+    dd_real z = 0.0;
+    const dd_real zero = 0.0;
+    const dd_real one = 1.0;
     if (!(x_is_nan || y_is_nan)) {
         xabs = abs(x);
         yabs = abs(y);

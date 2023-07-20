@@ -29,24 +29,24 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlascl(const char *type, INTEGER const kl, INTEGER const ku, REAL const cfrom, REAL const cto, INTEGER const m, INTEGER const n, REAL *a, INTEGER const lda, INTEGER &info) {
-    INTEGER itype = 0;
-    const REAL zero = 0.0;
-    REAL smlnum = 0.0;
-    const REAL one = 1.0;
-    REAL bignum = 0.0;
-    REAL cfromc = 0.0;
-    REAL ctoc = 0.0;
-    REAL cfrom1 = 0.0;
-    REAL mul = 0.0;
+void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_real const cfrom, dd_real const cto, mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info) {
+    mplapackint itype = 0;
+    const dd_real zero = 0.0;
+    dd_real smlnum = 0.0;
+    const dd_real one = 1.0;
+    dd_real bignum = 0.0;
+    dd_real cfromc = 0.0;
+    dd_real ctoc = 0.0;
+    dd_real cfrom1 = 0.0;
+    dd_real mul = 0.0;
     bool done = false;
-    REAL cto1 = 0.0;
-    INTEGER j = 0;
-    INTEGER i = 0;
-    INTEGER k3 = 0;
-    INTEGER k4 = 0;
-    INTEGER k1 = 0;
-    INTEGER k2 = 0;
+    dd_real cto1 = 0.0;
+    mplapackint j = 0;
+    mplapackint i = 0;
+    mplapackint k3 = 0;
+    mplapackint k4 = 0;
+    mplapackint k1 = 0;
+    mplapackint k2 = 0;
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -103,12 +103,12 @@ void Rlascl(const char *type, INTEGER const kl, INTEGER const ku, REAL const cfr
         info = -6;
     } else if (n < 0 || (itype == 4 && n != m) || (itype == 5 && n != m)) {
         info = -7;
-    } else if (itype <= 3 && lda < max((INTEGER)1, m)) {
+    } else if (itype <= 3 && lda < max((mplapackint)1, m)) {
         info = -9;
     } else if (itype >= 4) {
-        if (kl < 0 || kl > max(m - 1, (INTEGER)0)) {
+        if (kl < 0 || kl > max(m - 1, (mplapackint)0)) {
             info = -2;
-        } else if (ku < 0 || ku > max(n - 1, (INTEGER)0) || ((itype == 4 || itype == 5) && kl != ku)) {
+        } else if (ku < 0 || ku > max(n - 1, (mplapackint)0) || ((itype == 4 || itype == 5) && kl != ku)) {
             info = -3;
         } else if ((itype == 4 && lda < kl + 1) || (itype == 5 && lda < ku + 1) || (itype == 6 && lda < 2 * kl + ku + 1)) {
             info = -9;
@@ -223,7 +223,7 @@ statement_10:
         k1 = ku + 2;
         k3 = ku + 1;
         for (j = 1; j <= n; j = j + 1) {
-            for (i = max(k1 - j, (INTEGER)1); i <= k3; i = i + 1) {
+            for (i = max(k1 - j, (mplapackint)1); i <= k3; i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }

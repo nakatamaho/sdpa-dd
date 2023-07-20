@@ -29,23 +29,23 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlartg(REAL const f, REAL const g, REAL &cs, REAL &sn, REAL &r) {
-    REAL safmin = 0.0;
-    REAL eps = 0.0;
-    const REAL two = 2.0;
-    REAL safmn2 = 0.0;
-    const REAL one = 1.0;
-    REAL safmx2 = 0.0;
-    const REAL zero = 0.0;
-    REAL f1 = 0.0;
-    REAL g1 = 0.0;
-    REAL scale = 0.0;
-    INTEGER count = 0;
-    INTEGER i = 0;
+void Rlartg(dd_real const f, dd_real const g, dd_real &cs, dd_real &sn, dd_real &r) {
+    dd_real safmin = 0.0;
+    dd_real eps = 0.0;
+    const dd_real two = 2.0;
+    dd_real safmn2 = 0.0;
+    const dd_real one = 1.0;
+    dd_real safmx2 = 0.0;
+    const dd_real zero = 0.0;
+    dd_real f1 = 0.0;
+    dd_real g1 = 0.0;
+    dd_real scale = 0.0;
+    mplapackint count = 0;
+    mplapackint i = 0;
     //
     safmin = Rlamch("S");
     eps = Rlamch("E");
-    safmn2 = pow(Rlamch("B"), castINTEGER(log(safmin / eps) / log(Rlamch("B")) / two));
+    safmn2 = pow(Rlamch("B"), castmplapackint(log(safmin / eps) / log(Rlamch("B")) / two));
     safmx2 = one / safmn2;
     //        FIRST = .FALSE.
     //     END IF

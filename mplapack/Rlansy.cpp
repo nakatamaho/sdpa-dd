@@ -29,18 +29,18 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-REAL Rlansy(const char *norm, const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, REAL *work) {
-    REAL return_value = 0.0;
+dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *work) {
+    dd_real return_value = 0.0;
     //
-    const REAL zero = 0.0;
-    REAL value = 0.0;
-    INTEGER j = 0;
-    INTEGER i = 0;
-    REAL sum = 0.0;
-    REAL absa = 0.0;
-    REAL ssq[2];
-    const REAL one = 1.0;
-    REAL colssq[2];
+    const dd_real zero = 0.0;
+    dd_real value = 0.0;
+    mplapackint j = 0;
+    mplapackint i = 0;
+    dd_real sum = 0.0;
+    dd_real absa = 0.0;
+    dd_real ssq[2];
+    const dd_real one = 1.0;
+    dd_real colssq[2];
     if (n == 0) {
         value = zero;
     } else if (Mlsame(norm, "M")) {

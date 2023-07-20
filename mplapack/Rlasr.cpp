@@ -29,11 +29,11 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlasr(const char *side, const char *pivot, const char *direct, INTEGER const m, INTEGER const n, REAL *c, REAL *s, REAL *a, INTEGER const lda) {
+void Rlasr(const char *side, const char *pivot, const char *direct, mplapackint const m, mplapackint const n, dd_real *c, dd_real *s, dd_real *a, mplapackint const lda) {
     //
     //     Test the input parameters
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if (!(Mlsame(side, "L") || Mlsame(side, "R"))) {
         info = 1;
     } else if (!(Mlsame(pivot, "V") || Mlsame(pivot, "T") || Mlsame(pivot, "B"))) {
@@ -44,7 +44,7 @@ void Rlasr(const char *side, const char *pivot, const char *direct, INTEGER cons
         info = 4;
     } else if (n < 0) {
         info = 5;
-    } else if (lda < max((INTEGER)1, m)) {
+    } else if (lda < max((mplapackint)1, m)) {
         info = 9;
     }
     if (info != 0) {
@@ -57,13 +57,13 @@ void Rlasr(const char *side, const char *pivot, const char *direct, INTEGER cons
     if ((m == 0) || (n == 0)) {
         return;
     }
-    INTEGER j = 0;
-    REAL ctemp = 0.0;
-    REAL stemp = 0.0;
-    const REAL one = 1.0;
-    const REAL zero = 0.0;
-    INTEGER i = 0;
-    REAL temp = 0.0;
+    mplapackint j = 0;
+    dd_real ctemp = 0.0;
+    dd_real stemp = 0.0;
+    const dd_real one = 1.0;
+    const dd_real zero = 0.0;
+    mplapackint i = 0;
+    dd_real temp = 0.0;
     if (Mlsame(side, "L")) {
         //
         //        Form  P * A

@@ -29,43 +29,43 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rsterf(INTEGER const n, REAL *d, REAL *e, INTEGER &info) {
-    REAL eps = 0.0;
-    REAL eps2 = 0.0;
-    REAL safmin = 0.0;
-    const REAL one = 1.0;
-    REAL safmax = 0.0;
-    const REAL three = 3.0;
-    REAL ssfmax = 0.0;
-    REAL ssfmin = 0.0;
-    REAL rmax = 0.0;
-    const INTEGER maxit = 30;
-    INTEGER nmaxit = 0;
-    const REAL zero = 0.0;
-    REAL sigma = 0.0;
-    INTEGER jtot = 0;
-    INTEGER l1 = 0;
-    INTEGER m = 0;
-    INTEGER l = 0;
-    INTEGER lsv = 0;
-    INTEGER lend = 0;
-    INTEGER lendsv = 0;
-    REAL anorm = 0.0;
-    INTEGER iscale = 0;
-    INTEGER i = 0;
-    REAL p = 0.0;
-    REAL rte = 0.0;
-    REAL rt1 = 0.0;
-    REAL rt2 = 0.0;
-    const REAL two = 2.0;
-    REAL r = 0.0;
-    REAL c = 0.0;
-    REAL s = 0.0;
-    REAL gamma = 0.0;
-    REAL bb = 0.0;
-    REAL oldc = 0.0;
-    REAL oldgam = 0.0;
-    REAL alpha = 0.0;
+void Rsterf(mplapackint const n, dd_real *d, dd_real *e, mplapackint &info) {
+    dd_real eps = 0.0;
+    dd_real eps2 = 0.0;
+    dd_real safmin = 0.0;
+    const dd_real one = 1.0;
+    dd_real safmax = 0.0;
+    const dd_real three = 3.0;
+    dd_real ssfmax = 0.0;
+    dd_real ssfmin = 0.0;
+    dd_real rmax = 0.0;
+    const mplapackint maxit = 30;
+    mplapackint nmaxit = 0;
+    const dd_real zero = 0.0;
+    dd_real sigma = 0.0;
+    mplapackint jtot = 0;
+    mplapackint l1 = 0;
+    mplapackint m = 0;
+    mplapackint l = 0;
+    mplapackint lsv = 0;
+    mplapackint lend = 0;
+    mplapackint lendsv = 0;
+    dd_real anorm = 0.0;
+    mplapackint iscale = 0;
+    mplapackint i = 0;
+    dd_real p = 0.0;
+    dd_real rte = 0.0;
+    dd_real rt1 = 0.0;
+    dd_real rt2 = 0.0;
+    const dd_real two = 2.0;
+    dd_real r = 0.0;
+    dd_real c = 0.0;
+    dd_real s = 0.0;
+    dd_real gamma = 0.0;
+    dd_real bb = 0.0;
+    dd_real oldc = 0.0;
+    dd_real oldgam = 0.0;
+    dd_real alpha = 0.0;
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --

@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rtrmm(const char *side, const char *uplo, const char *transa, const char *diag, INTEGER const m, INTEGER const n, REAL const alpha, REAL *a, INTEGER const lda, REAL *b, INTEGER const ldb) {
+void Rtrmm(const char *side, const char *uplo, const char *transa, const char *diag, mplapackint const m, mplapackint const n, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *b, mplapackint const ldb) {
     //
     //  -- Reference BLAS level3 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -55,7 +55,7 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
     //     Test the input parameters.
     //
     bool lside = Mlsame(side, "L");
-    INTEGER nrowa = 0;
+    mplapackint nrowa = 0;
     if (lside) {
         nrowa = m;
     } else {
@@ -64,7 +64,7 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
     bool nounit = Mlsame(diag, "N");
     bool upper = Mlsame(uplo, "U");
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if ((!lside) && (!Mlsame(side, "R"))) {
         info = 1;
     } else if ((!upper) && (!Mlsame(uplo, "L"))) {
@@ -77,9 +77,9 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
         info = 5;
     } else if (n < 0) {
         info = 6;
-    } else if (lda < max((INTEGER)1, nrowa)) {
+    } else if (lda < max((mplapackint)1, nrowa)) {
         info = 9;
-    } else if (ldb < max((INTEGER)1, m)) {
+    } else if (ldb < max((mplapackint)1, m)) {
         info = 11;
     }
     if (info != 0) {
@@ -95,9 +95,9 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
     //
     //     And when  alpha.eq.zero.
     //
-    const REAL zero = 0.0;
-    INTEGER j = 0;
-    INTEGER i = 0;
+    const dd_real zero = 0.0;
+    mplapackint j = 0;
+    mplapackint i = 0;
     if (alpha == zero) {
         for (j = 1; j <= n; j = j + 1) {
             for (i = 1; i <= m; i = i + 1) {
@@ -109,9 +109,9 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
     //
     //     Start the operations.
     //
-    INTEGER k = 0;
-    REAL temp = 0.0;
-    const REAL one = 1.0;
+    mplapackint k = 0;
+    dd_real temp = 0.0;
+    const dd_real one = 1.0;
     if (lside) {
         if (Mlsame(transa, "N")) {
             //

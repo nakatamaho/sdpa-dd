@@ -132,4 +132,4 @@ dd_real Rlamch_dd(const char *cmach) {
     return RlamchZ_dd();
 }
 
-REAL Rlamc3(REAL a, REAL b) { return a + b; }
+dd_real Rlamc3(dd_real a, dd_real b) { return a + b; }

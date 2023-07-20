@@ -29,8 +29,8 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-REAL Rlanst(const char *norm, INTEGER const n, REAL *d, REAL *e) {
-    REAL return_value = 0.0;
+dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e) {
+    dd_real return_value = 0.0;
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -55,12 +55,12 @@ REAL Rlanst(const char *norm, INTEGER const n, REAL *d, REAL *e) {
     //     ..
     //     .. Executable Statements ..
     //
-    const REAL zero = 0.0;
-    REAL anorm = 0.0;
-    INTEGER i = 0;
-    REAL sum = 0.0;
-    REAL scale = 0.0;
-    const REAL one = 1.0;
+    const dd_real zero = 0.0;
+    dd_real anorm = 0.0;
+    mplapackint i = 0;
+    dd_real sum = 0.0;
+    dd_real scale = 0.0;
+    const dd_real one = 1.0;
     if (n <= 0) {
         anorm = zero;
     } else if (Mlsame(norm, "M")) {

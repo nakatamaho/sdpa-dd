@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rorgtr(const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, REAL *tau, REAL *work, INTEGER const lwork, INTEGER &info) {
+void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info) {
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -63,21 +63,21 @@ void Rorgtr(const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, REAL 
         info = -1;
     } else if (n < 0) {
         info = -2;
-    } else if (lda < max((INTEGER)1, n)) {
+    } else if (lda < max((mplapackint)1, n)) {
         info = -4;
-    } else if (lwork < max((INTEGER)1, n - 1) && !lquery) {
+    } else if (lwork < max((mplapackint)1, n - 1) && !lquery) {
         info = -7;
     }
     //
-    INTEGER nb = 0;
-    INTEGER lwkopt = 0;
+    mplapackint nb = 0;
+    mplapackint lwkopt = 0;
     if (info == 0) {
         if (upper) {
             nb = iMlaenv(1, "Rorgql", " ", n - 1, n - 1, n - 1, -1);
         } else {
             nb = iMlaenv(1, "Rorgqr", " ", n - 1, n - 1, n - 1, -1);
         }
-        lwkopt = max((INTEGER)1, n - 1) * nb;
+        lwkopt = max((mplapackint)1, n - 1) * nb;
         work[1 - 1] = lwkopt;
     }
     //
@@ -95,11 +95,11 @@ void Rorgtr(const char *uplo, INTEGER const n, REAL *a, INTEGER const lda, REAL 
         return;
     }
     //
-    INTEGER j = 0;
-    INTEGER i = 0;
-    const REAL zero = 0.0;
-    const REAL one = 1.0;
-    INTEGER iinfo = 0;
+    mplapackint j = 0;
+    mplapackint i = 0;
+    const dd_real zero = 0.0;
+    const dd_real one = 1.0;
+    mplapackint iinfo = 0;
     if (upper) {
         //
         //        Q was determined by a call to Rsytrd with UPLO = 'U'

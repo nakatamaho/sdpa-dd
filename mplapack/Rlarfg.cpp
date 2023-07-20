@@ -29,15 +29,15 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rlarfg(INTEGER const n, REAL &alpha, REAL *x, INTEGER const incx, REAL &tau) {
-    const REAL zero = 0.0;
-    REAL xnorm = 0.0;
-    REAL beta = 0.0;
-    REAL safmin = 0.0;
-    INTEGER knt = 0;
-    const REAL one = 1.0;
-    REAL rsafmn = 0.0;
-    INTEGER j = 0;
+void Rlarfg(mplapackint const n, dd_real &alpha, dd_real *x, mplapackint const incx, dd_real &tau) {
+    const dd_real zero = 0.0;
+    dd_real xnorm = 0.0;
+    dd_real beta = 0.0;
+    dd_real safmin = 0.0;
+    mplapackint knt = 0;
+    const dd_real one = 1.0;
+    dd_real rsafmn = 0.0;
+    mplapackint j = 0;
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --

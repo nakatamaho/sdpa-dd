@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rtrsv(const char *uplo, const char *trans, const char *diag, INTEGER const n, REAL *a, INTEGER const lda, REAL *x, INTEGER const incx) {
+void Rtrsv(const char *uplo, const char *trans, const char *diag, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *x, mplapackint const incx) {
     //
     //  -- Reference BLAS level1 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -54,7 +54,7 @@ void Rtrsv(const char *uplo, const char *trans, const char *diag, INTEGER const 
     //
     //     Test the input parameters.
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if (!Mlsame(uplo, "U") && !Mlsame(uplo, "L")) {
         info = 1;
     } else if (!Mlsame(trans, "N") && !Mlsame(trans, "T") && !Mlsame(trans, "C")) {
@@ -63,7 +63,7 @@ void Rtrsv(const char *uplo, const char *trans, const char *diag, INTEGER const 
         info = 3;
     } else if (n < 0) {
         info = 4;
-    } else if (lda < max((INTEGER)1, n)) {
+    } else if (lda < max((mplapackint)1, n)) {
         info = 6;
     } else if (incx == 0) {
         info = 8;
@@ -84,7 +84,7 @@ void Rtrsv(const char *uplo, const char *trans, const char *diag, INTEGER const 
     //     Set up the start point in X if the increment is not unity. This
     //     will be  ( N - 1 )*INCX  too small for descending loops.
     //
-    INTEGER kx = 0;
+    mplapackint kx = 0;
     if (incx <= 0) {
         kx = 1 - (n - 1) * incx;
     } else if (incx != 1) {
@@ -94,12 +94,12 @@ void Rtrsv(const char *uplo, const char *trans, const char *diag, INTEGER const 
     //     Start the operations. In this version the elements of A are
     //     accessed sequentially with one pass through A.
     //
-    INTEGER j = 0;
-    const REAL zero = 0.0;
-    REAL temp = 0.0;
-    INTEGER i = 0;
-    INTEGER jx = 0;
-    INTEGER ix = 0;
+    mplapackint j = 0;
+    const dd_real zero = 0.0;
+    dd_real temp = 0.0;
+    mplapackint i = 0;
+    mplapackint jx = 0;
+    mplapackint ix = 0;
     if (Mlsame(trans, "N")) {
         //
         //        Form  x := inv( A )*x.

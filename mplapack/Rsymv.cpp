@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rsymv(const char *uplo, INTEGER const n, REAL const alpha, REAL *a, INTEGER const lda, REAL *x, INTEGER const incx, REAL const beta, REAL *y, INTEGER const incy) {
+void Rsymv(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *x, mplapackint const incx, dd_real const beta, dd_real *y, mplapackint const incy) {
     //
     //  -- Reference BLAS level2 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -54,12 +54,12 @@ void Rsymv(const char *uplo, INTEGER const n, REAL const alpha, REAL *a, INTEGER
     //
     //     Test the input parameters.
     //
-    INTEGER info = 0;
+    mplapackint info = 0;
     if (!Mlsame(uplo, "U") && !Mlsame(uplo, "L")) {
         info = 1;
     } else if (n < 0) {
         info = 2;
-    } else if (lda < max((INTEGER)1, n)) {
+    } else if (lda < max((mplapackint)1, n)) {
         info = 5;
     } else if (incx == 0) {
         info = 7;
@@ -73,21 +73,21 @@ void Rsymv(const char *uplo, INTEGER const n, REAL const alpha, REAL *a, INTEGER
     //
     //     Quick return if possible.
     //
-    const REAL zero = 0.0;
-    const REAL one = 1.0;
+    const dd_real zero = 0.0;
+    const dd_real one = 1.0;
     if ((n == 0) || ((alpha == zero) && (beta == one))) {
         return;
     }
     //
     //     Set up the start points in  X  and  Y.
     //
-    INTEGER kx = 0;
+    mplapackint kx = 0;
     if (incx > 0) {
         kx = 1;
     } else {
         kx = 1 - (n - 1) * incx;
     }
-    INTEGER ky = 0;
+    mplapackint ky = 0;
     if (incy > 0) {
         ky = 1;
     } else {
@@ -100,8 +100,8 @@ void Rsymv(const char *uplo, INTEGER const n, REAL const alpha, REAL *a, INTEGER
     //
     //     First form  y := beta*y.
     //
-    INTEGER i = 0;
-    INTEGER iy = 0;
+    mplapackint i = 0;
+    mplapackint iy = 0;
     if (beta != one) {
         if (incy == 1) {
             if (beta == zero) {
@@ -131,12 +131,12 @@ void Rsymv(const char *uplo, INTEGER const n, REAL const alpha, REAL *a, INTEGER
     if (alpha == zero) {
         return;
     }
-    INTEGER j = 0;
-    REAL temp1 = 0.0;
-    REAL temp2 = 0.0;
-    INTEGER jx = 0;
-    INTEGER jy = 0;
-    INTEGER ix = 0;
+    mplapackint j = 0;
+    dd_real temp1 = 0.0;
+    dd_real temp2 = 0.0;
+    mplapackint jx = 0;
+    mplapackint jy = 0;
+    mplapackint ix = 0;
     if (Mlsame(uplo, "U")) {
         //
         //        Form  y  when A is stored in upper triangle.

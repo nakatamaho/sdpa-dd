@@ -29,49 +29,49 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rsteqr(const char *compz, INTEGER const n, REAL *d, REAL *e, REAL *z, INTEGER const ldz, REAL *work, INTEGER &info) {
-    INTEGER icompz = 0;
-    const REAL one = 1.0;
-    REAL eps = 0.0;
-    REAL eps2 = 0.0;
-    REAL safmin = 0.0;
-    REAL safmax = 0.0;
-    const REAL three = 3.0;
-    REAL ssfmax = 0.0;
-    REAL ssfmin = 0.0;
-    const REAL zero = 0.0;
-    const INTEGER maxit = 30;
-    INTEGER nmaxit = 0;
-    INTEGER jtot = 0;
-    INTEGER l1 = 0;
-    INTEGER nm1 = 0;
-    INTEGER m = 0;
-    REAL tst = 0.0;
-    INTEGER l = 0;
-    INTEGER lsv = 0;
-    INTEGER lend = 0;
-    INTEGER lendsv = 0;
-    REAL anorm = 0.0;
-    INTEGER iscale = 0;
-    INTEGER lendm1 = 0;
-    REAL p = 0.0;
-    REAL rt1 = 0.0;
-    REAL rt2 = 0.0;
-    REAL c = 0.0;
-    REAL s = 0.0;
-    const REAL two = 2.0;
-    REAL g = 0.0;
-    REAL r = 0.0;
-    INTEGER mm1 = 0;
-    INTEGER i = 0;
-    REAL f = 0.0;
-    REAL b = 0.0;
-    INTEGER mm = 0;
-    INTEGER lendp1 = 0;
-    INTEGER lm1 = 0;
-    INTEGER ii = 0;
-    INTEGER k = 0;
-    INTEGER j = 0;
+void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_real *z, mplapackint const ldz, dd_real *work, mplapackint &info) {
+    mplapackint icompz = 0;
+    const dd_real one = 1.0;
+    dd_real eps = 0.0;
+    dd_real eps2 = 0.0;
+    dd_real safmin = 0.0;
+    dd_real safmax = 0.0;
+    const dd_real three = 3.0;
+    dd_real ssfmax = 0.0;
+    dd_real ssfmin = 0.0;
+    const dd_real zero = 0.0;
+    const mplapackint maxit = 30;
+    mplapackint nmaxit = 0;
+    mplapackint jtot = 0;
+    mplapackint l1 = 0;
+    mplapackint nm1 = 0;
+    mplapackint m = 0;
+    dd_real tst = 0.0;
+    mplapackint l = 0;
+    mplapackint lsv = 0;
+    mplapackint lend = 0;
+    mplapackint lendsv = 0;
+    dd_real anorm = 0.0;
+    mplapackint iscale = 0;
+    mplapackint lendm1 = 0;
+    dd_real p = 0.0;
+    dd_real rt1 = 0.0;
+    dd_real rt2 = 0.0;
+    dd_real c = 0.0;
+    dd_real s = 0.0;
+    const dd_real two = 2.0;
+    dd_real g = 0.0;
+    dd_real r = 0.0;
+    mplapackint mm1 = 0;
+    mplapackint i = 0;
+    dd_real f = 0.0;
+    dd_real b = 0.0;
+    mplapackint mm = 0;
+    mplapackint lendp1 = 0;
+    mplapackint lm1 = 0;
+    mplapackint ii = 0;
+    mplapackint k = 0;
+    mplapackint j = 0;
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -113,7 +113,7 @@ void Rsteqr(const char *compz, INTEGER const n, REAL *d, REAL *e, REAL *z, INTEG
         info = -1;
     } else if (n < 0) {
         info = -2;
-    } else if ((ldz < 1) || (icompz > 0 && ldz < max((INTEGER)1, n))) {
+    } else if ((ldz < 1) || (icompz > 0 && ldz < max((mplapackint)1, n))) {
         info = -6;
     }
     if (info != 0) {

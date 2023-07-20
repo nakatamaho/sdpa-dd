@@ -28,7 +28,7 @@
 
 #include <mpblas.h>
 
-void Rswap(INTEGER const n, REAL *dx, INTEGER const incx, REAL *dy, INTEGER const incy) {
+void Rswap(mplapackint const n, dd_real *dx, mplapackint const incx, dd_real *dy, mplapackint const incy) {
     //
     //  -- Reference BLAS level1 routine --
     //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -48,12 +48,12 @@ void Rswap(INTEGER const n, REAL *dx, INTEGER const incx, REAL *dy, INTEGER cons
     if (n <= 0) {
         return;
     }
-    INTEGER m = 0;
-    INTEGER i = 0;
-    REAL dtemp = 0.0;
-    INTEGER mp1 = 0;
-    INTEGER ix = 0;
-    INTEGER iy = 0;
+    mplapackint m = 0;
+    mplapackint i = 0;
+    dd_real dtemp = 0.0;
+    mplapackint mp1 = 0;
+    mplapackint ix = 0;
+    mplapackint iy = 0;
     if (incx == 1 && incy == 1) {
         //
         //       code for both increments equal to 1

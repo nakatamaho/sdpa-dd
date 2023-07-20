@@ -29,7 +29,7 @@
 #include <mpblas.h>
 #include <mplapack.h>
 
-void Rorg2l(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER const lda, REAL *tau, REAL *work, INTEGER &info) {
+void Rorg2l(mplapackint const m, mplapackint const n, mplapackint const k, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint &info) {
     //
     //  -- LAPACK computational routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -61,7 +61,7 @@ void Rorg2l(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
         info = -2;
     } else if (k < 0 || k > n) {
         info = -3;
-    } else if (lda < max((INTEGER)1, m)) {
+    } else if (lda < max((mplapackint)1, m)) {
         info = -5;
     }
     if (info != 0) {
@@ -77,10 +77,10 @@ void Rorg2l(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
     //
     //     Initialise columns 1:n-k to columns of the unit matrix
     //
-    INTEGER j = 0;
-    INTEGER l = 0;
-    const REAL zero = 0.0;
-    const REAL one = 1.0;
+    mplapackint j = 0;
+    mplapackint l = 0;
+    const dd_real zero = 0.0;
+    const dd_real one = 1.0;
     for (j = 1; j <= n - k; j = j + 1) {
         for (l = 1; l <= m; l = l + 1) {
             a[(l - 1) + (j - 1) * lda] = zero;
@@ -88,8 +88,8 @@ void Rorg2l(INTEGER const m, INTEGER const n, INTEGER const k, REAL *a, INTEGER 
         a[((m - n + j) - 1) + (j - 1) * lda] = one;
     }
     //
-    INTEGER i = 0;
-    INTEGER ii = 0;
+    mplapackint i = 0;
+    mplapackint ii = 0;
     for (i = 1; i <= k; i = i + 1) {
         ii = n - k + i;
         //

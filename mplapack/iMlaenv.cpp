@@ -32,12 +32,12 @@
 
 #define subnamlen 17
 
-INTEGER iMlaenv(INTEGER const ispec, const char *name, const char *opts, INTEGER const n1, INTEGER const n2, INTEGER const n3, INTEGER const n4) {
-    INTEGER return_value = 0;
+mplapackint iMlaenv(mplapackint const ispec, const char *name, const char *opts, mplapackint const n1, mplapackint const n2, mplapackint const n3, mplapackint const n4) {
+    mplapackint return_value = 0;
     char subnam[subnamlen];
     memset(subnam, '\0', sizeof(subnam));
-    INTEGER ic = 0;
-    INTEGER i = 0;
+    mplapackint ic = 0;
+    mplapackint i = 0;
     bool sname = false;
     bool cname = false;
     char c1[1];
@@ -45,10 +45,10 @@ INTEGER iMlaenv(INTEGER const ispec, const char *name, const char *opts, INTEGER
     char c3[3];
     char c4[2];
     bool twostage = false;
-    INTEGER nb = 0;
-    INTEGER nbmin = 0;
-    INTEGER nx = 0;
-    INTEGER name_len;
+    mplapackint nb = 0;
+    mplapackint nbmin = 0;
+    mplapackint nx = 0;
+    mplapackint name_len;
     //
     switch (ispec) {
     case 1:
@@ -96,7 +96,7 @@ L10:
     //
     return_value = 1;
     //
-    // name_len = min((INTEGER)strlen(name), (INTEGER)subnamlen);
+    // name_len = min((mplapackint)strlen(name), (mplapackint)subnamlen);
     strcpy(subnam, name);
     ic = *subnam;
 
@@ -128,7 +128,7 @@ L50:
     //
     //     In these examples, separate code is provided for setting NB for
     //     real and complex.  We assume that NB will take the same value in
-    //     single or REAL precision.
+    //     single or dd_real precision.
     //
     nb = 1;
     //
@@ -493,7 +493,7 @@ L100:
     //
     //     ISPEC = 6:  crossover point for SVD (used by xGELSS and xGESVD)
     //
-    return_value = castINTEGER(castREAL(min(n1, n2)) * 1.6);
+    return_value = castmplapackint(castdd_real(min(n1, n2)) * 1.6);
     return return_value;
     //
 L110:
