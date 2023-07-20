@@ -39,7 +39,7 @@ dd_real Rdot(mplapackint const n, dd_real *dx, mplapackint const incx, dd_real *
 void Rcopy(mplapackint const n, dd_real *dx, mplapackint const incx, dd_real *dy, mplapackint const incy);
 void Raxpy(mplapackint const n, dd_real const da, dd_real *dx, mplapackint const incx, dd_real *dy, mplapackint const incy);
 void Rscal(mplapackint const n, dd_real const da, dd_real *dx, mplapackint const incx);
-bool Mlsame_dd_dd(const char *a, const char *b);
+bool Mlsame_dd(const char *a, const char *b);
 void Mxerbla_dd(const char *srname, int info);
 void Rswap(mplapackint const n, dd_real *dx, mplapackint const incx, dd_real *dy, mplapackint const incy);
 dd_real Rnrm2(mplapackint const n, dd_real *x, mplapackint const incx);

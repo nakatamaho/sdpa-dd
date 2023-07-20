@@ -493,7 +493,7 @@ L100:
     //
     //     ISPEC = 6:  crossover point for SVD (used by xGELSS and xGESVD)
     //
-    return_value = castmplapackint(castdd_real(min(n1, n2)) * 1.6);
+    return_value = castmplapackint(cast_real(std::min(n1, n2)) * 1.6);
     return return_value;
     //
 L110:

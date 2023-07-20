@@ -41,8 +41,8 @@ void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n,
     dd_real temp;
     dd_real Zero = 0.0, One = 1.0;
 
-    nota = Mlsame_dd_dd(transa, "N");
-    notb = Mlsame_dd_dd(transb, "N");
+    nota = Mlsame_dd(transa, "N");
+    notb = Mlsame_dd(transb, "N");
     if (nota) {
 	nrowa = m;
 	ncola = k;
@@ -57,9 +57,9 @@ void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n,
     }
 //Test the input parameters.
     info = 0;
-    if (!nota && (!Mlsame_dd_dd(transa, "C")) && (!Mlsame_dd_dd(transa, "T")))
+    if (!nota && (!Mlsame_dd(transa, "C")) && (!Mlsame_dd(transa, "T")))
 	info = 1;
-    else if (!notb && (!Mlsame_dd_dd(transb, "C")) && (!Mlsame_dd_dd(transb, "T")))
+    else if (!notb && (!Mlsame_dd(transb, "C")) && (!Mlsame_dd(transb, "T")))
 	info = 2;
     else if (m < 0)
 	info = 3;
