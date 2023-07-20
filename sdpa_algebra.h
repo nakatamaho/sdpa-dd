@@ -6,8 +6,8 @@
 #ifndef __sdpa_algebra_h__
 #define __sdpa_algebra_h__
 
-#include "mblas_dd.h"
-#include "mlapack_dd.h"
+#include "mpblas_dd.h"
+#include "mplapack_dd.h"
 
 #endif // __sdpa_algebra_h__
 
