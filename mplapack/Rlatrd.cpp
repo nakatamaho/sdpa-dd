@@ -66,7 +66,7 @@ void Rlatrd(const char *uplo, mplapackint const n, mplapackint const nb, dd_real
     const dd_real zero = 0.0;
     const dd_real half = 0.5e+0;
     dd_real alpha = 0.0;
-    if (Mlsame(uplo, "U")) {
+    if (Mlsame_dd(uplo, "U")) {
         //
         //        Reduce last NB columns of upper triangle
         //

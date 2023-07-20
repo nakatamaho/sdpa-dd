@@ -100,11 +100,11 @@ void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_r
     //
     info = 0;
     //
-    if (Mlsame(compz, "N")) {
+    if (Mlsame_dd(compz, "N")) {
         icompz = 0;
-    } else if (Mlsame(compz, "V")) {
+    } else if (Mlsame_dd(compz, "V")) {
         icompz = 1;
-    } else if (Mlsame(compz, "I")) {
+    } else if (Mlsame_dd(compz, "I")) {
         icompz = 2;
     } else {
         icompz = -1;

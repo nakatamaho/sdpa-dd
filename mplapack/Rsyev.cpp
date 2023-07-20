@@ -33,14 +33,14 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
     //
     //     Test the input parameters.
     //
-    bool wantz = Mlsame(jobz, "V");
-    bool lower = Mlsame(uplo, "L");
+    bool wantz = Mlsame_dd(jobz, "V");
+    bool lower = Mlsame_dd(uplo, "L");
     bool lquery = (lwork == -1);
     //
     info = 0;
-    if (!(wantz || Mlsame(jobz, "N"))) {
+    if (!(wantz || Mlsame_dd(jobz, "N"))) {
         info = -1;
-    } else if (!(lower || Mlsame(uplo, "U"))) {
+    } else if (!(lower || Mlsame_dd(uplo, "U"))) {
         info = -2;
     } else if (n < 0) {
         info = -3;

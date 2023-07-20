@@ -75,19 +75,19 @@ void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_rea
     //
     info = 0;
     //
-    if (Mlsame(type, "G")) {
+    if (Mlsame_dd(type, "G")) {
         itype = 0;
-    } else if (Mlsame(type, "L")) {
+    } else if (Mlsame_dd(type, "L")) {
         itype = 1;
-    } else if (Mlsame(type, "U")) {
+    } else if (Mlsame_dd(type, "U")) {
         itype = 2;
-    } else if (Mlsame(type, "H")) {
+    } else if (Mlsame_dd(type, "H")) {
         itype = 3;
-    } else if (Mlsame(type, "B")) {
+    } else if (Mlsame_dd(type, "B")) {
         itype = 4;
-    } else if (Mlsame(type, "Q")) {
+    } else if (Mlsame_dd(type, "Q")) {
         itype = 5;
-    } else if (Mlsame(type, "Z")) {
+    } else if (Mlsame_dd(type, "Z")) {
         itype = 6;
     } else {
         itype = -1;

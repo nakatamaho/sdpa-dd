@@ -54,24 +54,24 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
     //
     //     Test the input parameters.
     //
-    bool lside = Mlsame(side, "L");
+    bool lside = Mlsame_dd(side, "L");
     mplapackint nrowa = 0;
     if (lside) {
         nrowa = m;
     } else {
         nrowa = n;
     }
-    bool nounit = Mlsame(diag, "N");
-    bool upper = Mlsame(uplo, "U");
+    bool nounit = Mlsame_dd(diag, "N");
+    bool upper = Mlsame_dd(uplo, "U");
     //
     mplapackint info = 0;
-    if ((!lside) && (!Mlsame(side, "R"))) {
+    if ((!lside) && (!Mlsame_dd(side, "R"))) {
         info = 1;
-    } else if ((!upper) && (!Mlsame(uplo, "L"))) {
+    } else if ((!upper) && (!Mlsame_dd(uplo, "L"))) {
         info = 2;
-    } else if ((!Mlsame(transa, "N")) && (!Mlsame(transa, "T")) && (!Mlsame(transa, "C"))) {
+    } else if ((!Mlsame_dd(transa, "N")) && (!Mlsame_dd(transa, "T")) && (!Mlsame_dd(transa, "C"))) {
         info = 3;
-    } else if ((!Mlsame(diag, "U")) && (!Mlsame(diag, "N"))) {
+    } else if ((!Mlsame_dd(diag, "U")) && (!Mlsame_dd(diag, "N"))) {
         info = 4;
     } else if (m < 0) {
         info = 5;
@@ -113,7 +113,7 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
     dd_real temp = 0.0;
     const dd_real one = 1.0;
     if (lside) {
-        if (Mlsame(transa, "N")) {
+        if (Mlsame_dd(transa, "N")) {
             //
             //           Form  B := alpha*A*B.
             //
@@ -181,7 +181,7 @@ void Rtrmm(const char *side, const char *uplo, const char *transa, const char *d
             }
         }
     } else {
-        if (Mlsame(transa, "N")) {
+        if (Mlsame_dd(transa, "N")) {
             //
             //           Form  B := alpha*B*A.
             //

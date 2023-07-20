@@ -63,7 +63,7 @@ dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e) {
     const dd_real one = 1.0;
     if (n <= 0) {
         anorm = zero;
-    } else if (Mlsame(norm, "M")) {
+    } else if (Mlsame_dd(norm, "M")) {
         //
         //        Find max(abs(A(i,j))).
         //
@@ -78,7 +78,7 @@ dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e) {
                 anorm = sum;
             }
         }
-    } else if (Mlsame(norm, "O") || (Mlsame(norm, "1")) || Mlsame(norm, "I")) {
+    } else if (Mlsame_dd(norm, "O") || (Mlsame_dd(norm, "1")) || Mlsame_dd(norm, "I")) {
         //
         //        Find norm1(A).
         //
@@ -97,7 +97,7 @@ dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e) {
                 }
             }
         }
-    } else if ((Mlsame(norm, "F")) || (Mlsame(norm, "E"))) {
+    } else if ((Mlsame_dd(norm, "F")) || (Mlsame_dd(norm, "E"))) {
         //
         //        Find normF(A).
         //

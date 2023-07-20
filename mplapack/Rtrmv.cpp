@@ -55,11 +55,11 @@ void Rtrmv(const char *uplo, const char *trans, const char *diag, mplapackint co
     //     Test the input parameters.
     //
     mplapackint info = 0;
-    if (!Mlsame(uplo, "U") && !Mlsame(uplo, "L")) {
+    if (!Mlsame_dd(uplo, "U") && !Mlsame_dd(uplo, "L")) {
         info = 1;
-    } else if (!Mlsame(trans, "N") && !Mlsame(trans, "T") && !Mlsame(trans, "C")) {
+    } else if (!Mlsame_dd(trans, "N") && !Mlsame_dd(trans, "T") && !Mlsame_dd(trans, "C")) {
         info = 2;
-    } else if (!Mlsame(diag, "U") && !Mlsame(diag, "N")) {
+    } else if (!Mlsame_dd(diag, "U") && !Mlsame_dd(diag, "N")) {
         info = 3;
     } else if (n < 0) {
         info = 4;
@@ -79,7 +79,7 @@ void Rtrmv(const char *uplo, const char *trans, const char *diag, mplapackint co
         return;
     }
     //
-    bool nounit = Mlsame(diag, "N");
+    bool nounit = Mlsame_dd(diag, "N");
     //
     //     Set up the start point in X if the increment is not unity. This
     //     will be  ( N - 1 )*INCX  too small for descending loops.
@@ -100,11 +100,11 @@ void Rtrmv(const char *uplo, const char *trans, const char *diag, mplapackint co
     mplapackint i = 0;
     mplapackint jx = 0;
     mplapackint ix = 0;
-    if (Mlsame(trans, "N")) {
+    if (Mlsame_dd(trans, "N")) {
         //
         //        Form  x := A*x.
         //
-        if (Mlsame(uplo, "U")) {
+        if (Mlsame_dd(uplo, "U")) {
             if (incx == 1) {
                 for (j = 1; j <= n; j = j + 1) {
                     if (x[j - 1] != zero) {
@@ -170,7 +170,7 @@ void Rtrmv(const char *uplo, const char *trans, const char *diag, mplapackint co
         //
         //        Form  x := A**T*x.
         //
-        if (Mlsame(uplo, "U")) {
+        if (Mlsame_dd(uplo, "U")) {
             if (incx == 1) {
                 for (j = n; j >= 1; j = j - 1) {
                     temp = x[j - 1];

@@ -62,8 +62,8 @@ void Rpotf2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
     //     Test the input parameters.
     //
     info = 0;
-    upper = Mlsame(uplo, "U");
-    if (!upper && !Mlsame(uplo, "L")) {
+    upper = Mlsame_dd(uplo, "U");
+    if (!upper && !Mlsame_dd(uplo, "L")) {
         info = -1;
     } else if (n < 0) {
         info = -2;

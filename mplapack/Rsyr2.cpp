@@ -55,7 +55,7 @@ void Rsyr2(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *
     //     Test the input parameters.
     //
     mplapackint info = 0;
-    if (!Mlsame(uplo, "U") && !Mlsame(uplo, "L")) {
+    if (!Mlsame_dd(uplo, "U") && !Mlsame_dd(uplo, "L")) {
         info = 1;
     } else if (n < 0) {
         info = 2;
@@ -110,7 +110,7 @@ void Rsyr2(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *
     mplapackint i = 0;
     mplapackint ix = 0;
     mplapackint iy = 0;
-    if (Mlsame(uplo, "U")) {
+    if (Mlsame_dd(uplo, "U")) {
         //
         //        Form  A  when A is stored in the upper triangle.
         //

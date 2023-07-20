@@ -55,7 +55,7 @@ void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real 
     //     Test the input parameters.
     //
     mplapackint info = 0;
-    if (!Mlsame(trans, "N") && !Mlsame(trans, "T") && !Mlsame(trans, "C")) {
+    if (!Mlsame_dd(trans, "N") && !Mlsame_dd(trans, "T") && !Mlsame_dd(trans, "C")) {
         info = 1;
     } else if (m < 0) {
         info = 2;
@@ -86,7 +86,7 @@ void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real 
     //
     mplapackint lenx = 0;
     mplapackint leny = 0;
-    if (Mlsame(trans, "N")) {
+    if (Mlsame_dd(trans, "N")) {
         lenx = n;
         leny = m;
     } else {
@@ -147,7 +147,7 @@ void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real 
     dd_real temp = 0.0;
     mplapackint jy = 0;
     mplapackint ix = 0;
-    if (Mlsame(trans, "N")) {
+    if (Mlsame_dd(trans, "N")) {
         //
         //        Form  y := alpha*A*x + y.
         //

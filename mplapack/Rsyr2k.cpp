@@ -55,17 +55,17 @@ void Rsyr2k(const char *uplo, const char *trans, mplapackint const n, mplapackin
     //     Test the input parameters.
     //
     mplapackint nrowa = 0;
-    if (Mlsame(trans, "N")) {
+    if (Mlsame_dd(trans, "N")) {
         nrowa = n;
     } else {
         nrowa = k;
     }
-    bool upper = Mlsame(uplo, "U");
+    bool upper = Mlsame_dd(uplo, "U");
     //
     mplapackint info = 0;
-    if ((!upper) && (!Mlsame(uplo, "L"))) {
+    if ((!upper) && (!Mlsame_dd(uplo, "L"))) {
         info = 1;
-    } else if ((!Mlsame(trans, "N")) && (!Mlsame(trans, "T")) && (!Mlsame(trans, "C"))) {
+    } else if ((!Mlsame_dd(trans, "N")) && (!Mlsame_dd(trans, "T")) && (!Mlsame_dd(trans, "C"))) {
         info = 2;
     } else if (n < 0) {
         info = 3;
@@ -133,7 +133,7 @@ void Rsyr2k(const char *uplo, const char *trans, mplapackint const n, mplapackin
     mplapackint l = 0;
     dd_real temp1 = 0.0;
     dd_real temp2 = 0.0;
-    if (Mlsame(trans, "N")) {
+    if (Mlsame_dd(trans, "N")) {
         //
         //        Form  C := alpha*A*B**T + alpha*B*A**T + C.
         //

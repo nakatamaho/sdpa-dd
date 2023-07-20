@@ -52,7 +52,7 @@ void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real 
     //
     mplapackint j = 0;
     mplapackint i = 0;
-    if (Mlsame(uplo, "U")) {
+    if (Mlsame_dd(uplo, "U")) {
         //
         //        Set the strictly upper triangular or trapezoidal part of the
         //        array to ALPHA.
@@ -63,7 +63,7 @@ void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real 
             }
         }
         //
-    } else if (Mlsame(uplo, "L")) {
+    } else if (Mlsame_dd(uplo, "L")) {
         //
         //        Set the strictly lower triangular or trapezoidal part of the
         //        array to ALPHA.

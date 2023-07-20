@@ -34,9 +34,9 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
     //     Test the input parameters
     //
     info = 0;
-    bool upper = Mlsame(uplo, "U");
+    bool upper = Mlsame_dd(uplo, "U");
     bool lquery = (lwork == -1);
-    if (!upper && !Mlsame(uplo, "L")) {
+    if (!upper && !Mlsame_dd(uplo, "L")) {
         info = -1;
     } else if (n < 0) {
         info = -2;

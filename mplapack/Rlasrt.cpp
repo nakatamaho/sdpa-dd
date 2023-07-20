@@ -73,9 +73,9 @@ void Rlasrt(const char *id, mplapackint const n, dd_real *d, mplapackint &info) 
     //
     info = 0;
     dir = -1;
-    if (Mlsame(id, "D")) {
+    if (Mlsame_dd(id, "D")) {
         dir = 0;
-    } else if (Mlsame(id, "I")) {
+    } else if (Mlsame_dd(id, "I")) {
         dir = 1;
     }
     if (dir == -1) {

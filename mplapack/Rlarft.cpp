@@ -64,7 +64,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
     mplapackint j = 0;
     mplapackint lastv = 0;
     const dd_real one = 1.0;
-    if (Mlsame(direct, "F")) {
+    if (Mlsame_dd(direct, "F")) {
         prevlastv = n;
         for (i = 1; i <= k; i = i + 1) {
             prevlastv = max(i, prevlastv);
@@ -79,7 +79,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                 //
                 //              general case
                 //
-                if (Mlsame(storev, "C")) {
+                if (Mlsame_dd(storev, "C")) {
                     //                 Skip any trailing zeros.
                     for (lastv = n; lastv >= i + 1; lastv = lastv - 1) {
                         if (v[(lastv - 1) + (i - 1) * ldv] != zero) {
@@ -137,7 +137,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                 //              general case
                 //
                 if (i < k) {
-                    if (Mlsame(storev, "C")) {
+                    if (Mlsame_dd(storev, "C")) {
                         //                    Skip any leading zeros.
                         for (lastv = 1; lastv <= i - 1; lastv = lastv + 1) {
                             if (v[(lastv - 1) + (i - 1) * ldv] != zero) {

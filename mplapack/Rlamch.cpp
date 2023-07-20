@@ -107,25 +107,25 @@ dd_real RlamchZ_dd(void) {
 }
 
 dd_real Rlamch_dd(const char *cmach) {
-    if (Mlsame(cmach, "E"))
+    if (Mlsame_dd(cmach, "E"))
         return RlamchE_dd();
-    if (Mlsame(cmach, "S"))
+    if (Mlsame_dd(cmach, "S"))
         return RlamchS_dd();
-    if (Mlsame(cmach, "B"))
+    if (Mlsame_dd(cmach, "B"))
         return RlamchB_dd();
-    if (Mlsame(cmach, "P"))
+    if (Mlsame_dd(cmach, "P"))
         return RlamchP_dd();
-    if (Mlsame(cmach, "N"))
+    if (Mlsame_dd(cmach, "N"))
         return RlamchN_dd();
-    if (Mlsame(cmach, "R"))
+    if (Mlsame_dd(cmach, "R"))
         return RlamchR_dd();
-    if (Mlsame(cmach, "M"))
+    if (Mlsame_dd(cmach, "M"))
         return RlamchM_dd();
-    if (Mlsame(cmach, "U"))
+    if (Mlsame_dd(cmach, "U"))
         return RlamchU_dd();
-    if (Mlsame(cmach, "L"))
+    if (Mlsame_dd(cmach, "L"))
         return RlamchL_dd();
-    if (Mlsame(cmach, "O"))
+    if (Mlsame_dd(cmach, "O"))
         return RlamchO_dd();
 
     Mxerbla_dd("Rlamch", 1);

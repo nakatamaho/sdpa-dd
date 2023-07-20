@@ -59,7 +59,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
     }
     //
     char transt;
-    if (Mlsame(trans, "N")) {
+    if (Mlsame_dd(trans, "N")) {
         transt = 'T';
     } else {
         transt = 'N';
@@ -68,15 +68,15 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
     mplapackint j = 0;
     const dd_real one = 1.0;
     mplapackint i = 0;
-    if (Mlsame(storev, "C")) {
+    if (Mlsame_dd(storev, "C")) {
         //
-        if (Mlsame(direct, "F")) {
+        if (Mlsame_dd(direct, "F")) {
             //
             //           Let  V =  ( V1 )    (first K rows)
             //                     ( V2 )
             //           where  V1  is unit lower triangular.
             //
-            if (Mlsame(side, "L")) {
+            if (Mlsame_dd(side, "L")) {
                 //
                 //              Form  H * C  or  H**T * C  where  C = ( C1 )
                 //                                                    ( C2 )
@@ -124,7 +124,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
                     }
                 }
                 //
-            } else if (Mlsame(side, "R")) {
+            } else if (Mlsame_dd(side, "R")) {
                 //
                 //              Form  C * H  or  C * H**T  where  C = ( C1  C2 )
                 //
@@ -178,7 +178,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
             //                     ( V2 )    (last K rows)
             //           where  V2  is unit upper triangular.
             //
-            if (Mlsame(side, "L")) {
+            if (Mlsame_dd(side, "L")) {
                 //
                 //              Form  H * C  or  H**T * C  where  C = ( C1 )
                 //                                                    ( C2 )
@@ -226,7 +226,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
                     }
                 }
                 //
-            } else if (Mlsame(side, "R")) {
+            } else if (Mlsame_dd(side, "R")) {
                 //
                 //              Form  C * H  or  C * H**T  where  C = ( C1  C2 )
                 //
@@ -275,14 +275,14 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
             }
         }
         //
-    } else if (Mlsame(storev, "R")) {
+    } else if (Mlsame_dd(storev, "R")) {
         //
-        if (Mlsame(direct, "F")) {
+        if (Mlsame_dd(direct, "F")) {
             //
             //           Let  V =  ( V1  V2 )    (V1: first K columns)
             //           where  V1  is unit upper triangular.
             //
-            if (Mlsame(side, "L")) {
+            if (Mlsame_dd(side, "L")) {
                 //
                 //              Form  H * C  or  H**T * C  where  C = ( C1 )
                 //                                                    ( C2 )
@@ -330,7 +330,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
                     }
                 }
                 //
-            } else if (Mlsame(side, "R")) {
+            } else if (Mlsame_dd(side, "R")) {
                 //
                 //              Form  C * H  or  C * H**T  where  C = ( C1  C2 )
                 //
@@ -384,7 +384,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
             //           Let  V =  ( V1  V2 )    (V2: last K columns)
             //           where  V2  is unit lower triangular.
             //
-            if (Mlsame(side, "L")) {
+            if (Mlsame_dd(side, "L")) {
                 //
                 //              Form  H * C  or  H**T * C  where  C = ( C1 )
                 //                                                    ( C2 )
@@ -432,7 +432,7 @@ void Rlarfb(const char *side, const char *trans, const char *direct, const char 
                     }
                 }
                 //
-            } else if (Mlsame(side, "R")) {
+            } else if (Mlsame_dd(side, "R")) {
                 //
                 //              Form  C * H  or  C * H'  where  C = ( C1  C2 )
                 //

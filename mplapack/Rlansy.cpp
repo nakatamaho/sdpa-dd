@@ -43,12 +43,12 @@ dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real 
     dd_real colssq[2];
     if (n == 0) {
         value = zero;
-    } else if (Mlsame(norm, "M")) {
+    } else if (Mlsame_dd(norm, "M")) {
         //
         //        Find max(abs(A(i,j))).
         //
         value = zero;
-        if (Mlsame(uplo, "U")) {
+        if (Mlsame_dd(uplo, "U")) {
             for (j = 1; j <= n; j = j + 1) {
                 for (i = 1; i <= j; i = i + 1) {
                     sum = abs(a[(i - 1) + (j - 1) * lda]);
@@ -67,12 +67,12 @@ dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real 
                 }
             }
         }
-    } else if ((Mlsame(norm, "I")) || (Mlsame(norm, "O")) || (Mlsame(norm, "1"))) {
+    } else if ((Mlsame_dd(norm, "I")) || (Mlsame_dd(norm, "O")) || (Mlsame_dd(norm, "1"))) {
         //
         //        Find normI(A) ( = norm1(A), since A is symmetric).
         //
         value = zero;
-        if (Mlsame(uplo, "U")) {
+        if (Mlsame_dd(uplo, "U")) {
             for (j = 1; j <= n; j = j + 1) {
                 sum = zero;
                 for (i = 1; i <= j - 1; i = i + 1) {
@@ -104,7 +104,7 @@ dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real 
                 }
             }
         }
-    } else if ((Mlsame(norm, "F")) || (Mlsame(norm, "E"))) {
+    } else if ((Mlsame_dd(norm, "F")) || (Mlsame_dd(norm, "E"))) {
         //
         //        Find normF(A).
         //        SSQ(1) is scale
@@ -116,7 +116,7 @@ dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real 
         //
         //        Sum off-diagonals
         //
-        if (Mlsame(uplo, "U")) {
+        if (Mlsame_dd(uplo, "U")) {
             for (j = 2; j <= n; j = j + 1) {
                 colssq[1 - 1] = zero;
                 colssq[2 - 1] = one;
