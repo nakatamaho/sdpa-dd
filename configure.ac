@@ -13,10 +13,20 @@ AC_ARG_WITH(system-spooles,
 WITH_SYSTEM_SPOOLES=$withval, WITH_SYSTEM_SPOOLES=no)
 AM_CONDITIONAL(BUILD_SPOOLES, test x$WITH_SYSTEM_SPOOLES = xno)
 
-AC_ARG_WITH(system-mplapack,
-[  --with-system-mplapack      Use mplapack already on system],
-WITH_SYSTEM_MPLAPACK=$withval, WITH_SYSTEM_MPLAPACK=no)
-AM_CONDITIONAL(BUILD_MPLAPACK, test x$WITH_SYSTEM_MPLAPACK = xno)
+AC_ARG_WITH(spooles-includedir,
+[  --with-spooles-includedir    Gives spooles include dir you use(e.g., /usr/local/include/spooles).],
+SPOOLES_INCLUDEDIR=$withval
+)
+
+AC_ARG_WITH(spooles-libdir,
+[  --with-spooles-libdir    Gives spooles lib dir you use(e.g., /usr/local/lib).],
+SPOOLES_LIBDIR=$withval
+)
+
+AC_ARG_WITH(system-qd,
+[  --with-system-qd      Use qd already on system],
+WITH_SYSTEM_QD=$withval, WITH_SYSTEM_QD=no)
+AM_CONDITIONAL(BUILD_QD, test x$WITH_SYSTEM_QD = xno)
 
 AC_ARG_WITH(qd-includedir,
 [  --with-qd-includedir    Gives qd include dir you use(e.g., /usr/local/include).],
@@ -28,6 +38,11 @@ AC_ARG_WITH(qd-libdir,
 QD_LIBDIR=$withval
 )
 
+AC_ARG_WITH(system-mplapack,
+[  --with-system-mplapack      Use mplapack already on system],
+WITH_SYSTEM_MPLAPACK=$withval, WITH_SYSTEM_MPLAPACK=no)
+AM_CONDITIONAL(BUILD_MPLAPACK, test x$WITH_SYSTEM_MPLAPACK = xno)
+
 AC_ARG_WITH(mplapack-includedir,
 [  --with-mplapack-includedir    Gives mplapack include dir you use(e.g., /usr/local/include).],
 MPLAPACK_INCLUDEDIR=$withval
@@ -38,16 +53,6 @@ AC_ARG_WITH(mplapack-libdir,
 MPLAPACK_LIBDIR=$withval
 )
 
-AC_ARG_WITH(spooles-includedir,
-[  --with-spooles-includedir    Gives spooles include dir you use(e.g., /usr/local/include/spooles).],
-SPOOLES_INCLUDEDIR=$withval
-)
-
-AC_ARG_WITH(spooles-libdir,
-[  --with-spooles-libdir    Gives spooles lib dir you use(e.g., /usr/local/lib).],
-SPOOLES_LIBDIR=$withval
-)
-
 AC_ARG_ENABLE(metis,
 [  --enable-metis    Build with metis],
 [case "${enableval}" in
@@ -56,16 +61,6 @@ AC_ARG_ENABLE(metis,
   *) AC_MSG_ERROR(bad value ${enableval} for --enable-metis) ;;
 esac],[with_metis=no])
 AM_CONDITIONAL(ENABLE_METIS, test x$with_metis = xyes)
-
-AC_ARG_WITH(metis-includedir,
-[  --with-metis-includedir    Gives metis include dir you use(e.g., /usr/local/include/metis).],
-METIS_INCLUDEDIR=$withval
-)
-
-AC_ARG_WITH(metis-libdir,
-[  --with-metis-libdir    Gives metis lib dir you use(e.g., /usr/local/lib).],
-METIS_LIBDIR=$withval
-)
 
 AC_ARG_ENABLE(openmp,
 [  --enable-openmp       Enables openmp
@@ -91,7 +86,7 @@ AC_ARG_ENABLE(shared,
 ],,)
 
 
-dnl spooles and metis requires -lm when linking.
+dnl spooles requires -lm when linking.
 LIBS="-lm"
 
 dnl How thread we link thread library esp. needed for spooles.
@@ -126,46 +121,6 @@ SPOOLES_LIBDIR="."
 fi
 
 dnl
-
-AC_MSG_CHECKING([whether to enable metis])
-if test "$with_metis" = "no"; then
-  AC_MSG_RESULT([no])
-  ENABLE_METIS=NO
-  AC_SUBST(ENABLE_METIS)
-else
-  AC_MSG_RESULT([yes])
-  ENABLE_METIS=YES
-  AC_SUBST(ENABLE_METIS)
-
-  if test x$METIS_INCLUDEDIR = x; then
-  METIS_INCLUDEDIR="."
-  fi
-  if test x$METIS_LIBDIR = x; then
-  METIS_LIBDIR="."
-  fi
-
-  dnl Check for METIS include and library files
-  HAVE_METIS_HEADER=""
-  HAVE_METIS=""
-  save_CPPFLAGS="$CPPFLAGS"
-  CPPFLAGS="$CPPFLAGS -I$METIS_INCLUDEDIR"
-  AC_CHECK_HEADER(metis.h, HAVE_METIS_HEADER=yes)
-  CPPFLAGS=$save_CPPFLAGS
-  if test x$HAVE_METIS_HEADER = xyes; then
-    save_LDFLAGS="$LDFLAGS"
-    LDFLAGS="$LDFLAGS -L$METIS_LIBDIR"
-    AC_CHECK_LIB(metis, METIS_NodeND, [METIS_LIBS="-lmetis"; HAVE_METIS=yes])
-    LDFLAGS=$save_LDFLAGS
-  fi
-
-  if test x$HAVE_METIS != xyes; then
-    echo "Please install METIS"
-    echo "METIS http://glaros.dtc.umn.edu/gkhome/views/metis/index.html"
-    AC_MSG_ERROR([No METIS found])
-  fi
-  AC_SUBST(METIS_LIBDIR)
-  AC_SUBST(METIS_INCLUDEDIR)
-fi
 
 if test x$WITH_SYSTEM_SPOOLES != xno; then
   dnl Check for SPOOLES include and library files
