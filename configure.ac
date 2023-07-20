@@ -172,8 +172,8 @@ if test x$WITH_SYSTEM_QD != xno; then
     AC_MSG_ERROR([No QD found])
   fi
 else
-QD_LIBDIR=`pwd`/external/i/QD/lib
-QD_INCLUDEDIR=`pwd`/external/i/QD/include
+  QD_LIBDIR=`pwd`/external/i/QD/lib
+  QD_INCLUDEDIR=`pwd`/external/i/QD/include
 fi
 AC_SUBST(QD_LIBDIR)
 AC_SUBST(QD_INCLUDEDIR)

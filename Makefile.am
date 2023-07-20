@@ -48,13 +48,8 @@ sdpa_dd_LDADD = $(pthread_lib) -L$(SPOOLES_LIBDIR) -lspooles -L$(QD_LIBDIR) -lqd
 sdpa_dd_CXXFLAGS= $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -DUseMETIS=0 -I$(QD_INCLUDEDIR) $(OPENMPFLAGS) -I./mplapack
 endif
 
-if BUILD_SPOOLES
-SUBDIRS = external/spooles
-endif
-
-if BUILD_QD
-SUBDIRS = external/qd
-endif
+AUTOMAKE_OPTIONS = subdir-objects
+SUBDIRS = external
 
 EXTRA_DIST = \
 param.sdpa \
