@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *w, dd_real *work, mplapackint const lwork, mplapackint &info) {
     //
@@ -61,7 +61,7 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
     }
     //
     if (info != 0) {
-        Mxerbla("Rsyev", -info);
+        Mxerbla_dd("Rsyev", -info);
         return;
     } else if (lquery) {
         return;

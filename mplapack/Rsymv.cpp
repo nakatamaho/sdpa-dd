@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 void Rsymv(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *x, mplapackint const incx, dd_real const beta, dd_real *y, mplapackint const incy) {
     //
@@ -67,7 +67,7 @@ void Rsymv(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *
         info = 10;
     }
     if (info != 0) {
-        Mxerbla("Rsymv ", info);
+        Mxerbla_dd("Rsymv ", info);
         return;
     }
     //

@@ -27,8 +27,8 @@
  * SUCH DAMAGE.
  *
  */
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 #include <stdio.h>
 
 //"E" denots we always calculate relative machine precision (e).
@@ -128,7 +128,7 @@ dd_real Rlamch_dd(const char *cmach) {
     if (Mlsame(cmach, "O"))
         return RlamchO_dd();
 
-    Mxerbla("Rlamch", 1);
+    Mxerbla_dd("Rlamch", 1);
     return RlamchZ_dd();
 }
 

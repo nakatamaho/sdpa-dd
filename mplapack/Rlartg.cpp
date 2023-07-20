@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlartg(dd_real const f, dd_real const g, dd_real &cs, dd_real &sn, dd_real &r) {
     dd_real safmin = 0.0;

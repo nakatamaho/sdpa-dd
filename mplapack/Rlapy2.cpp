@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 dd_real Rlapy2(dd_real const x, dd_real const y) {
     dd_real return_value = 0.0;

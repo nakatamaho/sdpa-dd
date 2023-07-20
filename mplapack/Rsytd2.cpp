@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rsytd2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *d, dd_real *e, dd_real *tau, mplapackint &info) {
     //
@@ -66,7 +66,7 @@ void Rsytd2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         info = -4;
     }
     if (info != 0) {
-        Mxerbla("Rsytd2", -info);
+        Mxerbla_dd("Rsytd2", -info);
         return;
     }
     //

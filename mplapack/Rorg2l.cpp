@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rorg2l(mplapackint const m, mplapackint const n, mplapackint const k, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint &info) {
     //
@@ -65,7 +65,7 @@ void Rorg2l(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         info = -5;
     }
     if (info != 0) {
-        Mxerbla("Rorg2l", -info);
+        Mxerbla_dd("Rorg2l", -info);
         return;
     }
     //

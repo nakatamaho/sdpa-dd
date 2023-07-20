@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 void Rswap(mplapackint const n, dd_real *dx, mplapackint const incx, dd_real *dy, mplapackint const incy) {
     //

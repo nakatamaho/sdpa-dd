@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlarfg(mplapackint const n, dd_real &alpha, dd_real *x, mplapackint const incx, dd_real &tau) {
     const dd_real zero = 0.0;

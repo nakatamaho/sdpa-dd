@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlasrt(const char *id, mplapackint const n, dd_real *d, mplapackint &info) {
     mplapackint dir = 0;
@@ -84,7 +84,7 @@ void Rlasrt(const char *id, mplapackint const n, dd_real *d, mplapackint &info) 
         info = -2;
     }
     if (info != 0) {
-        Mxerbla("Rlasrt", -info);
+        Mxerbla_dd("Rlasrt", -info);
         return;
     }
     //

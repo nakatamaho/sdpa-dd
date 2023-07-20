@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info) {
     //
@@ -85,7 +85,7 @@ void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
     }
     //
     if (info != 0) {
-        Mxerbla("Rorgql", -info);
+        Mxerbla_dd("Rorgql", -info);
         return;
     } else if (lquery) {
         return;

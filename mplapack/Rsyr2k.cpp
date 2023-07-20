@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 void Rsyr2k(const char *uplo, const char *trans, mplapackint const n, mplapackint const k, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *b, mplapackint const ldb, dd_real const beta, dd_real *c, mplapackint const ldc) {
     //
@@ -79,7 +79,7 @@ void Rsyr2k(const char *uplo, const char *trans, mplapackint const n, mplapackin
         info = 12;
     }
     if (info != 0) {
-        Mxerbla("Rsyr2k", info);
+        Mxerbla_dd("Rsyr2k", info);
         return;
     }
     //

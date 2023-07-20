@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 dd_real Rnrm2(mplapackint const n, dd_real *x, mplapackint const incx) {
     dd_real return_value = 0.0;

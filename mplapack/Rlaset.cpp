@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real const alpha, dd_real const beta, dd_real *a, mplapackint const lda) {
     //

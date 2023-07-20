@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_real const cfrom, dd_real const cto, mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info) {
     mplapackint itype = 0;
@@ -116,7 +116,7 @@ void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_rea
     }
     //
     if (info != 0) {
-        Mxerbla("Rlascl", -info);
+        Mxerbla_dd("Rlascl", -info);
         return;
     }
     //

@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rsterf(mplapackint const n, dd_real *d, dd_real *e, mplapackint &info) {
     dd_real eps = 0.0;
@@ -98,7 +98,7 @@ void Rsterf(mplapackint const n, dd_real *d, dd_real *e, mplapackint &info) {
     //
     if (n < 0) {
         info = -1;
-        Mxerbla("Rsterf", -info);
+        Mxerbla_dd("Rsterf", -info);
         return;
     }
     if (n <= 1) {

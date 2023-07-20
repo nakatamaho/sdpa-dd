@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_real *z, mplapackint const ldz, dd_real *work, mplapackint &info) {
     mplapackint icompz = 0;
@@ -117,7 +117,7 @@ void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_r
         info = -6;
     }
     if (info != 0) {
-        Mxerbla("Rsteqr", -info);
+        Mxerbla_dd("Rsteqr", -info);
         return;
     }
     //

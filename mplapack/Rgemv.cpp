@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real const alpha, dd_real *a, mplapackint const lda, dd_real *x, mplapackint const incx, dd_real const beta, dd_real *y, mplapackint const incy) {
     //
@@ -69,7 +69,7 @@ void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real 
         info = 11;
     }
     if (info != 0) {
-        Mxerbla("Rgemv ", info);
+        Mxerbla_dd("Rgemv ", info);
         return;
     }
     //

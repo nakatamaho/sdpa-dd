@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapackint const k, dd_real *v, mplapackint const ldv, dd_real *tau, dd_real *t, mplapackint const ldt) {
     //

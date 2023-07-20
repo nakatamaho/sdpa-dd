@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 void Rger(mplapackint const m, mplapackint const n, dd_real const alpha, dd_real *x, mplapackint const incx, dd_real *y, mplapackint const incy, dd_real *a, mplapackint const lda) {
     //
@@ -65,7 +65,7 @@ void Rger(mplapackint const m, mplapackint const n, dd_real const alpha, dd_real
         info = 9;
     }
     if (info != 0) {
-        Mxerbla("Rger  ", info);
+        Mxerbla_dd("Rger  ", info);
         return;
     }
     //

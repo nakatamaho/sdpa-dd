@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlae2(dd_real const a, dd_real const b, dd_real const c, dd_real &rt1, dd_real &rt2) {
     //

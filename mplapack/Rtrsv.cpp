@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 
 void Rtrsv(const char *uplo, const char *trans, const char *diag, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *x, mplapackint const incx) {
     //
@@ -69,7 +69,7 @@ void Rtrsv(const char *uplo, const char *trans, const char *diag, mplapackint co
         info = 8;
     }
     if (info != 0) {
-        Mxerbla("Rtrsv ", info);
+        Mxerbla_dd("Rtrsv ", info);
         return;
     }
     //

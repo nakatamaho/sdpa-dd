@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlasr(const char *side, const char *pivot, const char *direct, mplapackint const m, mplapackint const n, dd_real *c, dd_real *s, dd_real *a, mplapackint const lda) {
     //
@@ -48,7 +48,7 @@ void Rlasr(const char *side, const char *pivot, const char *direct, mplapackint 
         info = 9;
     }
     if (info != 0) {
-        Mxerbla("Rlasr", info);
+        Mxerbla_dd("Rlasr", info);
         return;
     }
     //

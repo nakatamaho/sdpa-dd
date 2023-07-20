@@ -74,7 +74,7 @@ void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n,
     else if (ldc < std::max((mplapackint) 1, m))
 	info = 13;
     if (info != 0) {
-	Mxerbla_dd("Rgemm ", info);
+	Mxerbla_dd_dd("Rgemm ", info);
 	return;
     }
 //Quick return if possible.

@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rlarfb(const char *side, const char *trans, const char *direct, const char *storev, mplapackint const m, mplapackint const n, mplapackint const k, dd_real *v, mplapackint const ldv, dd_real *t, mplapackint const ldt, dd_real *c, mplapackint const ldc, dd_real *work, mplapackint const ldwork) {
     //

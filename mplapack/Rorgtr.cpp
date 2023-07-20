@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info) {
     //
@@ -82,7 +82,7 @@ void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
     }
     //
     if (info != 0) {
-        Mxerbla("Rorgtr", -info);
+        Mxerbla_dd("Rorgtr", -info);
         return;
     } else if (lquery) {
         return;

@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e) {
     dd_real return_value = 0.0;

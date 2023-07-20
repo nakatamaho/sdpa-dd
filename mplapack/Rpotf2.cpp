@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 void Rpotf2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info) {
     bool upper = false;
@@ -71,7 +71,7 @@ void Rpotf2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         info = -4;
     }
     if (info != 0) {
-        Mxerbla("Rpotf2", -info);
+        Mxerbla_dd("Rpotf2", -info);
         return;
     }
     //
