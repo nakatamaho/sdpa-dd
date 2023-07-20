@@ -150,34 +150,30 @@ fi
 AC_SUBST(SPOOLES_LIBDIR)
 AC_SUBST(SPOOLES_INCLUDEDIR)
 
-dnl Check for QD include and library files
-dnl some dummy settings
-if test x$QD_INCLUDEDIR = x; then
-QD_INCLUDEDIR="."
-fi
-if test x$QD_LIBDIR = x; then
-QD_LIBDIR="."
-fi
+if test x$WITH_SYSTEM_QD != xno; then
+  dnl Check for QD include and library files
+  HAVE_QD_HEADER=""
+  HAVE_QD=""
+  save_CPPFLAGS="$CPPFLAGS"
+  CPPFLAGS="$CPPFLAGS -I$QD_INCLUDEDIR"
+  AC_CHECK_HEADER(qd/qd_real.h, HAVE_QD_HEADER=yes)
+  CPPFLAGS=$save_CPPFLAGS
 
-HAVE_QD_HEADER=""
-HAVE_QD=""
-AC_LANG_PUSH([C++])
-save_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -I$QD_INCLUDEDIR"
-AC_CHECK_HEADER(qd/qd_real.h, HAVE_QD_HEADER=yes)
-CPPFLAGS=$save_CPPFLAGS
+  if test x$HAVE_QD_HEADER = xyes; then
+    save_LDFLAGS="$LDFLAGS"
+    LDFLAGS="$LDFLAGS -L$QD_LIBDIR"
+    AC_CHECK_LIB(qd, c_qd_sqrt, [QD_LIBS="-lqd"; HAVE_QD=yes])
+    LDFLAGS=$save_LDFLAGS
+  fi
 
-if test x$HAVE_QD_HEADER = xyes; then
-  save_LDFLAGS="$LDFLAGS"
-  LDFLAGS="$LDFLAGS -L$QD_LIBDIR"
-  AC_CHECK_LIB(qd, c_qd_sqrt, [QD_LIBS="-lqd"; HAVE_QD=yes])
-  LDFLAGS=$save_LDFLAGS
-fi
-
-if test x$HAVE_QD != xyes; then
-  echo "Please install QD"
-  echo "Double-Double and Quad-Double Arithmetic http://www.cs.berkeley.edu/~yozo/"
-  AC_MSG_ERROR([No QD found])
+  if test x$HAVE_QD != xyes; then
+    echo "Please install QD"
+    echo "You can download Double-Double and Quad-Double Arithmetic at https://www.davidhbailey.com/dhbsoftware/"
+    AC_MSG_ERROR([No QD found])
+  fi
+else
+QD_LIBDIR=`pwd`/external/i/QD/lib
+QD_INCLUDEDIR=`pwd`/external/i/QD/include
 fi
 AC_SUBST(QD_LIBDIR)
 AC_SUBST(QD_INCLUDEDIR)
