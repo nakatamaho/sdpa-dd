@@ -29,89 +29,6 @@
 #ifndef _MUTILS_DD_H_
 #define _MUTILS_DD_H_
 
-#if defined ___MPLAPACK_INTERNAL___
-#define DD_PRECISION 32
-#define DD_PRECISION_SHORT 16
-
-#if !defined __MPLAPACK_BUFLEN__
-#define __MPLAPACK_BUFLEN__ 1024
-#endif
-
-#include <cstring>
-
-inline void printnum(dd_real rtmp) {
-    std::cout.precision(DD_PRECISION);
-    if (rtmp >= 0.0) {
-        std::cout << "+" << rtmp;
-    } else {
-        std::cout << rtmp;
-    }
-    return;
-}
-
-inline void printnum_short(dd_real rtmp) {
-    std::cout.precision(DD_PRECISION_SHORT);
-    if (rtmp >= 0.0) {
-        std::cout << "+" << rtmp;
-    } else {
-        std::cout << rtmp;
-    }
-    return;
-}
-inline void printnum(dd_complex rtmp) {
-    std::cout.precision(DD_PRECISION);
-    if (rtmp.real() >= 0.0) {
-        std::cout << "+" << rtmp.real();
-    } else {
-        std::cout << rtmp.real();
-    }
-    if (rtmp.imag() >= 0.0) {
-        std::cout << "+" << rtmp.imag() << "i";
-    } else {
-        std::cout << rtmp.imag() << "i";
-    }
-    return;
-}
-inline void printnum_short(dd_complex rtmp) {
-    std::cout.precision(DD_PRECISION);
-    if (rtmp.real() >= 0.0) {
-        std::cout << "+" << rtmp.real();
-    } else {
-        std::cout << rtmp.real();
-    }
-    if (rtmp.imag() >= 0.0) {
-        std::cout << "+" << rtmp.imag() << "i";
-    } else {
-        std::cout << rtmp.imag() << "i";
-    }
-    return;
-}
-inline void sprintnum(char *buf, dd_real rtmp) {
-    rtmp.write(buf, __MPLAPACK_BUFLEN__, DD_PRECISION);
-    return;
-}
-inline void sprintnum_short(char *buf, dd_real rtmp) {
-    rtmp.write(buf, __MPLAPACK_BUFLEN__, DD_PRECISION_SHORT);
-    return;
-}
-inline void sprintnum(char *buf, dd_complex rtmp) {
-    char buf1[__MPLAPACK_BUFLEN__], buf2[__MPLAPACK_BUFLEN__];
-    rtmp.real().write(buf1, __MPLAPACK_BUFLEN__, DD_PRECISION);
-    rtmp.real().write(buf2, __MPLAPACK_BUFLEN__, DD_PRECISION);
-    strcat(buf, buf1);
-    strcat(buf, buf2);
-    strcat(buf, "i");
-}
-inline void sprintnum_short(char *buf, dd_complex rtmp) {
-    char buf1[__MPLAPACK_BUFLEN__], buf2[__MPLAPACK_BUFLEN__];
-    rtmp.real().write(buf1, __MPLAPACK_BUFLEN__, DD_PRECISION_SHORT);
-    rtmp.real().write(buf2, __MPLAPACK_BUFLEN__, DD_PRECISION_SHORT);
-    strcat(buf, buf1);
-    strcat(buf, buf2);
-    strcat(buf, "i");
-}
-#endif
-
 inline dd_real pow2(dd_real a) {
     dd_real mtmp = a * a;
     return mtmp;
@@ -148,38 +65,5 @@ inline long __dd_nint(dd_real a) {
 }
 
 inline double cast2double(dd_real a) { return a.x[0]; }
-
-inline dd_complex sin(dd_complex a) {
-    dd_real mtemp1, mtemp2;
-    mtemp1 = a.real();
-    mtemp2 = a.imag();
-    dd_complex b = dd_complex(sin(mtemp1) * cosh(mtemp2), cos(mtemp1) * sinh(mtemp2));
-    return b;
-}
-
-inline dd_complex cos(dd_complex a) {
-    dd_real mtemp1, mtemp2;
-    mtemp1 = a.real();
-    mtemp2 = a.imag();
-    dd_complex b = dd_complex(cos(mtemp1) * cosh(mtemp2), -sin(mtemp1) * sinh(mtemp2));
-    return b;
-}
-
-inline dd_real log2(dd_real x) { return log10(x) / (dd_real::_log2 / dd_real::_log10); }
-
-inline dd_complex exp(dd_complex x) {
-    dd_real ex;
-    dd_real c;
-    dd_real s;
-    dd_complex ans;
-    ex = exp(x.real());
-    c = cos(x.imag());
-    s = sin(x.imag());
-    ans.real(ex * c);
-    ans.imag(ex * s);
-    return ans;
-}
-
-inline dd_real pi(dd_real dummy) { return dd_real::_pi; }
 
 #endif
