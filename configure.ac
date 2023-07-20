@@ -13,10 +13,10 @@ AC_ARG_WITH(system-spooles,
 WITH_SYSTEM_SPOOLES=$withval, WITH_SYSTEM_SPOOLES=no)
 AM_CONDITIONAL(BUILD_SPOOLES, test x$WITH_SYSTEM_SPOOLES = xno)
 
-AC_ARG_WITH(system-mpack,
-[  --with-system-mpack      Use mpack already on system],
-WITH_SYSTEM_MPACK=$withval, WITH_SYSTEM_MPACK=no)
-AM_CONDITIONAL(BUILD_MPACK, test x$WITH_SYSTEM_MPACK = xno)
+AC_ARG_WITH(system-mplapack,
+[  --with-system-mplapack      Use mplapack already on system],
+WITH_SYSTEM_MPLAPACK=$withval, WITH_SYSTEM_MPLAPACK=no)
+AM_CONDITIONAL(BUILD_MPLAPACK, test x$WITH_SYSTEM_MPLAPACK = xno)
 
 AC_ARG_WITH(qd-includedir,
 [  --with-qd-includedir    Gives qd include dir you use(e.g., /usr/local/include).],
@@ -28,14 +28,14 @@ AC_ARG_WITH(qd-libdir,
 QD_LIBDIR=$withval
 )
 
-AC_ARG_WITH(mpack-includedir,
-[  --with-mpack-includedir    Gives mpack include dir you use(e.g., /usr/local/include).],
-MPACK_INCLUDEDIR=$withval
+AC_ARG_WITH(mplapack-includedir,
+[  --with-mplapack-includedir    Gives mplapack include dir you use(e.g., /usr/local/include).],
+MPLAPACK_INCLUDEDIR=$withval
 )
 
-AC_ARG_WITH(mpack-libdir,
-[  --with-mpack-libdir    Gives mpack lib dir you use(e.g., /usr/local/lib).],
-MPACK_LIBDIR=$withval
+AC_ARG_WITH(mplapack-libdir,
+[  --with-mplapack-libdir    Gives mplapack lib dir you use(e.g., /usr/local/lib).],
+MPLAPACK_LIBDIR=$withval
 )
 
 AC_ARG_WITH(spooles-includedir,
@@ -227,45 +227,45 @@ fi
 AC_SUBST(QD_LIBDIR)
 AC_SUBST(QD_INCLUDEDIR)
 
-dnl Check for MPACK include and library files
+dnl Check for MPLAPACK include and library files
 dnl some dummy settings
-if test x$MPACK_INCLUDEDIR = x; then
-MPACK_INCLUDEDIR="."
+if test x$MPLAPACK_INCLUDEDIR = x; then
+MPLAPACK_INCLUDEDIR="."
 fi
-if test x$MPACK_LIBDIR = x; then
-MPACK_LIBDIR="."
+if test x$MPLAPACK_LIBDIR = x; then
+MPLAPACK_LIBDIR="."
 fi
 
-if test x$WITH_SYSTEM_MPACK != xno; then
-HAVE_MPACK_HEADER=""
-HAVE_MPACK=""
+if test x$WITH_SYSTEM_MPLAPACK != xno; then
+HAVE_MPLAPACK_HEADER=""
+HAVE_MPLAPACK=""
 save_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS -I$MPACK_INCLUDEDIR"
+CPPFLAGS="$CPPFLAGS -I$MPLAPACK_INCLUDEDIR"
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADER(mblas_qd.h, HAVE_MPACK_HEADER=yes)
+AC_CHECK_HEADER(mblas_qd.h, HAVE_MPLAPACK_HEADER=yes)
 CPPFLAGS=$save_CPPFLAGS
 
-if test x$HAVE_MPACK_HEADER = xyes; then
+if test x$HAVE_MPLAPACK_HEADER = xyes; then
   save_LDFLAGS="$LDFLAGS"
-  LDFLAGS="$LDFLAGS -L$MPACK_LIBDIR"
-  LIBS="$LDFLAGS -L$MPACK_LIBDIR -lmlapack_dd -lmblas_dd -lqd";
- # AC_CHECK_FUNC(Rsyev, [HAVE_MPACK=yes])
-  HAVE_MPACK=yes
+  LDFLAGS="$LDFLAGS -L$MPLAPACK_LIBDIR"
+  LIBS="$LDFLAGS -L$MPLAPACK_LIBDIR -lmlapack_dd -lmblas_dd -lqd";
+ # AC_CHECK_FUNC(Rsyev, [HAVE_MPLAPACK=yes])
+  HAVE_MPLAPACK=yes
   LDFLAGS=$save_LDFLAGS
 fi
 
-if test x$HAVE_MPACK != xyes; then
-  echo "Please install MPACK (MBLAS/MLAPACK)"
-  echo "MPACK (MBLAS/MLAPACK) http://mplapack.cvs.sourceforge.net/"
-  AC_MSG_ERROR([No MPACK found])
+if test x$HAVE_MPLAPACK != xyes; then
+  echo "Please install MPLAPACK (MBLAS/MLAPACK)"
+  echo "MPLAPACK (MBLAS/MLAPACK) http://mplapack.cvs.sourceforge.net/"
+  AC_MSG_ERROR([No MPLAPACK found])
 fi
 else
-MPACK_LIBDIR=`pwd`/mpack
-MPACK_INCLUDEDIR=`pwd`/mpack
+MPLAPACK_LIBDIR=`pwd`/mplapack
+MPLAPACK_INCLUDEDIR=`pwd`/mplapack
 fi
-AM_CONDITIONAL(SYSTEM_MPACK, test x$with_system_mpack = xyes)
-AC_SUBST(MPACK_LIBDIR)
-AC_SUBST(MPACK_INCLUDEDIR)
+AM_CONDITIONAL(SYSTEM_MPLAPACK, test x$with_system_mplapack = xyes)
+AC_SUBST(MPLAPACK_LIBDIR)
+AC_SUBST(MPLAPACK_INCLUDEDIR)
 
 dnl openmp
 if test -n "$enable_openmp" && test "$enable_openmp" != "no" && test "$WITH_OPENMP" = "yes"; then
