@@ -72,16 +72,16 @@ Based on http://www.netlib.org/blas/dcopy.f
 Rcopy copies a vector, x, to a vector, y.
 */
 
-#include <mblas_dd.h>
+#include <mpblas_dd.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
 
-void Rcopy(mpackint n, dd_real * dx, mpackint incx, dd_real * dy, mpackint incy)
+void Rcopy_omp(mplapackint n, dd_real * dx, mplapackint incx, dd_real * dy, mplapackint incy)
 {
-    mpackint ix = 0;
-    mpackint iy = 0;
-    mpackint i;
+    mplapackint ix = 0;
+    mplapackint iy = 0;
+    mplapackint i;
 
     if (incx < 0) ix = (-n + 1) * incx;
     if (incy < 0) iy = (-n + 1) * incy;

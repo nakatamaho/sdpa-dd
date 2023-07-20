@@ -72,16 +72,16 @@ Based on http://www.netlib.org/blas/ddot.f
 Rdot forms the dot product of two vectors.
 */
 
-#include <mblas_dd.h>
+#include <mpblas_dd.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
 
-dd_real Rdot(mpackint n, dd_real * dx, mpackint incx, dd_real * dy, mpackint incy)
+dd_real Rdot_omp(mplapackint n, dd_real * dx, mplapackint incx, dd_real * dy, mplapackint incy)
 {
-    mpackint ix = 0;
-    mpackint iy = 0;
-    mpackint i;
+    mplapackint ix = 0;
+    mplapackint iy = 0;
+    mplapackint i;
     dd_real temp, templ;
 
     temp = 0.0;

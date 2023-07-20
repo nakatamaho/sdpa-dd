@@ -28,15 +28,15 @@
  *
  */
 
-#include <mblas_dd.h>
+#include <mpblas_dd.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
 
-void Rgemm_NN(mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real *A, mpackint lda, dd_real *B, mpackint ldb, dd_real beta,
-	      dd_real *C, mpackint ldc)
+void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta,
+	      dd_real *C, mplapackint ldc)
 {
-    mpackint i, j, l;
+    mplapackint i, j, l;
     dd_real temp;
 
 //Form C := alpha*A*B + beta*C.

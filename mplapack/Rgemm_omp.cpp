@@ -28,16 +28,16 @@
  *
  */
 
-#include <mblas_dd.h>
+#include <mpblas_dd.h>
 
-void Rgemm_NN(mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real * A, mpackint lda, dd_real * B, mpackint ldb, dd_real beta, dd_real * C, mpackint ldc);
-void Rgemm_TN(mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real * A, mpackint lda, dd_real * B, mpackint ldb, dd_real beta, dd_real * C, mpackint ldc);
-void Rgemm_NT(mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real * A, mpackint lda, dd_real * B, mpackint ldb, dd_real beta, dd_real * C, mpackint ldc);
-void Rgemm_TT(mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real * A, mpackint lda, dd_real * B, mpackint ldb, dd_real beta, dd_real * C, mpackint ldc);
+void Rgemm_NN(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_TN(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_NT(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_TT(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
 
-void Rgemm(const char *transa, const char *transb, mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real * A, mpackint lda, dd_real * B, mpackint ldb, dd_real beta, dd_real * C, mpackint ldc)
+void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc)
 {
-    mpackint i, j, l, nota, notb, nrowa, ncola, nrowb, info;
+    mplapackint i, j, l, nota, notb, nrowa, ncola, nrowb, info;
     dd_real temp;
     dd_real Zero = 0.0, One = 1.0;
 
@@ -67,11 +67,11 @@ void Rgemm(const char *transa, const char *transb, mpackint m, mpackint n, mpack
 	info = 4;
     else if (k < 0)
 	info = 5;
-    else if (lda < std::max((mpackint) 1, nrowa))
+    else if (lda < std::max((mplapackint) 1, nrowa))
 	info = 8;
-    else if (ldb < std::max((mpackint) 1, nrowb))
+    else if (ldb < std::max((mplapackint) 1, nrowb))
 	info = 10;
-    else if (ldc < std::max((mpackint) 1, m))
+    else if (ldc < std::max((mplapackint) 1, m))
 	info = 13;
     if (info != 0) {
 	Mxerbla_dd("Rgemm ", info);

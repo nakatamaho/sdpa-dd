@@ -1,50 +1,41 @@
-/*************************************************************************
+/*
+ * Copyright (c) 2008-2010
+ *	Nakata, Maho
+ * 	All rights reserved.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Nakata, Maho
- * 
- * $Id: Mxerbla.cpp,v 1.4 2009/09/25 23:15:56 nakatamaho Exp $ 
+ * $Id: Mxerbla.cpp,v 1.7 2010/08/07 05:50:10 nakatamaho Exp $
  *
- * MPACK - multiple precision arithmetic library
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  *
- * This file is part of MPACK.
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  *
- * MPACK is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * MPACK is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with MPACK.  If not, see
- * <http://www.gnu.org/licenses/lgpl.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ */
 /*
 Based on http://www.netlib.org/blas/xerbla.f
-Mxerbla_dd is an error handler for the Mlapack routines.
+Mxerbla is an error handler for the Mplapack routines.
 */
 
-#include <mblas_dd.h>
+#include <mpblas.h>
 #include <stdio.h>
 
-#if !defined  __MPACK_ERRNO__
-#define __MPACK_ERRNO__
-int mpack_errno;
-#endif
-
-void
-Mxerbla_dd(const char *srname, int info)
-{
-    fprintf(stderr,
-	" ** On entry to %s parameter number %2d had an illegal value\n",
-	srname, info);
-    mpack_errno = info;
-    return;
+void Mxerbla(const char *srname, int info) {
+    fprintf(stderr, " ** On entry to %s parameter number %2d had an illegal value\n", srname, info);
+    exit(info);
 }

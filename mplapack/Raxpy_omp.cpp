@@ -71,21 +71,21 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Based on http://www.netlib.org/blas/daxpy.f
 */
 
-#include <mblas_dd.h>
+#include <mpblas_dd.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
 
-void Raxpy(mpackint n, dd_real da, dd_real * dx, mpackint incx, dd_real * dy, mpackint incy)
+void Raxpy_omp(mplapackint n, dd_real da, dd_real * dx, mplapackint incx, dd_real * dy, mplapackint incy)
 {
     dd_real Zero = 0.0;
-    mpackint i;
+    mplapackint i;
 
     if (n <= 0)	return;
     if (da == Zero) return;
 
-    mpackint ix = 0;
-    mpackint iy = 0;
+    mplapackint ix = 0;
+    mplapackint iy = 0;
 
     if (incx < 0) ix = (-n + 1) * incx;
     if (incy < 0) iy = (-n + 1) * incy;

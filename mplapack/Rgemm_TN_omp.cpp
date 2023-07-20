@@ -27,13 +27,13 @@
  * SUCH DAMAGE.
  *
  */
-#include <mblas_dd.h>
+#include <mpblas_dd.h>
 
-void Rgemm_TN(mpackint m, mpackint n, mpackint k, dd_real alpha, dd_real *A, mpackint lda, dd_real *B, mpackint ldb, dd_real beta,
-	      dd_real *C, mpackint ldc)
+void Rgemm_TN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta,
+	      dd_real *C, mplapackint ldc)
 {
 //Form  C := alpha*A'*B + beta*C.
-    mpackint i, j, l;
+    mplapackint i, j, l;
     dd_real temp;
     for (j = 0; j < n; j++) {
 	if (beta == 0.0) {
