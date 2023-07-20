@@ -71,9 +71,9 @@ void Rsyrk(const char *uplo, const char *trans, mplapackint const n, mplapackint
         info = 3;
     } else if (k < 0) {
         info = 4;
-    } else if (lda < max((mplapackint)1, nrowa)) {
+    } else if (lda < std::max((mplapackint)1, nrowa)) {
         info = 7;
-    } else if (ldc < max((mplapackint)1, n)) {
+    } else if (ldc < std::max((mplapackint)1, n)) {
         info = 10;
     }
     if (info != 0) {

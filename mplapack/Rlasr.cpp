@@ -44,7 +44,7 @@ void Rlasr(const char *side, const char *pivot, const char *direct, mplapackint 
         info = 4;
     } else if (n < 0) {
         info = 5;
-    } else if (lda < max((mplapackint)1, m)) {
+    } else if (lda < std::max((mplapackint)1, m)) {
         info = 9;
     }
     if (info != 0) {

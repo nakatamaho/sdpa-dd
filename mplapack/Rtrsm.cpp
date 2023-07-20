@@ -77,9 +77,9 @@ void Rtrsm(const char *side, const char *uplo, const char *transa, const char *d
         info = 5;
     } else if (n < 0) {
         info = 6;
-    } else if (lda < max((mplapackint)1, nrowa)) {
+    } else if (lda < std::max((mplapackint)1, nrowa)) {
         info = 9;
-    } else if (ldb < max((mplapackint)1, m)) {
+    } else if (ldb < std::max((mplapackint)1, m)) {
         info = 11;
     }
     if (info != 0) {

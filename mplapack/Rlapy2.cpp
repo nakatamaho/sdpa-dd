@@ -50,7 +50,7 @@ dd_real Rlapy2(dd_real const x, dd_real const y) {
     if (!(x_is_nan || y_is_nan)) {
         xabs = abs(x);
         yabs = abs(y);
-        w = max(xabs, yabs);
+        w = std::max(xabs, yabs);
         z = min(xabs, yabs);
         if (z == zero) {
             return_value = w;

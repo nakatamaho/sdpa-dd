@@ -63,7 +63,7 @@ void Rtrsv(const char *uplo, const char *trans, const char *diag, mplapackint co
         info = 3;
     } else if (n < 0) {
         info = 4;
-    } else if (lda < max((mplapackint)1, n)) {
+    } else if (lda < std::max((mplapackint)1, n)) {
         info = 6;
     } else if (incx == 0) {
         info = 8;

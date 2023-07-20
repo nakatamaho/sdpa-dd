@@ -40,7 +40,7 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         info = -1;
     } else if (n < 0) {
         info = -2;
-    } else if (lda < max((mplapackint)1, n)) {
+    } else if (lda < std::max((mplapackint)1, n)) {
         info = -4;
     } else if (lwork < 1 && !lquery) {
         info = -9;
@@ -80,7 +80,7 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         //        Determine when to cross over from blocked to unblocked code
         //        (last block is always handled by unblocked code).
         //
-        nx = max(nb, iMlaenv(3, "Rsytrd", uplo, n, -1, -1, -1));
+        nx = std::max(nb, iMlaenv(3, "Rsytrd", uplo, n, -1, -1, -1));
         if (nx < n) {
             //
             //           Determine if workspace is large enough for blocked code.
@@ -93,7 +93,7 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
                 //              minimum value of NB, and reduce NB or force use of
                 //              unblocked code by setting NX = N.
                 //
-                nb = max(lwork / ldwork, (mplapackint)1);
+                nb = std::max(lwork / ldwork, (mplapackint)1);
                 nbmin = iMlaenv(2, "Rsytrd", uplo, n, -1, -1, -1);
                 if (nb < nbmin) {
                     nx = n;

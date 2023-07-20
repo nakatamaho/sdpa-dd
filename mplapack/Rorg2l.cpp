@@ -61,7 +61,7 @@ void Rorg2l(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         info = -2;
     } else if (k < 0 || k > n) {
         info = -3;
-    } else if (lda < max((mplapackint)1, m)) {
+    } else if (lda < std::max((mplapackint)1, m)) {
         info = -5;
     }
     if (info != 0) {

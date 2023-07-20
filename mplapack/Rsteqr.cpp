@@ -113,7 +113,7 @@ void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_r
         info = -1;
     } else if (n < 0) {
         info = -2;
-    } else if ((ldz < 1) || (icompz > 0 && ldz < max((mplapackint)1, n))) {
+    } else if ((ldz < 1) || (icompz > 0 && ldz < std::max((mplapackint)1, n))) {
         info = -6;
     }
     if (info != 0) {

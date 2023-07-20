@@ -45,7 +45,7 @@ dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real 
         value = zero;
     } else if (Mlsame_dd(norm, "M")) {
         //
-        //        Find max(abs(A(i,j))).
+        //        Find std::max(abs(A(i,j))).
         //
         value = zero;
         if (Mlsame_dd(uplo, "U")) {

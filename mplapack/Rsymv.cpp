@@ -59,7 +59,7 @@ void Rsymv(const char *uplo, mplapackint const n, dd_real const alpha, dd_real *
         info = 1;
     } else if (n < 0) {
         info = 2;
-    } else if (lda < max((mplapackint)1, n)) {
+    } else if (lda < std::max((mplapackint)1, n)) {
         info = 5;
     } else if (incx == 0) {
         info = 7;

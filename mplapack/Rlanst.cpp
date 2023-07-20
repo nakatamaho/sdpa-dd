@@ -65,7 +65,7 @@ dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e) {
         anorm = zero;
     } else if (Mlsame_dd(norm, "M")) {
         //
-        //        Find max(abs(A(i,j))).
+        //        Find std::max(abs(A(i,j))).
         //
         anorm = abs(d[n - 1]);
         for (i = 1; i <= n - 1; i = i + 1) {

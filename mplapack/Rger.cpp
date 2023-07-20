@@ -61,7 +61,7 @@ void Rger(mplapackint const m, mplapackint const n, dd_real const alpha, dd_real
         info = 5;
     } else if (incy == 0) {
         info = 7;
-    } else if (lda < max((mplapackint)1, m)) {
+    } else if (lda < std::max((mplapackint)1, m)) {
         info = 9;
     }
     if (info != 0) {

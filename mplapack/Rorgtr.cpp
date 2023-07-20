@@ -63,9 +63,9 @@ void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         info = -1;
     } else if (n < 0) {
         info = -2;
-    } else if (lda < max((mplapackint)1, n)) {
+    } else if (lda < std::max((mplapackint)1, n)) {
         info = -4;
-    } else if (lwork < max((mplapackint)1, n - 1) && !lquery) {
+    } else if (lwork < std::max((mplapackint)1, n - 1) && !lquery) {
         info = -7;
     }
     //
@@ -77,7 +77,7 @@ void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         } else {
             nb = iMlaenv(1, "Rorgqr", " ", n - 1, n - 1, n - 1, -1);
         }
-        lwkopt = max((mplapackint)1, n - 1) * nb;
+        lwkopt = std::max((mplapackint)1, n - 1) * nb;
         work[1 - 1] = lwkopt;
     }
     //

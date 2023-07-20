@@ -67,7 +67,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
     if (Mlsame_dd(direct, "F")) {
         prevlastv = n;
         for (i = 1; i <= k; i = i + 1) {
-            prevlastv = max(i, prevlastv);
+            prevlastv = std::max(i, prevlastv);
             if (tau[i - 1] == zero) {
                 //
                 //              H(i)  =  I
@@ -116,7 +116,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                 Rtrmv("Upper", "No transpose", "Non-unit", i - 1, t, ldt, &t[(i - 1) * ldt], 1);
                 t[(i - 1) + (i - 1) * ldt] = tau[i - 1];
                 if (i > 1) {
-                    prevlastv = max(prevlastv, lastv);
+                    prevlastv = std::max(prevlastv, lastv);
                 } else {
                     prevlastv = lastv;
                 }
@@ -147,7 +147,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                         for (j = i + 1; j <= k; j = j + 1) {
                             t[(j - 1) + (i - 1) * ldt] = -tau[i - 1] * v[((n - k + i) - 1) + (j - 1) * ldv];
                         }
-                        j = max(lastv, prevlastv);
+                        j = std::max(lastv, prevlastv);
                         //
                         //                    T(i+1:k,i) = -tau(i) * V(j:n-k+i,i+1:k)**T * V(j:n-k+i,i)
                         //
@@ -162,7 +162,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                         for (j = i + 1; j <= k; j = j + 1) {
                             t[(j - 1) + (i - 1) * ldt] = -tau[i - 1] * v[(j - 1) + ((n - k + i) - 1) * ldv];
                         }
-                        j = max(lastv, prevlastv);
+                        j = std::max(lastv, prevlastv);
                         //
                         //                    T(i+1:k,i) = -tau(i) * V(i+1:k,j:n-k+i) * V(i,j:n-k+i)**T
                         //

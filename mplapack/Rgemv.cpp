@@ -61,7 +61,7 @@ void Rgemv(const char *trans, mplapackint const m, mplapackint const n, dd_real 
         info = 2;
     } else if (n < 0) {
         info = 3;
-    } else if (lda < max((mplapackint)1, m)) {
+    } else if (lda < std::max((mplapackint)1, m)) {
         info = 6;
     } else if (incx == 0) {
         info = 8;

@@ -103,12 +103,12 @@ void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_rea
         info = -6;
     } else if (n < 0 || (itype == 4 && n != m) || (itype == 5 && n != m)) {
         info = -7;
-    } else if (itype <= 3 && lda < max((mplapackint)1, m)) {
+    } else if (itype <= 3 && lda < std::max((mplapackint)1, m)) {
         info = -9;
     } else if (itype >= 4) {
-        if (kl < 0 || kl > max(m - 1, (mplapackint)0)) {
+        if (kl < 0 || kl > std::max(m - 1, (mplapackint)0)) {
             info = -2;
-        } else if (ku < 0 || ku > max(n - 1, (mplapackint)0) || ((itype == 4 || itype == 5) && kl != ku)) {
+        } else if (ku < 0 || ku > std::max(n - 1, (mplapackint)0) || ((itype == 4 || itype == 5) && kl != ku)) {
             info = -3;
         } else if ((itype == 4 && lda < kl + 1) || (itype == 5 && lda < ku + 1) || (itype == 6 && lda < 2 * kl + ku + 1)) {
             info = -9;
@@ -223,7 +223,7 @@ statement_10:
         k1 = ku + 2;
         k3 = ku + 1;
         for (j = 1; j <= n; j = j + 1) {
-            for (i = max(k1 - j, (mplapackint)1); i <= k3; i = i + 1) {
+            for (i = std::max(k1 - j, (mplapackint)1); i <= k3; i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }
@@ -237,7 +237,7 @@ statement_10:
         k3 = 2 * kl + ku + 1;
         k4 = kl + ku + 1 + m;
         for (j = 1; j <= n; j = j + 1) {
-            for (i = max(k1 - j, k2); i <= min(k3, k4 - j); i = i + 1) {
+            for (i = std::max(k1 - j, k2); i <= min(k3, k4 - j); i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }

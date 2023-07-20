@@ -60,14 +60,14 @@ void Rlartg(dd_real const f, dd_real const g, dd_real &cs, dd_real &sn, dd_real 
     } else {
         f1 = f;
         g1 = g;
-        scale = max(abs(f1), abs(g1));
+        scale = std::max(abs(f1), abs(g1));
         if (scale >= safmx2) {
             count = 0;
         statement_10:
             count++;
             f1 = f1 * safmn2;
             g1 = g1 * safmn2;
-            scale = max(abs(f1), abs(g1));
+            scale = std::max(abs(f1), abs(g1));
             if (scale >= safmx2 && count < 20) {
                 goto statement_10;
             }
@@ -83,7 +83,7 @@ void Rlartg(dd_real const f, dd_real const g, dd_real &cs, dd_real &sn, dd_real 
             count++;
             f1 = f1 * safmx2;
             g1 = g1 * safmx2;
-            scale = max(abs(f1), abs(g1));
+            scale = std::max(abs(f1), abs(g1));
             if (scale <= safmn2) {
                 goto statement_30;
             }

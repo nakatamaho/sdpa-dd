@@ -44,7 +44,7 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
         info = -2;
     } else if (n < 0) {
         info = -3;
-    } else if (lda < max((mplapackint)1, n)) {
+    } else if (lda < std::max((mplapackint)1, n)) {
         info = -5;
     }
     //
@@ -52,10 +52,10 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
     mplapackint lwkopt = 0;
     if (info == 0) {
         nb = iMlaenv(1, "Rsytrd", uplo, n, -1, -1, -1);
-        lwkopt = max((mplapackint)1, (nb + 2) * n);
+        lwkopt = std::max((mplapackint)1, (nb + 2) * n);
         work[1 - 1] = lwkopt;
         //
-        if (lwork < max((mplapackint)1, 3 * n - 1) && !lquery) {
+        if (lwork < std::max((mplapackint)1, 3 * n - 1) && !lquery) {
             info = -8;
         }
     }

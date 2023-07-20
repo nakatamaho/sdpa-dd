@@ -71,11 +71,11 @@ void Rsyr2k(const char *uplo, const char *trans, mplapackint const n, mplapackin
         info = 3;
     } else if (k < 0) {
         info = 4;
-    } else if (lda < max((mplapackint)1, nrowa)) {
+    } else if (lda < std::max((mplapackint)1, nrowa)) {
         info = 7;
-    } else if (ldb < max((mplapackint)1, nrowa)) {
+    } else if (ldb < std::max((mplapackint)1, nrowa)) {
         info = 9;
-    } else if (ldc < max((mplapackint)1, n)) {
+    } else if (ldc < std::max((mplapackint)1, n)) {
         info = 12;
     }
     if (info != 0) {
