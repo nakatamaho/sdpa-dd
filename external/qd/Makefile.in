@@ -89,7 +89,7 @@ build_triplet = @build@
 host_triplet = @host@
 subdir = external/qd
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.in
+am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
@@ -153,8 +153,8 @@ LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
-MPACK_INCLUDEDIR = @MPACK_INCLUDEDIR@
-MPACK_LIBDIR = @MPACK_LIBDIR@
+MPLAPACK_INCLUDEDIR = @MPLAPACK_INCLUDEDIR@
+MPLAPACK_LIBDIR = @MPLAPACK_LIBDIR@
 OBJEXT = @OBJEXT@
 OPENMPFLAGS = @OPENMPFLAGS@
 OPENMPLIB = @OPENMPLIB@
@@ -227,7 +227,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-QDVERSION = 2.3.7
+QDVERSION = 2.3.23
 @IS_MACOSX_FALSE@CONFIGURE_ARGS = --prefix=$(abs_builddir)/../i/QD/ --host=$(host) --disable-shared
 @IS_MACOSX_TRUE@CONFIGURE_ARGS = --prefix=$(abs_builddir)/../i/QD/ --host=$(host)
 EXTRACT_STAMP = .qd_extract_done

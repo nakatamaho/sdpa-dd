@@ -85,9 +85,26 @@ AC_ARG_ENABLE(shared,
 [  --enable-shared       Enables shared link to the libraries (slower)
 ],,)
 
-
 dnl spooles requires -lm when linking.
 LIBS="-lm"
+
+IS_MINGW=0
+case "$host" in
+        *-mingw32*) # mingw
+          IS_MINGW=1
+        ;;
+        *)
+esac
+AM_CONDITIONAL(IS_MINGW, test x$IS_MINGW = x1)
+
+IS_MACOSX=0
+case "$host" in
+         *apple-darwin*) # MacOSX
+          IS_MACOSX=1
+        ;;
+        *)
+esac
+AM_CONDITIONAL(IS_MACOSX, test x$IS_MACOSX = x1)
 
 dnl How thread we link thread library esp. needed for spooles.
 case "$host" in
@@ -144,8 +161,8 @@ if test x$WITH_SYSTEM_SPOOLES != xno; then
     AC_MSG_ERROR([No SPOOLES found])
   fi
 else
-SPOOLES_LIBDIR=`pwd`/spooles/build
-SPOOLES_INCLUDEDIR=`pwd`/spooles/build
+SPOOLES_LIBDIR=`pwd`/external/i/SPOOLES/lib
+SPOOLES_INCLUDEDIR=`pwd`/external/spooles/work/internal #just too messy
 fi
 AC_SUBST(SPOOLES_LIBDIR)
 AC_SUBST(SPOOLES_INCLUDEDIR)
@@ -227,6 +244,12 @@ AC_SUBST(OPENMPLIB)
 AC_SUBST(OPENMPFLAGS)
 
 AM_CONDITIONAL(ENABLE_SHARED, test x$enable_shared = xyes)
+
+AC_CONFIG_FILES([
+external/Makefile
+external/spooles/Makefile
+external/qd/Makefile
+])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

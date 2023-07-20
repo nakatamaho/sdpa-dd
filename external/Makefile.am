@@ -1,4 +1,4 @@
-SUBDIRS = dummy
+SUBDIRS =
 
 if BUILD_QD
 SUBDIRS += qd

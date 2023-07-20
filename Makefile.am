@@ -35,6 +35,8 @@ mplapack/Rgemm_TN_omp.cpp\
 mplapack/Rgemm_TT_omp.cpp
 endif
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 if ENABLE_SHARED
 else
 sdpa_dd_LDFLAGS = -static
@@ -48,7 +50,6 @@ sdpa_dd_LDADD = $(pthread_lib) -L$(SPOOLES_LIBDIR) -lspooles -L$(QD_LIBDIR) -lqd
 sdpa_dd_CXXFLAGS= $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -DUseMETIS=0 -I$(QD_INCLUDEDIR) $(OPENMPFLAGS) -I./mplapack
 endif
 
-AUTOMAKE_OPTIONS = subdir-objects
 SUBDIRS = external
 
 EXTRA_DIST = \
