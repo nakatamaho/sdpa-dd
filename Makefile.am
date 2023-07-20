@@ -52,6 +52,10 @@ if BUILD_SPOOLES
 SUBDIRS = external/spooles
 endif
 
+if BUILD_QD
+SUBDIRS = external/qd
+endif
+
 EXTRA_DIST = \
 param.sdpa \
 external/qd/download/*.tar.gz \

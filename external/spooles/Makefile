@@ -1,7 +1,7 @@
 all: build/libspooles.a
 
 build/libspooles.a:
-	rm -rf build ; mkdir build ; cd build ; tar xvfz ../archive/spooles.2.2.tgz
+	rm -rf build ; mkdir build ; cd build ; tar xvfz ../download/spooles.2.2.tgz
 	cd build ; patch -p0 < ../patches/patch-ETree+src+makeGlobalLib 
 	cd build ; patch -p0 < ../patches/patch-A2+makefile
 	cd build ; patch -p0 < ../patches/patch-IVL+src+makeGlobalLib 
