@@ -1,4 +1,4 @@
-QDVERSION=2.3.7
+QDVERSION=2.3.23
 
 if IS_MACOSX
 CONFIGURE_ARGS=--prefix=$(abs_builddir)/../i/QD/ --host=$(host)
