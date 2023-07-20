@@ -31,9 +31,12 @@
 #ifndef _MPLAPACK_DD_H_
 #define _MPLAPACK_DD_H_
 
+/* this is a subset of mplapack only for SDPA-DD */
 #include "mplapack_config.h"
 #include "qd/dd_real.h"
 
+dd_real Rlamch_dd(const char *cmach);
+void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *w, dd_real *work, mplapackint const lwork, mplapackint &info);
 void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_real *z, mplapackint const ldz, dd_real *work, mplapackint &info);
 void Rpotrf(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info);
 void Rpotrf2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info);

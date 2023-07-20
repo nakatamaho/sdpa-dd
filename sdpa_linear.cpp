@@ -87,7 +87,7 @@ dd_real Lal::getMinEigen(DenseMatrix& lMat,
       // rMessage("b = ");
       // b.display();
 
-      mpackint info;
+      mplapackint info;
       int kp1 = k+1;
       Rsteqr ("I_withEigenvalues", kp1, out.ele, b.ele, Q.de_ele, Q.nRow, workVec.ele, &info);
       if (info < 0) {
@@ -144,8 +144,8 @@ dd_real Lal::getMinEigenValue(DenseMatrix& aMat,
   // and needs memory of length aMat.nRow 
   // workVec is temporary space and needs
   // 3*aMat.nRow-1 length memory.
-  mpackint N = aMat.nRow;
-  mpackint LWORK, info;
+  mplapackint N = aMat.nRow;
+  mplapackint LWORK, info;
   switch (aMat.type) {
   case DenseMatrix::DENSE:
     LWORK = 3*N-1;
@@ -338,7 +338,7 @@ bool Lal::getCholesky(DenseMatrix& retMat,DenseMatrix& aMat)
     rError("getCholesky:: different memory size");
   }
   int length,shou,amari;
-  mpackint info; 
+  mplapackint info; 
   switch (retMat.type) {
   case DenseMatrix::DENSE:
     length = retMat.nRow * retMat.nCol;
@@ -622,7 +622,7 @@ int Lal::rdpotrf_(char *uplo, int *n, double *a, int *lda, int *info)
 
 bool Lal::choleskyFactorWithAdjust(DenseMatrix& aMat)
 {
-  mpackint info=0;
+  mplapackint info=0;
 #if 1
   // aMat.display();
   TimeStart(START1);
