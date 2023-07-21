@@ -45,7 +45,7 @@ void Rlartg(dd_real const f, dd_real const g, dd_real &cs, dd_real &sn, dd_real 
     //
     safmin = Rlamch("S");
     eps = Rlamch("E");
-    safmn2 = pow(Rlamch("B"), castINTEGER(log(safmin / eps) / log(Rlamch("B")) / two));
+    safmn2 = pow(Rlamch("B"), castINTEGER_dd(log(safmin / eps) / log(Rlamch("B")) / two));
     safmx2 = one / safmn2;
     //        FIRST = .FALSE.
     //     END IF
