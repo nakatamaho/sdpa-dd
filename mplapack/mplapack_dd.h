@@ -81,5 +81,10 @@ void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
 mplapackint iMparmq_dd(mplapackint const ispec, const char *name, const char *opts, mplapackint const n, mplapackint const ilo, mplapackint const ihi, mplapackint const lwork);
 mplapackint iMieeeck_dd(mplapackint const &ispec, dd_real const &zero, dd_real const &one);
 bool Risnan(dd_real const din);
+mplapackint iMlaenv_dd(mplapackint ispec, const char *name, const char *opts, mplapackint n1, mplapackint n2, mplapackint n3, mplapackint n4);
+dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e);
+dd_real Rlapy2(dd_real const x, dd_real const y);
+mplapackint iMladlr(mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda);
+mplapackint iMladlc(mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda);
 
 #endif

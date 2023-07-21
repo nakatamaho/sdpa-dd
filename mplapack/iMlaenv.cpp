@@ -32,7 +32,7 @@
 
 #define subnamlen 17
 
-mplapackint iMlaenv(mplapackint const ispec, const char *name, const char *opts, mplapackint const n1, mplapackint const n2, mplapackint const n3, mplapackint const n4) {
+mplapackint iMlaenv_dd(mplapackint const ispec, const char *name, const char *opts, mplapackint const n1, mplapackint const n2, mplapackint const n3, mplapackint const n4) {
     mplapackint return_value = 0;
     char subnam[subnamlen];
     memset(subnam, '\0', sizeof(subnam));
@@ -523,7 +523,7 @@ L140:
     //
     //     ISPEC = 10: ieee and infinity NaN arithmetic can be trusted not to trap
     //
-    //     iMlaenv = 0
+    //     iMlaenv_dd = 0
     return_value = 1;
     if (return_value == 1) {
         return_value = iMieeeck_dd(1, 0.0, 1.0);
@@ -534,7 +534,7 @@ L150:
     //
     //     ISPEC = 11: ieee infinity arithmetic can be trusted not to trap
     //
-    //     iMlaenv = 0
+    //     iMlaenv_dd = 0
     return_value = 1;
     if (return_value == 1) {
         return_value = iMieeeck_dd(0, 0.0, 1.0);
@@ -548,6 +548,6 @@ L160:
     return_value = iMparmq_dd(ispec, name, opts, n1, n2, n3, n4);
     return return_value;
     //
-    //     End of iMlaenv
+    //     End of iMlaenv_dd
     //
 }

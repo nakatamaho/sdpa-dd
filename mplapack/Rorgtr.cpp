@@ -73,9 +73,9 @@ void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
     mplapackint lwkopt = 0;
     if (info == 0) {
         if (upper) {
-            nb = iMlaenv(1, "Rorgql", " ", n - 1, n - 1, n - 1, -1);
+            nb = iMlaenv_dd(1, "Rorgql", " ", n - 1, n - 1, n - 1, -1);
         } else {
-            nb = iMlaenv(1, "Rorgqr", " ", n - 1, n - 1, n - 1, -1);
+            nb = iMlaenv_dd(1, "Rorgqr", " ", n - 1, n - 1, n - 1, -1);
         }
         lwkopt = std::max((mplapackint)1, n - 1) * nb;
         work[1 - 1] = lwkopt;

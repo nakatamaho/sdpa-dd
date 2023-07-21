@@ -52,7 +52,7 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         //
         //        Determine the block size.
         //
-        nb = iMlaenv(1, "Rsytrd", uplo, n, -1, -1, -1);
+        nb = iMlaenv_dd(1, "Rsytrd", uplo, n, -1, -1, -1);
         lwkopt = n * nb;
         work[1 - 1] = lwkopt;
     }
@@ -80,7 +80,7 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
         //        Determine when to cross over from blocked to unblocked code
         //        (last block is always handled by unblocked code).
         //
-        nx = std::max(nb, iMlaenv(3, "Rsytrd", uplo, n, -1, -1, -1));
+        nx = std::max(nb, iMlaenv_dd(3, "Rsytrd", uplo, n, -1, -1, -1));
         if (nx < n) {
             //
             //           Determine if workspace is large enough for blocked code.
@@ -94,7 +94,7 @@ void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
                 //              unblocked code by setting NX = N.
                 //
                 nb = std::max(lwork / ldwork, (mplapackint)1);
-                nbmin = iMlaenv(2, "Rsytrd", uplo, n, -1, -1, -1);
+                nbmin = iMlaenv_dd(2, "Rsytrd", uplo, n, -1, -1, -1);
                 if (nb < nbmin) {
                     nx = n;
                 }

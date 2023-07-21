@@ -51,7 +51,7 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
     mplapackint nb = 0;
     mplapackint lwkopt = 0;
     if (info == 0) {
-        nb = iMlaenv(1, "Rsytrd", uplo, n, -1, -1, -1);
+        nb = iMlaenv_dd(1, "Rsytrd", uplo, n, -1, -1, -1);
         lwkopt = std::max((mplapackint)1, (nb + 2) * n);
         work[1 - 1] = lwkopt;
         //

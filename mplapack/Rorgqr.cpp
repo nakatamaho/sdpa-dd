@@ -34,7 +34,7 @@ void Rorgqr(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
     //     Test the input arguments
     //
     info = 0;
-    mplapackint nb = iMlaenv(1, "Rorgqr", " ", m, n, k, -1);
+    mplapackint nb = iMlaenv_dd(1, "Rorgqr", " ", m, n, k, -1);
     mplapackint lwkopt = std::max((mplapackint)1, n) * nb;
     work[1 - 1] = lwkopt;
     bool lquery = (lwork == -1);
@@ -71,7 +71,7 @@ void Rorgqr(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         //
         //        Determine when to cross over from blocked to unblocked code.
         //
-        nx = std::max((mplapackint)0, iMlaenv(3, "Rorgqr", " ", m, n, k, -1));
+        nx = std::max((mplapackint)0, iMlaenv_dd(3, "Rorgqr", " ", m, n, k, -1));
         if (nx < k) {
             //
             //           Determine if workspace is large enough for blocked code.
@@ -84,7 +84,7 @@ void Rorgqr(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
                 //              determine the minimum value of NB.
                 //
                 nb = lwork / ldwork;
-                nbmin = std::max((mplapackint)2, iMlaenv(2, "Rorgqr", " ", m, n, k, -1));
+                nbmin = std::max((mplapackint)2, iMlaenv_dd(2, "Rorgqr", " ", m, n, k, -1));
             }
         }
     }

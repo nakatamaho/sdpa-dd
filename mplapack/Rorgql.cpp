@@ -74,7 +74,7 @@ void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         if (n == 0) {
             lwkopt = 1;
         } else {
-            nb = iMlaenv(1, "Rorgql", " ", m, n, k, -1);
+            nb = iMlaenv_dd(1, "Rorgql", " ", m, n, k, -1);
             lwkopt = n * nb;
         }
         work[1 - 1] = lwkopt;
@@ -105,7 +105,7 @@ void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         //
         //        Determine when to cross over from blocked to unblocked code.
         //
-        nx = std::max((mplapackint)0, iMlaenv(3, "Rorgql", " ", m, n, k, -1));
+        nx = std::max((mplapackint)0, iMlaenv_dd(3, "Rorgql", " ", m, n, k, -1));
         if (nx < k) {
             //
             //           Determine if workspace is large enough for blocked code.
@@ -118,7 +118,7 @@ void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
                 //              determine the minimum value of NB.
                 //
                 nb = lwork / ldwork;
-                nbmin = std::max((mplapackint)2, iMlaenv(2, "Rorgql", " ", m, n, k, -1));
+                nbmin = std::max((mplapackint)2, iMlaenv_dd(2, "Rorgql", " ", m, n, k, -1));
             }
         }
     }

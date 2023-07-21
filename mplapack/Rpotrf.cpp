@@ -83,7 +83,7 @@ void Rpotrf(const char *uplo, mplapackint const n, dd_real *a, mplapackint const
     //
     //     Determine the block size for this environment.
     //
-    nb = iMlaenv(1, "Rpotrf", uplo, n, -1, -1, -1);
+    nb = iMlaenv_dd(1, "Rpotrf", uplo, n, -1, -1, -1);
     if (nb <= 1 || nb >= n) {
         //
         //        Use unblocked code.
