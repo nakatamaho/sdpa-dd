@@ -26,62 +26,37 @@
  *
  */
 
-#include <mpblas_dd.h>
+#include <mpblas.h>
+#include <mplapack.h>
 
-void Rscal(mplapackint const n, dd_real const da, dd_real *dx, mplapackint const incx) {
+void Rcombssq(REAL *v1, REAL *v2) {
     //
-    //  -- Reference BLAS level1 routine --
-    //  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
+    //  -- LAPACK auxiliary routine --
+    //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
     //  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
+    //     November 2018
     //
-    //     .. Scalar Arguments ..
-    //     ..
     //     .. Array Arguments ..
     //     ..
     //
-    //  =====================================================================
+    // =====================================================================
     //
-    //     .. Local Scalars ..
+    //     .. Parameters ..
     //     ..
-    //     .. Intrinsic Functions ..
-    //     ..
-    if (n <= 0 || incx <= 0) {
-        return;
-    }
-    mplapackint m = 0;
-    mplapackint i = 0;
-    mplapackint mp1 = 0;
-    mplapackint nincx = 0;
-    if (incx == 1) {
-        //
-        //        code for increment equal to 1
-        //
-        //        clean-up loop
-        //
-	m = fmod(n, 5);
-        if (m != 0) {
-            for (i = 1; i <= m; i = i + 1) {
-                dx[i - 1] = da * dx[i - 1];
-            }
-            if (n < 5) {
-                return;
-            }
-        }
-        mp1 = m + 1;
-        for (i = mp1; i <= n; i = i + 5) {
-            dx[i - 1] = da * dx[i - 1];
-            dx[(i + 1) - 1] = da * dx[(i + 1) - 1];
-            dx[(i + 2) - 1] = da * dx[(i + 2) - 1];
-            dx[(i + 3) - 1] = da * dx[(i + 3) - 1];
-            dx[(i + 4) - 1] = da * dx[(i + 4) - 1];
+    //     .. Executable Statements ..
+    //
+    const REAL zero = 0.0;
+    if (v1[1 - 1] >= v2[1 - 1]) {
+        if (v1[1 - 1] != zero) {
+            v1[2 - 1] += pow2((v2[1 - 1] / v1[1 - 1])) * v2[2 - 1];
+        } else {
+            v1[2 - 1] += v2[2 - 1];
         }
     } else {
-        //
-        //        code for increment not equal to 1
-        //
-        nincx = n * incx;
-        for (i = 1; i <= nincx; i = i + incx) {
-            dx[i - 1] = da * dx[i - 1];
-        }
+        v1[2 - 1] = v2[2 - 1] + pow2((v1[1 - 1] / v2[1 - 1])) * v1[2 - 1];
+        v1[1 - 1] = v2[1 - 1];
     }
+    //
+    //     End of Rcombssq
+    //
 }

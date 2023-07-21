@@ -86,5 +86,7 @@ dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e);
 dd_real Rlapy2(dd_real const x, dd_real const y);
 mplapackint iMladlr(mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda);
 mplapackint iMladlc(mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda);
+dd_real Rlansy(const char *norm, const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *work);
+void Rcombssq(dd_real *v1, dd_real *v2);
 
 #endif

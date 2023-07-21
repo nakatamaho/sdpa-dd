@@ -60,7 +60,7 @@ void Rswap(mplapackint const n, dd_real *dx, mplapackint const incx, dd_real *dy
         //
         //       clean-up loop
         //
-        m = mod(n, 3);
+        m = fmod(n, 3);
         if (m != 0) {
             for (i = 1; i <= m; i = i + 1) {
                 dtemp = dx[i - 1];
