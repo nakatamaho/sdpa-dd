@@ -78,5 +78,7 @@ void Rlartgs(dd_real const x, dd_real const y, dd_real const sigma, dd_real &cs,
 void Rlatrd(const char *uplo, mplapackint const n, mplapackint const nb, dd_real *a, mplapackint const lda, dd_real *e, dd_real *tau, dd_real *w, mplapackint const ldw);
 void Rsterf(mplapackint const n, dd_real *d, dd_real *e, mplapackint &info);
 void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info);
+mplapackint iMparmq_dd(mplapackint const ispec, const char *name, const char *opts, mplapackint const n, mplapackint const ilo, mplapackint const ihi, mplapackint const lwork);
+mplapackint iMieeeck_dd(mplapackint const &ispec, dd_real const &zero, dd_real const &one);
 
 #endif

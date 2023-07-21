@@ -493,7 +493,7 @@ L100:
     //
     //     ISPEC = 6:  crossover point for SVD (used by xGELSS and xGESVD)
     //
-    return_value = castmplapackint(cast_real(std::min(n1, n2)) * 1.6);
+    return_value = castINTEGER(castREAL(std::min(n1, n2)) * 1.6);
     return return_value;
     //
 L110:
@@ -526,7 +526,7 @@ L140:
     //     iMlaenv = 0
     return_value = 1;
     if (return_value == 1) {
-        return_value = iMieeeck(1, 0.0, 1.0);
+        return_value = iMieeeck_dd(1, 0.0, 1.0);
     }
     return return_value;
     //
@@ -537,7 +537,7 @@ L150:
     //     iMlaenv = 0
     return_value = 1;
     if (return_value == 1) {
-        return_value = iMieeeck(0, 0.0, 1.0);
+        return_value = iMieeeck_dd(0, 0.0, 1.0);
     }
     return return_value;
 //
@@ -545,7 +545,7 @@ L160:
     //
     //     12 <= ISPEC <= 16: xHSEQR or related subroutines.
     //
-    return_value = iMparmq(ispec, name, opts, n1, n2, n3, n4);
+    return_value = iMparmq_dd(ispec, name, opts, n1, n2, n3, n4);
     return return_value;
     //
     //     End of iMlaenv
