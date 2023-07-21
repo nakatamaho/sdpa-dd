@@ -79,7 +79,7 @@ void Rlarfg(mplapackint const n, dd_real &alpha, dd_real *x, mplapackint const i
         //        general case
         //
         beta = -sign(Rlapy2(alpha, xnorm), alpha);
-        safmin = Rlamch("S") / Rlamch("E");
+        safmin = Rlamch_dd("S") / Rlamch_dd("E");
         knt = 0;
         if (abs(beta) < safmin) {
             //

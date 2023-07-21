@@ -128,7 +128,7 @@ void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_rea
     //
     //     Get machine parameters
     //
-    smlnum = Rlamch("S");
+    smlnum = Rlamch_dd("S");
     bignum = one / smlnum;
     //
     cfromc = cfrom;
@@ -189,7 +189,7 @@ statement_10:
         //        Upper triangular matrix
         //
         for (j = 1; j <= n; j = j + 1) {
-            for (i = 1; i <= min(j, m); i = i + 1) {
+            for (i = 1; i <= std::min(j, m); i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }
@@ -199,7 +199,7 @@ statement_10:
         //        Upper Hessenberg matrix
         //
         for (j = 1; j <= n; j = j + 1) {
-            for (i = 1; i <= min(j + 1, m); i = i + 1) {
+            for (i = 1; i <= std::min(j + 1, m); i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }
@@ -211,7 +211,7 @@ statement_10:
         k3 = kl + 1;
         k4 = n + 1;
         for (j = 1; j <= n; j = j + 1) {
-            for (i = 1; i <= min(k3, k4 - j); i = i + 1) {
+            for (i = 1; i <= std::min(k3, k4 - j); i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }
@@ -237,7 +237,7 @@ statement_10:
         k3 = 2 * kl + ku + 1;
         k4 = kl + ku + 1 + m;
         for (j = 1; j <= n; j = j + 1) {
-            for (i = std::max(k1 - j, k2); i <= min(k3, k4 - j); i = i + 1) {
+            for (i = std::max(k1 - j, k2); i <= std::min(k3, k4 - j); i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = a[(i - 1) + (j - 1) * lda] * mul;
             }
         }

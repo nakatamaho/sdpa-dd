@@ -58,7 +58,7 @@ void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real 
         //        array to ALPHA.
         //
         for (j = 2; j <= n; j = j + 1) {
-            for (i = 1; i <= min(j - 1, m); i = i + 1) {
+            for (i = 1; i <= std::min(j - 1, m); i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = alpha;
             }
         }
@@ -68,7 +68,7 @@ void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real 
         //        Set the strictly lower triangular or trapezoidal part of the
         //        array to ALPHA.
         //
-        for (j = 1; j <= min(m, n); j = j + 1) {
+        for (j = 1; j <= std::min(m, n); j = j + 1) {
             for (i = j + 1; i <= m; i = i + 1) {
                 a[(i - 1) + (j - 1) * lda] = alpha;
             }
@@ -85,9 +85,9 @@ void Rlaset(const char *uplo, mplapackint const m, mplapackint const n, dd_real 
         }
     }
     //
-    //     Set the first min(M,N) diagonal elements to BETA.
+    //     Set the first std::min(M,N) diagonal elements to BETA.
     //
-    for (i = 1; i <= min(m, n); i = i + 1) {
+    for (i = 1; i <= std::min(m, n); i = i + 1) {
         a[(i - 1) + (i - 1) * lda] = beta;
     }
     //

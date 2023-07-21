@@ -89,7 +89,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                     for (j = 1; j <= i - 1; j = j + 1) {
                         t[(j - 1) + (i - 1) * ldt] = -tau[i - 1] * v[(i - 1) + (j - 1) * ldv];
                     }
-                    j = min(lastv, prevlastv);
+                    j = std::min(lastv, prevlastv);
                     //
                     //                 T(1:i-1,i) := - tau(i) * V(i:j,1:i-1)**T * V(i:j,i)
                     //
@@ -104,7 +104,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                     for (j = 1; j <= i - 1; j = j + 1) {
                         t[(j - 1) + (i - 1) * ldt] = -tau[i - 1] * v[(j - 1) + (i - 1) * ldv];
                     }
-                    j = min(lastv, prevlastv);
+                    j = std::min(lastv, prevlastv);
                     //
                     //                 T(1:i-1,i) := - tau(i) * V(1:i-1,i:j) * V(i,i:j)**T
                     //
@@ -173,7 +173,7 @@ void Rlarft(const char *direct, const char *storev, mplapackint const n, mplapac
                     //
                     Rtrmv("Lower", "No transpose", "Non-unit", k - i, &t[((i + 1) - 1) + ((i + 1) - 1) * ldt], ldt, &t[((i + 1) - 1) + (i - 1) * ldt], 1);
                     if (i > 1) {
-                        prevlastv = min(prevlastv, lastv);
+                        prevlastv = std::min(prevlastv, lastv);
                     } else {
                         prevlastv = lastv;
                     }

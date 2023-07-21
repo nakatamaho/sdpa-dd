@@ -136,9 +136,9 @@ void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_r
     //
     //     Determine the unit roundoff and over/underflow thresholds.
     //
-    eps = Rlamch("E");
+    eps = Rlamch_dd("E");
     eps2 = pow2(eps);
-    safmin = Rlamch("S");
+    safmin = Rlamch_dd("S");
     safmax = one / safmin;
     ssfmax = sqrt(safmax) / three;
     ssfmin = sqrt(safmin) / eps2;

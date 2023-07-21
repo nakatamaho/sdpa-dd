@@ -107,13 +107,13 @@ void Rsterf(mplapackint const n, dd_real *d, dd_real *e, mplapackint &info) {
     //
     //     Determine the unit roundoff for this environment.
     //
-    eps = Rlamch("E");
+    eps = Rlamch_dd("E");
     eps2 = pow2(eps);
-    safmin = Rlamch("S");
+    safmin = Rlamch_dd("S");
     safmax = one / safmin;
     ssfmax = sqrt(safmax) / three;
     ssfmin = sqrt(safmin) / eps2;
-    rmax = Rlamch("O");
+    rmax = Rlamch_dd("O");
     //
     //     Compute the eigenvalues of the tridiagonal matrix.
     //

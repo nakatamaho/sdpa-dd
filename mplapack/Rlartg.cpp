@@ -43,9 +43,9 @@ void Rlartg(dd_real const f, dd_real const g, dd_real &cs, dd_real &sn, dd_real 
     mplapackint count = 0;
     mplapackint i = 0;
     //
-    safmin = Rlamch("S");
-    eps = Rlamch("E");
-    safmn2 = pow(Rlamch("B"), castINTEGER_dd(log(safmin / eps) / log(Rlamch("B")) / two));
+    safmin = Rlamch_dd("S");
+    eps = Rlamch_dd("E");
+    safmn2 = pow(Rlamch_dd("B"), castINTEGER_dd(log(safmin / eps) / log(Rlamch_dd("B")) / two));
     safmx2 = one / safmn2;
     //        FIRST = .FALSE.
     //     END IF

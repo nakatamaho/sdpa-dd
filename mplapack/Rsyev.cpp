@@ -85,8 +85,8 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
     //
     //     Get machine constants.
     //
-    dd_real safmin = Rlamch("Safe minimum");
-    dd_real eps = Rlamch("Precision");
+    dd_real safmin = Rlamch_dd("Safe minimum");
+    dd_real eps = Rlamch_dd("Precision");
     dd_real smlnum = safmin / eps;
     dd_real bignum = one / smlnum;
     dd_real rmin = sqrt(smlnum);

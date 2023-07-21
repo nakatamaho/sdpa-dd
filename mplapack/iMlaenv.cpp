@@ -96,7 +96,7 @@ L10:
     //
     return_value = 1;
     //
-    // name_len = min((mplapackint)strlen(name), (mplapackint)subnamlen);
+    // name_len = std::min((mplapackint)strlen(name), (mplapackint)subnamlen);
     strcpy(subnam, name);
     ic = *subnam;
 

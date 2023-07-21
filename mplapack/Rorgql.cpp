@@ -132,7 +132,7 @@ void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         //        Use blocked code after the first block.
         //        The last kk columns are handled by the block method.
         //
-        kk = min(k, ((k - nx + nb - 1) / nb) * nb);
+        kk = std::min(k, ((k - nx + nb - 1) / nb) * nb);
         //
         //        Set A(m-kk+1:m,1:n-kk) to zero.
         //
@@ -157,7 +157,7 @@ void Rorgql(mplapackint const m, mplapackint const n, mplapackint const k, dd_re
         //        Use blocked code
         //
         for (i = k - kk + 1; i <= k; i = i + nb) {
-            ib = min(nb, k - i + 1);
+            ib = std::min(nb, k - i + 1);
             if (n - k + i > 1) {
                 //
                 //              Form the triangular factor of the block reflector

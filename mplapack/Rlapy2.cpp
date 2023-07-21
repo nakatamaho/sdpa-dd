@@ -51,7 +51,7 @@ dd_real Rlapy2(dd_real const x, dd_real const y) {
         xabs = abs(x);
         yabs = abs(y);
         w = std::max(xabs, yabs);
-        z = min(xabs, yabs);
+        z = std::min(xabs, yabs);
         if (z == zero) {
             return_value = w;
         } else {
