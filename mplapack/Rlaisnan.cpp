@@ -26,8 +26,8 @@
  *
  */
 
-#include <mpblas.h>
-#include <mplapack.h>
+#include <mpblas_dd.h>
+#include <mplapack_dd.h>
 
 bool Rlaisnan(dd_real const din1, dd_real const din2) {
     bool return_value = false;
