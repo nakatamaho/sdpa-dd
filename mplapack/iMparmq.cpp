@@ -55,7 +55,7 @@ mplapackint iMparmq(mplapackint const ispec, const char *name, const char *opts,
             ns = 10;
         }
         if (nh >= 150) {
-            ns = max((mplapackint)10, nh / nint((log(castdd_real(nh - 1)) / log(two)) - 1));
+	    ns = std::max((mplapackint)10, nh / nint((log(castdd_real(nh - 1)) / log(two)) - 1));
         }
         if (nh >= 590) {
             ns = 64;
@@ -66,7 +66,7 @@ mplapackint iMparmq(mplapackint const ispec, const char *name, const char *opts,
         if (nh >= 6000) {
             ns = 256;
         }
-        ns = max((mplapackint)2, ns - mod(ns, 2));
+        ns = std::max((mplapackint)2, ns - mod(ns, 2));
     }
     //
     const mplapackint inmin = 12;
