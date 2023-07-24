@@ -3,6 +3,7 @@ dnl Configure for SDPA-DD 7.1.2
 dnl
 
 AC_INIT(sdpa-dd, 7.1.2)
+AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_CC
 AC_PROG_CXX
