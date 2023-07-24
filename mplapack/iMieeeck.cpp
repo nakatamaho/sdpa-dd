@@ -29,7 +29,7 @@
 #include <mpblas_dd.h>
 #include <mplapack_dd.h>
 
-mplapackint iMieeeck(mplapackint const &ispec, dd_real const &zero, dd_real const &one) {
+mplapackint iMieeeck_dd(mplapackint const &ispec, dd_real const &zero, dd_real const &one) {
     mplapackint return_value = 0;
     //
 #if defined ___MPLAPACK_BUILD_WITH_GMP___

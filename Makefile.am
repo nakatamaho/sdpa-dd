@@ -32,7 +32,6 @@ mplapack/Rcopy.cpp\
 mplapack/Rcopy_omp.cpp\
 mplapack/Rdot.cpp\
 mplapack/Rdot_omp.cpp\
-mplapack/Rgemm.cpp\
 mplapack/Rgemm_omp.cpp\
 mplapack/Rgemm_NN_omp.cpp\
 mplapack/Rgemm_NT_omp.cpp\
