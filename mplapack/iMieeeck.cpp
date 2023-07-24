@@ -27,7 +27,7 @@
  */
 
 #include <mpblas_dd.h>
-#include <mplapack.h>
+#include <mplapack_dd.h>
 
 INTEGER iMieeeck(INTEGER const &ispec, dd_real const &zero, dd_real const &one) {
     INTEGER return_value = 0;

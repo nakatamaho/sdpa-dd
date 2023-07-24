@@ -27,7 +27,7 @@
  */
 
 #include <mpblas_dd.h>
-#include <mplapack.h>
+#include <mplapack_dd.h>
 
 INTEGER
 iMladlr(INTEGER const m, INTEGER const n, REAL *a, INTEGER const lda) {
