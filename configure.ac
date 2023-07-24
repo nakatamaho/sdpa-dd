@@ -9,6 +9,8 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_CANONICAL_HOST
 
+highest_abs_top_srcdir=`cd "$srcdir" && pwd`
+
 AC_ARG_WITH(system-spooles,
 [  --with-system-spooles      Use spooles already on system],
 WITH_SYSTEM_SPOOLES=$withval, WITH_SYSTEM_SPOOLES=no)
@@ -162,8 +164,8 @@ if test x$WITH_SYSTEM_SPOOLES != xno; then
     AC_MSG_ERROR([No SPOOLES found])
   fi
 else
-SPOOLES_LIBDIR=$abs_srcdir/external/i/SPOOLES/lib
-SPOOLES_INCLUDEDIR=$abs_srcdir/external/spooles/work/internal #just too messy
+SPOOLES_LIBDIR=$highest_abs_top_srcdir/external/i/SPOOLES/lib
+SPOOLES_INCLUDEDIR=$highest_abs_top_srcdir/external/spooles/work/internal #just too messy
 fi
 AC_SUBST(SPOOLES_LIBDIR)
 AC_SUBST(SPOOLES_INCLUDEDIR)
@@ -190,8 +192,8 @@ if test x$WITH_SYSTEM_QD != xno; then
     AC_MSG_ERROR([No QD found])
   fi
 else
-  QD_LIBDIR=$abs_srcdir/external/i/QD/lib
-  QD_INCLUDEDIR=$abs_srcdir/external/i/QD/include
+  QD_LIBDIR=$highest_abs_top_srcdir/external/i/QD/lib
+  QD_INCLUDEDIR=$highest_abs_top_srcdir/external/i/QD/include
 fi
 AC_SUBST(QD_LIBDIR)
 AC_SUBST(QD_INCLUDEDIR)
@@ -229,8 +231,8 @@ if test x$HAVE_MPLAPACK != xyes; then
   AC_MSG_ERROR([No MPLAPACK found])
 fi
 else
-MPLAPACK_LIBDIR=$abs_srcdir/mplapack
-MPLAPACK_INCLUDEDIR=$abs_srcdir/mplapack
+MPLAPACK_LIBDIR=$highest_abs_top_srcdir/mplapack
+MPLAPACK_INCLUDEDIR=$highest_abs_top_srcdir/mplapack
 fi
 AM_CONDITIONAL(SYSTEM_MPLAPACK, test x$with_system_mplapack = xyes)
 AC_SUBST(MPLAPACK_LIBDIR)

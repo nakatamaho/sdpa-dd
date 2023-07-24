@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 #include <mplapack.h>
 
 void Rcombssq(REAL *v1, REAL *v2) {

@@ -26,7 +26,7 @@
  *
  */
 
-#include <mpblas.h>
+#include <mpblas_dd.h>
 #include <mplapack.h>
 
 bool Risnan(REAL const din) {
