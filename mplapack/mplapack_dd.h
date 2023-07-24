@@ -80,6 +80,7 @@ void Rsterf(mplapackint const n, dd_real *d, dd_real *e, mplapackint &info);
 void Rorgtr(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info);
 mplapackint iMparmq_dd(mplapackint const ispec, const char *name, const char *opts, mplapackint const n, mplapackint const ilo, mplapackint const ihi, mplapackint const lwork);
 mplapackint iMieeeck_dd(mplapackint const &ispec, dd_real const &zero, dd_real const &one);
+bool Rlaisnan(dd_real const din1, dd_real const din2);
 bool Risnan(dd_real const din);
 mplapackint iMlaenv_dd(mplapackint ispec, const char *name, const char *opts, mplapackint n1, mplapackint n2, mplapackint n3, mplapackint n4);
 dd_real Rlanst(const char *norm, mplapackint const n, dd_real *d, dd_real *e);

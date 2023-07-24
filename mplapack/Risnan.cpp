@@ -29,7 +29,7 @@
 #include <mpblas_dd.h>
 #include <mplapack_dd.h>
 
-bool Risnan(REAL const din) {
+bool Risnan(dd_real const din) {
     bool return_value = false;
     //
     return_value = Rlaisnan(din, din);

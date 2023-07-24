@@ -25,7 +25,7 @@ mplapack/Rcombssq.cpp mplapack/Risnan.cpp \
 mplapack/Mlsame.cpp mplapack/Rscal.cpp mplapack/Rgemv.cpp \
 mplapack/Rtrmv.cpp mplapack/Rsteqr.cpp mplapack/Rlaset.cpp mplapack/Rlaev2.cpp \
 mplapack/Rlasr.cpp mplapack/Rlartg.cpp mplapack/Rswap.cpp mplapack/Rsyev.cpp\
-mplapack/Rlansy.cpp\
+mplapack/Rlansy.cpp mplapack/Rlaisnan.cpp\
 mplapack/Raxpy_omp.cpp\
 mplapack/Rcopy_omp.cpp\
 mplapack/Rdot_omp.cpp\

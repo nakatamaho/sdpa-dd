@@ -29,9 +29,9 @@
 #include <mpblas_dd.h>
 #include <mplapack_dd.h>
 
-INTEGER
-iMladlc(INTEGER const m, INTEGER const n, REAL *a, INTEGER const lda) {
-    INTEGER return_value = 0;
+mplapackint
+iMladlc(mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda) {
+    mplapackint return_value = 0;
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -51,8 +51,8 @@ iMladlc(INTEGER const m, INTEGER const n, REAL *a, INTEGER const lda) {
     //     .. Executable Statements ..
     //
     //     Quick test for the common case where one corner is non-zero.
-    const REAL zero = 0.0;
-    INTEGER i = 0;
+    const dd_real zero = 0.0;
+    mplapackint i = 0;
     if (n == 0) {
         return_value = n;
     } else if (a[(n - 1) * lda] != zero || a[(m - 1) + (n - 1) * lda] != zero) {

@@ -29,7 +29,7 @@
 #include <mpblas_dd.h>
 #include <mplapack_dd.h>
 
-void Rcombssq(REAL *v1, REAL *v2) {
+void Rcombssq(dd_real *v1, dd_real *v2) {
     //
     //  -- LAPACK auxiliary routine --
     //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
@@ -45,7 +45,7 @@ void Rcombssq(REAL *v1, REAL *v2) {
     //     ..
     //     .. Executable Statements ..
     //
-    const REAL zero = 0.0;
+    const dd_real zero = 0.0;
     if (v1[1 - 1] >= v2[1 - 1]) {
         if (v1[1 - 1] != zero) {
             v1[2 - 1] += pow2((v2[1 - 1] / v1[1 - 1])) * v2[2 - 1];

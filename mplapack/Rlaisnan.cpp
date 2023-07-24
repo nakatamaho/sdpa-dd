@@ -26,48 +26,12 @@
  *
  */
 
-#include <mpblas_dd.h>
-#include <mplapack_dd.h>
+#include <mpblas.h>
+#include <mplapack.h>
 
-mplapackint
-iMladlr(mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda) {
-    mplapackint return_value = 0;
+bool Rlaisnan(dd_real const din1, dd_real const din2) {
+    bool return_value = false;
     //
-    //  -- LAPACK auxiliary routine --
-    //  -- LAPACK is a software package provided by Univ. of Tennessee,    --
-    //  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
-    //
-    //     .. Scalar Arguments ..
-    //     ..
-    //     .. Array Arguments ..
-    //     ..
-    //
-    //  =====================================================================
-    //
-    //     .. Parameters ..
-    //     ..
-    //     .. Local Scalars ..
-    //     ..
-    //     .. Executable Statements ..
-    //
-    //     Quick test for the common case where one corner is non-zero.
-    const dd_real zero = 0.0;
-    mplapackint j = 0;
-    mplapackint i = 0;
-    if (m == 0) {
-        return_value = m;
-    } else if (a[(m - 1)] != zero || a[(m - 1) + (n - 1) * lda] != zero) {
-        return_value = m;
-    } else {
-        //     Scan up each column tracking the last zero row seen.
-        return_value = 0;
-        for (j = 1; j <= n; j = j + 1) {
-            i = m;
-            while ((a[(max(i, (mplapackint)1) - 1) + (j - 1) * lda] == zero) && (i >= 1)) {
-                i = i - 1;
-            }
-            return_value = max(return_value, i);
-        }
-    }
+    return_value = (din1 != din2);
     return return_value;
 }

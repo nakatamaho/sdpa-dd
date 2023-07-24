@@ -32,15 +32,15 @@
 
 #define subnamlen 32
 
-INTEGER iMparmq(INTEGER const ispec, const char *name, const char *opts, INTEGER const n, INTEGER const ilo, INTEGER const ihi, INTEGER const lwork) {
-    INTEGER return_value = 0;
+mplapackint iMparmq(mplapackint const ispec, const char *name, const char *opts, mplapackint const n, mplapackint const ilo, mplapackint const ihi, mplapackint const lwork) {
+    mplapackint return_value = 0;
     //
-    const INTEGER ishfts = 15;
-    const INTEGER inwin = 13;
-    const INTEGER iacc22 = 16;
-    INTEGER nh = 0;
-    INTEGER ns = 0;
-    INTEGER name_len;
+    const mplapackint ishfts = 15;
+    const mplapackint inwin = 13;
+    const mplapackint iacc22 = 16;
+    mplapackint nh = 0;
+    mplapackint ns = 0;
+    mplapackint name_len;
     const dd_real two = 2.0;
     if ((ispec == ishfts) || (ispec == inwin) || (ispec == iacc22)) {
         //
@@ -55,7 +55,7 @@ INTEGER iMparmq(INTEGER const ispec, const char *name, const char *opts, INTEGER
             ns = 10;
         }
         if (nh >= 150) {
-            ns = max((INTEGER)10, nh / nint((log(castdd_real(nh - 1)) / log(two)) - 1));
+            ns = max((mplapackint)10, nh / nint((log(castdd_real(nh - 1)) / log(two)) - 1));
         }
         if (nh >= 590) {
             ns = 64;
@@ -66,20 +66,20 @@ INTEGER iMparmq(INTEGER const ispec, const char *name, const char *opts, INTEGER
         if (nh >= 6000) {
             ns = 256;
         }
-        ns = max((INTEGER)2, ns - mod(ns, 2));
+        ns = max((mplapackint)2, ns - mod(ns, 2));
     }
     //
-    const INTEGER inmin = 12;
-    const INTEGER nmin = 75;
-    const INTEGER inibl = 14;
-    const INTEGER nibble = 14;
-    const INTEGER knwswp = 500;
+    const mplapackint inmin = 12;
+    const mplapackint nmin = 75;
+    const mplapackint inibl = 14;
+    const mplapackint nibble = 14;
+    const mplapackint knwswp = 500;
     char subnam[subnamlen];
-    INTEGER ic = 0;
-    INTEGER iz = 0;
-    INTEGER i = 0;
-    const INTEGER k22min = 14;
-    const INTEGER kacmin = 14;
+    mplapackint ic = 0;
+    mplapackint iz = 0;
+    mplapackint i = 0;
+    const mplapackint k22min = 14;
+    const mplapackint kacmin = 14;
     if (ispec == inmin) {
         //
         //        ===== Matrices of order smaller than NMIN get sent

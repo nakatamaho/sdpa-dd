@@ -29,8 +29,8 @@
 #include <mpblas_dd.h>
 #include <mplapack_dd.h>
 
-INTEGER iMieeeck(INTEGER const &ispec, dd_real const &zero, dd_real const &one) {
-    INTEGER return_value = 0;
+mplapackint iMieeeck(mplapackint const &ispec, dd_real const &zero, dd_real const &one) {
+    mplapackint return_value = 0;
     //
 #if defined ___MPLAPACK_BUILD_WITH_GMP___
     // GMP is not a natural extention to IEEE 754.
