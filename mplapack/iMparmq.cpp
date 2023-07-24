@@ -32,7 +32,7 @@
 
 #define subnamlen 32
 
-mplapackint iMparmq(mplapackint const ispec, const char *name, const char *opts, mplapackint const n, mplapackint const ilo, mplapackint const ihi, mplapackint const lwork) {
+mplapackint iMparmq_dd(mplapackint const ispec, const char *name, const char *opts, mplapackint const n, mplapackint const ilo, mplapackint const ihi, mplapackint const lwork) {
     mplapackint return_value = 0;
     //
     const mplapackint ishfts = 15;
@@ -55,7 +55,7 @@ mplapackint iMparmq(mplapackint const ispec, const char *name, const char *opts,
             ns = 10;
         }
         if (nh >= 150) {
-	    ns = std::max((mplapackint)10, nh / nint((log(castREAL_dd(nh - 1)) / log(two)) - 1));
+	    ns = 32; //should not affect for SDPA.
         }
         if (nh >= 590) {
             ns = 64;
