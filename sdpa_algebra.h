@@ -1,6 +1,6 @@
 /*  sdpa_algebra.h
-  functions are taken from MPACK (mlapack, mblas)
- http://accc.riken.jp/maho/mpack/index.html
+  functions are taken from MPLAPACK (mplapack, mpblas)
+  https://github.com/nakatamaho/mplapack
 */
 
 #ifndef __sdpa_algebra_h__
