@@ -16,11 +16,12 @@ mplapack/Rtrsm.cpp mplapack/Rsyrk.cpp\
 mplapack/Rtrmm.cpp mplapack/Rtrsv.cpp mplapack/iMlaenv.cpp\
 mplapack/Rlamch.cpp mplapack/Rlascl.cpp mplapack/Rsytrd.cpp mplapack/Rsterf.cpp\
 mplapack/Rorgtr.cpp mplapack/Rlatrd.cpp mplapack/Rsyr2k.cpp mplapack/Rsytd2.cpp \
-mplapack/Rlanst.cpp mplapack/Rlae2.cpp mplapack/Rlapy2.cpp mplapack/Rlasrt.cpp\
-mplapack/Rorgql.cpp mplapack/Rorgqr.cpp mplapack/Rsymv.cpp mplapack/Rlarfg.cpp\
-mplapack/Rsyr2.cpp mplapack/Rlassq.cpp mplapack/Rorg2l.cpp mplapack/Rlarft.cpp\
+mplapack/Rlanst.cpp mplapack/Rlae2.cpp mplapack/Rlapy2.cpp mplapack/Rlasrt.cpp \
+mplapack/Rorgql.cpp mplapack/Rorgqr.cpp mplapack/Rsymv.cpp mplapack/Rlarfg.cpp \
+mplapack/Rsyr2.cpp mplapack/Rlassq.cpp mplapack/Rorg2l.cpp mplapack/Rlarft.cpp \
 mplapack/Rlarfb.cpp mplapack/Rorg2r.cpp mplapack/Rnrm2.cpp mplapack/Rlarf.cpp \
-mplapack/Rger.cpp mplapack/Rpotrf.cpp mplapack/Mxerbla.cpp mplapack/Rpotf2.cpp \
+mplapack/Rger.cpp mplapack/Rpotf2.cpp mplapack/Rpotrf.cpp mplapack/Mxerbla.cpp \
+mplapack/Rcombssq.cpp mplapack/Risnan.cpp \
 mplapack/Mlsame.cpp mplapack/Rscal.cpp mplapack/Rgemv.cpp \
 mplapack/Rtrmv.cpp mplapack/Rsteqr.cpp mplapack/Rlaset.cpp mplapack/Rlaev2.cpp \
 mplapack/Rlasr.cpp mplapack/Rlartg.cpp mplapack/Rswap.cpp mplapack/Rsyev.cpp\

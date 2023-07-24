@@ -161,8 +161,8 @@ if test x$WITH_SYSTEM_SPOOLES != xno; then
     AC_MSG_ERROR([No SPOOLES found])
   fi
 else
-SPOOLES_LIBDIR=`pwd`/external/i/SPOOLES/lib
-SPOOLES_INCLUDEDIR=`pwd`/external/spooles/work/internal #just too messy
+SPOOLES_LIBDIR=$(abs_builddir)/external/i/SPOOLES/lib
+SPOOLES_INCLUDEDIR=$(abs_builddir)/external/spooles/work/internal #just too messy
 fi
 AC_SUBST(SPOOLES_LIBDIR)
 AC_SUBST(SPOOLES_INCLUDEDIR)
@@ -189,8 +189,8 @@ if test x$WITH_SYSTEM_QD != xno; then
     AC_MSG_ERROR([No QD found])
   fi
 else
-  QD_LIBDIR=`pwd`/external/i/QD/lib
-  QD_INCLUDEDIR=`pwd`/external/i/QD/include
+  QD_LIBDIR=$(abs_builddir)/external/i/QD/lib
+  QD_INCLUDEDIR=$(abs_builddir)/external/i/QD/include
 fi
 AC_SUBST(QD_LIBDIR)
 AC_SUBST(QD_INCLUDEDIR)
@@ -228,8 +228,8 @@ if test x$HAVE_MPLAPACK != xyes; then
   AC_MSG_ERROR([No MPLAPACK found])
 fi
 else
-MPLAPACK_LIBDIR=`pwd`/mplapack
-MPLAPACK_INCLUDEDIR=`pwd`/mplapack
+MPLAPACK_LIBDIR=$(abs_builddir)/mplapack
+MPLAPACK_INCLUDEDIR=$(abs_builddir)/mplapack
 fi
 AM_CONDITIONAL(SYSTEM_MPLAPACK, test x$with_system_mplapack = xyes)
 AC_SUBST(MPLAPACK_LIBDIR)
