@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2008-2010
+ * Copyright (c) 2008-2012
  *	Nakata, Maho
  * 	All rights reserved.
  *
@@ -30,12 +30,15 @@
 
 #include <mpblas_dd.h>
 
-void Rgemm_NN(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
-void Rgemm_TN(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
-void Rgemm_NT(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
-void Rgemm_TT(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_TN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_NT_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_TT_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
+void Rgemm_ref(const char *transa, const char *transb, mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc);
 
-void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real * A, mplapackint lda, dd_real * B, mplapackint ldb, dd_real beta, dd_real * C, mplapackint ldc)
+#define SINGLEOROMP 1000000
+
+void Rgemm(const char *transa, const char *transb, mplapackint const m, mplapackint const n, mplapackint const k, dd_real const alpha, dd_real *A, mplapackint const lda, dd_real *B, mplapackint const ldb, dd_real const beta, dd_real *C, mplapackint const ldc)
 {
     mplapackint i, j, l, nota, notb, nrowa, ncola, nrowb, info;
     dd_real temp;
@@ -80,6 +83,12 @@ void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n,
 //Quick return if possible.
     if ((m == 0) || (n == 0) || (((alpha == Zero) || (k == 0)) && (beta == One)))
 	return;
+
+    if (0) {
+        Rgemm_ref(transa, transb, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+        return;
+    }
+
 //And when alpha == 0.0
     if (alpha == Zero) {
 	if (beta == Zero) {
@@ -101,18 +110,18 @@ void Rgemm(const char *transa, const char *transb, mplapackint m, mplapackint n,
     if (notb) {
 	if (nota) {
 //Form C := alpha*A*B + beta*C.
-	    Rgemm_NN(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+	    Rgemm_NN_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	} else {
 //Form  C := alpha*A'*B + beta*C.
-	    Rgemm_TN(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+	    Rgemm_TN_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
     } else {
 	if (nota) {
 //Form  C := alpha*A*B' + beta*C.
-	    Rgemm_NT(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+	    Rgemm_NT_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	} else {
 //Form  C := alpha*A'*B' + beta*C.
-	    Rgemm_TT(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+	    Rgemm_TT_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 	}
     }
     return;
