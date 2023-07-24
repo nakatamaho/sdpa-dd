@@ -28,6 +28,7 @@ mplapack/Rlasr.cpp mplapack/Rlartg.cpp mplapack/Rswap.cpp mplapack/Rsyev.cpp\
 mplapack/Rlansy.cpp mplapack/Rlaisnan.cpp\
 mplapack/Raxpy.cpp\
 mplapack/Raxpy_omp.cpp\
+mplapack/Rcopy.cpp\
 mplapack/Rcopy_omp.cpp\
 mplapack/Rdot.cpp\
 mplapack/Rdot_omp.cpp\
