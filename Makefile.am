@@ -20,7 +20,8 @@ mplapack/Rlanst.cpp mplapack/Rlae2.cpp mplapack/Rlapy2.cpp mplapack/Rlasrt.cpp \
 mplapack/Rorgql.cpp mplapack/Rorgqr.cpp mplapack/Rsymv.cpp mplapack/Rlarfg.cpp \
 mplapack/Rsyr2.cpp mplapack/Rlassq.cpp mplapack/Rorg2l.cpp mplapack/Rlarft.cpp \
 mplapack/Rlarfb.cpp mplapack/Rorg2r.cpp mplapack/Rnrm2.cpp mplapack/Rlarf.cpp \
-mplapack/Rger.cpp mplapack/Rpotf2.cpp mplapack/Rpotrf.cpp mplapack/Mxerbla.cpp \
+mplapack/Rger.cpp mplapack/Rpotf2.cpp mplapack/Rpotrf.cpp mplapack/Rpotrf2.cpp \
+mplapack/Mxerbla.cpp \
 mplapack/Rcombssq.cpp mplapack/Risnan.cpp \
 mplapack/Mlsame.cpp mplapack/Rscal.cpp mplapack/Rgemv.cpp \
 mplapack/Rtrmv.cpp mplapack/Rsteqr.cpp mplapack/Rlaset.cpp mplapack/Rlaev2.cpp \

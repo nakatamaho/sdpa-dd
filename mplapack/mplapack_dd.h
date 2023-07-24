@@ -40,6 +40,7 @@ void Rsyev(const char *jobz, const char *uplo, mplapackint const n, dd_real *a, 
 void Rsteqr(const char *compz, mplapackint const n, dd_real *d, dd_real *e, dd_real *z, mplapackint const ldz, dd_real *work, mplapackint &info);
 void Rpotrf(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info);
 void Rpotf2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info);
+void Rpotrf2(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info);
 void Rlascl(const char *type, mplapackint const kl, mplapackint const ku, dd_real const cfrom, dd_real const cto, mplapackint const m, mplapackint const n, dd_real *a, mplapackint const lda, mplapackint &info);
 void Rlascl2(mplapackint const m, mplapackint const n, dd_real *d, dd_real *x, mplapackint const ldx);
 void Rsytrd(const char *uplo, mplapackint const n, dd_real *a, mplapackint const lda, dd_real *d, dd_real *e, dd_real *tau, dd_real *work, mplapackint const lwork, mplapackint &info);
