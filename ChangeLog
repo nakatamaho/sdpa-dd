@@ -1,4 +1,5 @@
 2023-07-25 Nakata Maho <maho@riken.jp>
+        * Version 7.1.3 
         * mplapack 2.0.1 integration
         * now we use automake-1.16
 
