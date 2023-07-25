@@ -71,6 +71,15 @@ AM_CONDITIONAL(ENABLE_METIS, test x$with_metis = xyes)
 dnl spooles requires -lm when linking.
 LIBS="-lm"
 
+IS_LINUX=0
+case "$host" in
+    *linux*)
+        IS_LINUX=1
+        ;;
+    *)
+esac
+AM_CONDITIONAL(IS_LINUX, test x$IS_LINUX = x1)
+
 IS_MINGW=0
 case "$host" in
         *-mingw32*) # mingw
@@ -199,7 +208,9 @@ if test x$HAVE_MPLAPACK_HEADER = xyes; then
   LIBS="$LDFLAGS -L$MPLAPACK_LIBDIR -lmplapack_dd -lmpblas_dd_opt"
  # AC_CHECK_FUNC(Rsyev, [HAVE_MPLAPACK=yes])
   HAVE_MPLAPACK=yes
-  LDFLAGS=$save_LDFLAGS
+  if test x$IS_LINUX = x1; then
+    LDFLAGS="$save_LDFLAGS -Wl,--rpath=$MPLAPACK_LIBDIR"
+  fi
 fi
 
 if test x$HAVE_MPLAPACK != xyes; then
