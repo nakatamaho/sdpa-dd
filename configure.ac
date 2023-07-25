@@ -213,21 +213,21 @@ HAVE_MPLAPACK=""
 save_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS -I$MPLAPACK_INCLUDEDIR"
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADER(mblas_qd.h, HAVE_MPLAPACK_HEADER=yes)
+AC_CHECK_HEADER(mpblas_qd.h, HAVE_MPLAPACK_HEADER=yes)
 CPPFLAGS=$save_CPPFLAGS
 
 if test x$HAVE_MPLAPACK_HEADER = xyes; then
   save_LDFLAGS="$LDFLAGS"
   LDFLAGS="$LDFLAGS -L$MPLAPACK_LIBDIR"
-  LIBS="$LDFLAGS -L$MPLAPACK_LIBDIR -lmlapack_dd -lmblas_dd -lqd";
+  LIBS="$LDFLAGS -L$MPLAPACK_LIBDIR -lmplapack_dd -lmpblas_dd -lqd";
  # AC_CHECK_FUNC(Rsyev, [HAVE_MPLAPACK=yes])
   HAVE_MPLAPACK=yes
   LDFLAGS=$save_LDFLAGS
 fi
 
 if test x$HAVE_MPLAPACK != xyes; then
-  echo "Please install MPLAPACK (MBLAS/MLAPACK)"
-  echo "MPLAPACK (MBLAS/MLAPACK) http://mplapack.cvs.sourceforge.net/"
+  echo "Please install MPLAPACK (MPBLAS/MPLAPACK)"
+  echo "https://github.com/nakatamaho/mplapack/"
   AC_MSG_ERROR([No MPLAPACK found])
 fi
 else
