@@ -8,6 +8,9 @@ AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_CC
 AC_PROG_CXX
 AC_CANONICAL_HOST
+AC_OPENMP
+AC_LANG([C++])
+AC_OPENMP
 
 highest_abs_top_srcdir=`cd "$srcdir" && pwd`
 
@@ -64,25 +67,6 @@ AC_ARG_ENABLE(metis,
   *) AC_MSG_ERROR(bad value ${enableval} for --enable-metis) ;;
 esac],[with_metis=no])
 AM_CONDITIONAL(ENABLE_METIS, test x$with_metis = xyes)
-
-AC_ARG_ENABLE(openmp,
-[  --enable-openmp       Enables openmp
-],WITH_OPENMP=yes)
-
-AC_ARG_WITH(openmplib,
-[  --with-openmplib    Gives openmplib],
-OPENMPLIB=$withval
-)
-
-AC_ARG_WITH(openmpflag,
-[  --with-openmpflag    Gives openmpflag],
-OPENMPFLAG=$withval
-)
-
-AC_ARG_WITH(openmpthreads,
-[  --with-openmpthread   Gives openmpthreads],
-OPENMPTHREADS=$withval
-)
 
 AC_ARG_ENABLE(shared,
 [  --enable-shared       Enables shared link to the libraries (slower)
@@ -237,14 +221,6 @@ fi
 AM_CONDITIONAL(SYSTEM_MPLAPACK, test x$with_system_mplapack = xyes)
 AC_SUBST(MPLAPACK_LIBDIR)
 AC_SUBST(MPLAPACK_INCLUDEDIR)
-
-dnl openmp
-if test -n "$enable_openmp" && test "$enable_openmp" != "no" && test "$WITH_OPENMP" = "yes"; then
-OPENMPFLAGS="-fopenmp -DENABLE_OPENMP -DNUM_OF_THREADS=$OPENMPTHREADS"
-OPENMPLIB=-lgomp
-fi
-AC_SUBST(OPENMPLIB)
-AC_SUBST(OPENMPFLAGS)
 
 AM_CONDITIONAL(ENABLE_SHARED, test x$enable_shared = xyes)
 
