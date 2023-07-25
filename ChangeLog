@@ -1,3 +1,7 @@
+2023-07-25 Nakata Maho <maho@riken.jp>
+        * mplapack 2.0.1 integration
+        * now we use automake-1.16
+
 2009-10-05 Nakata Maho <maho@riken.jp>
         * mpack 0.5.1 integration
 
