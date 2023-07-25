@@ -46,11 +46,6 @@ endif
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-if ENABLE_SHARED
-else
-sdpa_dd_LDFLAGS = -static
-endif
-
 if SYSTEM_MPLAPACK
 sdpa_dd_LDADD = $(pthread_lib) -L$(SPOOLES_LIBDIR) -lspooles -L$(QD_LIBDIR) -lqd $(OPENMPLIB) -L$(MPLAPACK_LIBDIR)
 sdpa_dd_CXXFLAGS= $(OPENMP_CXXFLAGS) $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -DUseMETIS=0 -I$(QD_INCLUDEDIR) $(OPENMPFLAGS) -I$(MPLAPACK_INCLUDEDIR)

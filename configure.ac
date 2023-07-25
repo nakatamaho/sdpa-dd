@@ -68,10 +68,6 @@ AC_ARG_ENABLE(metis,
 esac],[with_metis=no])
 AM_CONDITIONAL(ENABLE_METIS, test x$with_metis = xyes)
 
-AC_ARG_ENABLE(shared,
-[  --enable-shared       Enables shared link to the libraries (slower)
-],,)
-
 dnl spooles requires -lm when linking.
 LIBS="-lm"
 
@@ -102,9 +98,6 @@ case "$host" in
         *-*-freebsd*|*-*-dragonfly*)
             pthread_cflags=""
             pthread_lib="-pthread"
-            ;;
-        *-apple-darwin*)
-           enable_shared="yes"
         ;;
 esac
 LIBS="$LIBS $pthread_lib"
@@ -221,8 +214,6 @@ fi
 AM_CONDITIONAL(SYSTEM_MPLAPACK, test x$with_system_mplapack = xyes)
 AC_SUBST(MPLAPACK_LIBDIR)
 AC_SUBST(MPLAPACK_INCLUDEDIR)
-
-AM_CONDITIONAL(ENABLE_SHARED, test x$enable_shared = xyes)
 
 AC_CONFIG_FILES([
 external/Makefile
