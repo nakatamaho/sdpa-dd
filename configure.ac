@@ -156,8 +156,8 @@ fi
 AC_SUBST(SPOOLES_LIBDIR)
 AC_SUBST(SPOOLES_INCLUDEDIR)
 
+dnl Check for QD include and library files
 if test x$WITH_SYSTEM_QD != xno; then
-  dnl Check for QD include and library files
   HAVE_QD_HEADER=""
   HAVE_QD=""
   save_CPPFLAGS="$CPPFLAGS"
