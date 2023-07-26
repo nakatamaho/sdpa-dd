@@ -1,6 +1,6 @@
 QDVERSION=2.3.23
 
-if IS_MACOSX
+if IS_MACOS
 CONFIGURE_ARGS=--prefix=$(abs_builddir)/../i/QD/ --host=$(host)
 else
 CONFIGURE_ARGS=--prefix=$(abs_builddir)/../i/QD/ --host=$(host) --disable-shared
