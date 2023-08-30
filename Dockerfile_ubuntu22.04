@@ -35,4 +35,3 @@ RUN cd /home/$DOCKER_USER && rm -rf sdpa-dd
 RUN cd /home/$DOCKER_USER && mkdir /home/$DOCKER_USER/tmp
 RUN cd /home/$DOCKER_USER/tmp && tar xvf ~/sdpa-dd-${SDPA_DD_VER}.tar.gz
 RUN cd /home/$DOCKER_USER/tmp/sdpa-dd-${SDPA_DD_VER} && ./configure ; make
-

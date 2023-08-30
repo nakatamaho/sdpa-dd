@@ -58,6 +58,11 @@ sdpa_dd_CXXFLAGS= $(OPENMP_CXXFLAGS) $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -
 SUBDIRS = external
 
 EXTRA_DIST = \
+example1.dat \
+example1.dat-s \
+example1.ini \
+example1.ini-s \
+example2.dat \
 param.sdpa \
 external/qd/download/*.tar.gz \
 external/qd/Makefile.am \
