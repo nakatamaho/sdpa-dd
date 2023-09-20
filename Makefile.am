@@ -41,7 +41,11 @@ mplapack/Rgemm_omp.cpp\
 mplapack/Rgemm_NN_omp.cpp\
 mplapack/Rgemm_NT_omp.cpp\
 mplapack/Rgemm_TN_omp.cpp\
-mplapack/Rgemm_TT_omp.cpp
+mplapack/Rgemm_TT_omp.cpp\
+mplapack/mpblas_dd.h\
+mplapack/mplapack_config.h\
+mplapack/mplapack_dd.h\
+mplapack/mplapack_utils_dd.h
 endif
 
 AUTOMAKE_OPTIONS = subdir-objects
@@ -52,6 +56,11 @@ sdpa_dd_CXXFLAGS= $(OPENMP_CXXFLAGS) $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -
 SUBDIRS = external
 
 EXTRA_DIST = \
+example1.dat \
+example1.dat-s \
+example1.ini \
+example1.ini-s \
+example2.dat \
 param.sdpa \
 external/qd/download/*.tar.gz \
 external/qd/Makefile.am \
