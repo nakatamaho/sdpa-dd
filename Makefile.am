@@ -3,13 +3,13 @@ bin_PROGRAMS = sdpa_dd
 if SYSTEM_MPLAPACK
 sdpa_dd_SOURCES = sdpa_chordal.cpp sdpa_dataset.cpp sdpa_io.cpp \
 sdpa_jordan.cpp sdpa_linear.cpp sdpa_main.cpp sdpa_newton.cpp sdpa_parts.cpp \
-sdpa_struct.cpp sdpa_tool.cpp sdpa_chordal.h sdpa_dataset.h \
+sdpa_struct.cpp sdpa_tool.cpp sdpa_chordal.h sdpa_dataset.h sdpa_algebra.h \
 sdpa_include.h sdpa_io.h sdpa_jordan.h sdpa_linear.h sdpa_newton.h \
 sdpa_parts.h sdpa_right.h sdpa_struct.h sdpa_tool.h
 else
 sdpa_dd_SOURCES = sdpa_chordal.cpp sdpa_dataset.cpp sdpa_io.cpp \
 sdpa_jordan.cpp sdpa_linear.cpp sdpa_main.cpp sdpa_newton.cpp sdpa_parts.cpp \
-sdpa_struct.cpp sdpa_tool.cpp sdpa_chordal.h sdpa_dataset.h \
+sdpa_struct.cpp sdpa_tool.cpp sdpa_chordal.h sdpa_dataset.h sdpa_algebra.h \
 sdpa_include.h sdpa_io.h sdpa_jordan.h sdpa_linear.h sdpa_newton.h \
 sdpa_parts.h sdpa_right.h sdpa_struct.h sdpa_tool.h \
 mplapack/Rtrsm.cpp mplapack/Rsyrk.cpp\
