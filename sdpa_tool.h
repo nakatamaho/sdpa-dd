@@ -33,21 +33,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #include <string>
 
 #include <qd/dd_real.h>
+#include <chrono>
 
 namespace sdpa {
 
+// clang-format off
 #if 1
 #define rMessage(message) \
-cout << message << " :: line " << __LINE__ \
-  << " in " << __FILE__ << endl
+    cout << message << " :: line " << __LINE__ \
+         << " in " << __FILE__ << endl
 #else
 #define rMessage(message)
 #endif
 
 #define rError(message) \
-cout << message << " :: line " << __LINE__ \
-  << " in " << __FILE__ << endl; \
-exit(false)
+    cout << message << " :: line " << __LINE__ \
+         << " in " << __FILE__ << endl; \
+    exit(false)
 
 #if 0
 #define rNewCheck() rMessage("new invoked");
@@ -55,40 +57,54 @@ exit(false)
 #define rNewCheck() ;
 #endif
 
+#if 1 // count time with process time
+#define TimeStart(START__)               \
+    static double START__;                \
+    START__ = Time::rGetUseTime()
+
+#define TimeEnd(END__)                   \
+    static double END__;                  \
+    END__ = Time::rGetUseTime()
+
+#define TimeCal(START__, END__) (END__ - START__)
+#else // count time with real time
+#define TimeStart(START__)               \
+    static struct timeval START__;        \
+    Time::rSetTimeVal(START__)
+
+#define TimeEnd(END__)                   \
+    static struct timeval END__;          \
+    Time::rSetTimeVal(END__)
+
+#define TimeCal(START__, END__) Time::rGetRealTime(START__, END__)
+#endif
+// clang-format on
+
 #define REVERSE_PRIMAL_DUAL 1
 
-
 // These are constant. Do NOT change
-extern int IZERO   ; // =  0;
-extern int IONE    ; // =  1;
-extern int IMONE   ; // = -1;
-extern dd_real MZERO; // =  0.0;
-extern dd_real MONE ; // =  1.0;
-extern dd_real MMONE; // = -1.0;
+extern int IZERO; // =  0;
+extern int IONE;  // =  1;
+extern int IMONE; // = -1;
+extern dd_real MZERO;
+extern dd_real MONE;
+extern dd_real MMONE;
 
-class Time
-{
-public:
-  static double rGetUseTime();
-  static void rSetTimeVal(struct timeval & targetVal);
-  static double rGetRealTime(const struct timeval & start,
-			     const struct timeval & end);
+class Time {
+  public:
+    static double rGetUseTime() {
+        auto now = std::chrono::system_clock::now().time_since_epoch();
+        return std::chrono::duration<double>(now).count();
+    }
+
+    static void rSetTimeVal(std::chrono::system_clock::time_point &targetVal) { targetVal = std::chrono::system_clock::now(); }
+
+    static double rGetRealTime(const std::chrono::system_clock::time_point &start, const std::chrono::system_clock::time_point &end) {
+        std::chrono::duration<double> elapsed_seconds = end - start;
+        return elapsed_seconds.count();
+    }
 };
 
-#if 1 // count time with process time
-#define TimeStart(START__) \
-   static double START__; START__ = Time::rGetUseTime()
-#define TimeEnd(END__) \
-   static double END__;   END__ = Time::rGetUseTime()
-#define TimeCal(START__,END__) (END__ - START__)
-#else // count time with real time
-#define TimeStart(START__) \
-   static struct timeval START__; Time::rSetTimeVal(START__)
-#define TimeEnd(END__) \
-   static struct timeval END__; Time::rSetTimeVal(END__)
-#define TimeCal(START__,END__) Time::rGetRealTime(START__,END__)
-#endif
-
-}
+} // namespace sdpa
 
 #endif // __sdpa_tool_h__
