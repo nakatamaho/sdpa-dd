@@ -55,7 +55,7 @@ mplapackint iMparmq_dd(mplapackint const ispec, const char *name, const char *op
             ns = 10;
         }
         if (nh >= 150) {
-	    ns = 32; //should not affect for SDPA.
+            ns = 32; // should not affect for SDPA.
         }
         if (nh >= 590) {
             ns = 64;

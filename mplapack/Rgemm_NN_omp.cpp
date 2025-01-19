@@ -33,35 +33,33 @@
 #include <omp.h>
 #endif
 
-void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta,
-	      dd_real *C, mplapackint ldc)
-{
+void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
     mplapackint i, j, l;
     dd_real temp;
 
-//Form C := alpha*A*B + beta*C.
+    // Form C := alpha*A*B + beta*C.
     for (j = 0; j < n; j++) {
-	if (beta == 0.0) {
-	    for (i = 0; i < m; i++) {
-		C[i + j * ldc] = 0.0;
-	    }
-	} else if (beta != 1.0) {
-	    for (i = 0; i < m; i++) {
-		C[i + j * ldc] = beta * C[i + j * ldc];
-	    }
-	}
+        if (beta == 0.0) {
+            for (i = 0; i < m; i++) {
+                C[i + j * ldc] = 0.0;
+            }
+        } else if (beta != 1.0) {
+            for (i = 0; i < m; i++) {
+                C[i + j * ldc] = beta * C[i + j * ldc];
+            }
+        }
     }
-//main loop
+// main loop
 #ifdef _OPENMP
 #pragma omp parallel for private(i, j, l, temp)
 #endif
     for (j = 0; j < n; j++) {
-	for (l = 0; l < k; l++) {
-	    temp = alpha * B[l + j * ldb];
-	    for (i = 0; i < m; i++) {
-		C[i + j * ldc] += temp * A[i + l * lda];
-	    }
-	}
+        for (l = 0; l < k; l++) {
+            temp = alpha * B[l + j * ldb];
+            for (i = 0; i < m; i++) {
+                C[i + j * ldc] += temp * A[i + l * lda];
+            }
+        }
     }
     return;
 }

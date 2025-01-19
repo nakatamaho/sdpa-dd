@@ -29,24 +29,22 @@
  */
 #include <mpblas_dd.h>
 
-void Rgemm_TT_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta,
-	      dd_real *C, mplapackint ldc)
-{
-//Form  C := alpha*A'*B' + beta*C.
+void Rgemm_TT_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
+    // Form  C := alpha*A'*B' + beta*C.
     mplapackint i, j, l;
     dd_real temp;
     for (j = 0; j < n; j++) {
-	if (beta == 0.0) {
-	    for (i = 0; i < m; i++) {
-		C[i + j * ldc] = 0.0;
-	    }
-	} else if (beta != 1.0) {
-	    for (i = 0; i < m; i++) {
-		C[i + j * ldc] = beta * C[i + j * ldc];
-	    }
-	}
+        if (beta == 0.0) {
+            for (i = 0; i < m; i++) {
+                C[i + j * ldc] = 0.0;
+            }
+        } else if (beta != 1.0) {
+            for (i = 0; i < m; i++) {
+                C[i + j * ldc] = beta * C[i + j * ldc];
+            }
+        }
     }
-//main loop
+// main loop
 #ifdef _OPENMP
 #pragma omp parallel for private(i, j, l, temp)
 #endif
@@ -55,9 +53,9 @@ void Rgemm_TT_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd
             temp = 0.0;
             for (l = 0; l < k; l++) {
                 temp += A[l + i * lda] * B[j + l * ldb];
-	    }
-	    C[i + j * ldc] += alpha * temp;
-	}
+            }
+            C[i + j * ldc] += alpha * temp;
+        }
     }
     return;
 }
