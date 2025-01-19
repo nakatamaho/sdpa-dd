@@ -19,7 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 ------------------------------------------------------------- */
 
-// printing presicion of such as vector 
+// printing presicion of such as vector
 #define P_FORMAT "%+18.12e"
 
 #ifndef __sdpa_struct_h__
@@ -29,208 +29,172 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 namespace sdpa {
 
-class Vector
-{
-public:
-  int nDim;
-  dd_real* ele;
+class Vector {
+  public:
+    int nDim;
+    dd_real *ele;
 
-  Vector();
-  Vector(int nDim, dd_real value = 0.0);
-  ~Vector();
+    Vector();
+    Vector(int nDim, dd_real value = 0.0);
+    ~Vector();
 
-  void initialize(int nDim, dd_real value = 0.0);
-  void initialize(dd_real value);
-  void terminate();
+    void initialize(int nDim, dd_real value = 0.0);
+    void initialize(dd_real value);
+    void terminate();
 
-  void setZero();
-  void display(FILE* fpout = stdout);
-  void display(FILE* fpout,dd_real scalar);
-  bool copyFrom(Vector& other);
+    void setZero();
+    void display(FILE *fpout = stdout);
+    void display(FILE *fpout, dd_real scalar);
+    bool copyFrom(Vector &other);
 };
 
-class BlockVector
-{
-public:
-  int  nBlock;
-  int* blockStruct;
+class BlockVector {
+  public:
+    int nBlock;
+    int *blockStruct;
 
-  Vector* ele;
-  
-  BlockVector();
-  BlockVector(int nBlock, int* blockStruct, dd_real value = 0.0);
-  ~BlockVector();
-  
-  void initialize(int nBlock, int* blockStruct, dd_real value = 0.0);
-  void initialize(dd_real value);
-  void terminate();
+    Vector *ele;
 
-  void setZero();
-  void display(FILE* fpout = stdout);
-  bool copyFrom(BlockVector& other);
+    BlockVector();
+    BlockVector(int nBlock, int *blockStruct, dd_real value = 0.0);
+    ~BlockVector();
+
+    void initialize(int nBlock, int *blockStruct, dd_real value = 0.0);
+    void initialize(dd_real value);
+    void terminate();
+
+    void setZero();
+    void display(FILE *fpout = stdout);
+    bool copyFrom(BlockVector &other);
 };
 
-class SparseMatrix
-{
-public:
-  int nRow, nCol;
+class SparseMatrix {
+  public:
+    int nRow, nCol;
 
-  enum Type { SPARSE, DENSE};
-  Type type;
-  
-  int NonZeroNumber;
-  // for memory
-  int NonZeroCount;
-  // currentry stored
-  int NonZeroEffect;
-  // use for calculation of F1,F2,F3 
+    enum Type { SPARSE, DENSE };
+    Type type;
 
-  // for Dense
-  dd_real* de_ele;
+    int NonZeroNumber;
+    // for memory
+    int NonZeroCount;
+    // currentry stored
+    int NonZeroEffect;
+    // use for calculation of F1,F2,F3
 
-  // for Sparse
-  int*    row_index;
-  int*    column_index;
-  dd_real* sp_ele;
+    // for Dense
+    dd_real *de_ele;
 
-  SparseMatrix();
-  SparseMatrix(int nRow,int nCol, Type type, int NonZeroNumber);
-  ~SparseMatrix();
+    // for Sparse
+    int *row_index;
+    int *column_index;
+    dd_real *sp_ele;
 
-  void initialize(int nRow,int nCol, Type type, int NonZeroNumber);
-  void terminate();
+    SparseMatrix();
+    SparseMatrix(int nRow, int nCol, Type type, int NonZeroNumber);
+    ~SparseMatrix();
 
-  void display(FILE* fpout = stdout);
-  bool copyFrom(SparseMatrix& other);
+    void initialize(int nRow, int nCol, Type type, int NonZeroNumber);
+    void terminate();
 
-  void changeToDense(bool forceChange = false);
-  void setZero();
-  void setIdentity(dd_real scalar = 1.0);
+    void display(FILE *fpout = stdout);
+    bool copyFrom(SparseMatrix &other);
 
-  bool sortSparseIndex(int&i, int& j);
+    void changeToDense(bool forceChange = false);
+    void setZero();
+    void setIdentity(dd_real scalar = 1.0);
+
+    bool sortSparseIndex(int &i, int &j);
 };
 
-class DenseMatrix
-{
-public:
-  int nRow, nCol;
+class DenseMatrix {
+  public:
+    int nRow, nCol;
 
-  enum Type { DENSE, COMPLETION};
-  Type type;
-  
-  dd_real* de_ele;
+    enum Type { DENSE, COMPLETION };
+    Type type;
 
-  DenseMatrix();
-  DenseMatrix(int nRow,int nCol, Type type);
-  ~DenseMatrix();
+    dd_real *de_ele;
 
-  void initialize(int nRow,int nCol, Type type);
-  void terminate();
-  
-  void display(FILE* fpout = stdout);
-  bool copyFrom(DenseMatrix& other);
-  bool copyFrom(SparseMatrix& other);
+    DenseMatrix();
+    DenseMatrix(int nRow, int nCol, Type type);
+    ~DenseMatrix();
 
-  void setZero();
-  void setIdentity(dd_real scalar = 1.0);
+    void initialize(int nRow, int nCol, Type type);
+    void terminate();
+
+    void display(FILE *fpout = stdout);
+    bool copyFrom(DenseMatrix &other);
+    bool copyFrom(SparseMatrix &other);
+
+    void setZero();
+    void setIdentity(dd_real scalar = 1.0);
 };
 
-class SparseLinearSpace
-{
-public:
-  int  SDP_sp_nBlock;
-  int  SOCP_sp_nBlock;
-  int  LP_sp_nBlock;
+class SparseLinearSpace {
+  public:
+    int SDP_sp_nBlock;
+    int SOCP_sp_nBlock;
+    int LP_sp_nBlock;
 
-  int*  SDP_sp_index;
-  int*  SOCP_sp_index;
-  int*  LP_sp_index;
+    int *SDP_sp_index;
+    int *SOCP_sp_index;
+    int *LP_sp_index;
 
-  SparseMatrix* SDP_sp_block;
-  SparseMatrix* SOCP_sp_block;
-  dd_real* LP_sp_block;
-  
-  SparseLinearSpace();
-  SparseLinearSpace(int SDP_nBlock, int* SDP_blockStruct, 
-		    int* SDP_NonZeroNumber,
-		    int SOCP_nBlock, int* SOCP_blockStruct,
-		    int* SOCP_NonZeroNumber,
-		    int LP_nBlock, bool* LP_NonZeroNumber);
-  SparseLinearSpace(int SDP_sp_nBlock, 
-                    int* SDP_sp_index,
-                    int* SDP_sp_blockStruct, 
-                    int* SDP_sp_NonZeroNumber,
-                    int SOCP_sp_nBlock, 
-                    int* SOCP_sp_index,
-                    int* SOCP_sp_blockStruct,
-                    int* SOCP_sp_NonZeroNumber,
-                    int LP_sp_nBlock, 
-                    int* LP_sp_index);
-  ~SparseLinearSpace();
+    SparseMatrix *SDP_sp_block;
+    SparseMatrix *SOCP_sp_block;
+    dd_real *LP_sp_block;
 
-  // dense form of block index
-  void initialize(int SDP_nBlock, int* SDP_blockStruct, 
-		    int* SDP_NonZeroNumber,
-		    int SOCP_nBlock, int* SOCP_blockStruct,
-		    int* SOCP_NonZeroNumber,
-		    int LP_nBlock, bool* LP_NonZeroNumber);
-  // sparse form of block index      2008/02/27 kazuhide nakata
-  void initialize(int SDP_sp_nBlock, 
-                  int* SDP_sp_index,
-                  int* SDP_sp_blockStruct, 
-                  int* SDP_sp_NonZeroNumber,
-                  int SOCP_sp_nBlock, 
-                  int* SOCP_sp_index,
-                  int* SOCP_sp_blockStruct,
-                  int* SOCP_sp_NonZeroNumber,
-                  int LP_sp_nBlock, 
-                  int* LP_sp_index);
-  void terminate();
-  
-  void changeToDense(bool forceChange=false);
-  void display(FILE* fpout = stdout);
-  bool copyFrom(SparseLinearSpace& other);
-  
-  void setElement_SDP(int block, int nCol, int nRow, dd_real ele);
-  void setElement_SOCP(int block, int nCol, int nRow, dd_real ele);
-  void setElement_LP(int block, dd_real ele);
+    SparseLinearSpace();
+    SparseLinearSpace(int SDP_nBlock, int *SDP_blockStruct, int *SDP_NonZeroNumber, int SOCP_nBlock, int *SOCP_blockStruct, int *SOCP_NonZeroNumber, int LP_nBlock, bool *LP_NonZeroNumber);
+    SparseLinearSpace(int SDP_sp_nBlock, int *SDP_sp_index, int *SDP_sp_blockStruct, int *SDP_sp_NonZeroNumber, int SOCP_sp_nBlock, int *SOCP_sp_index, int *SOCP_sp_blockStruct, int *SOCP_sp_NonZeroNumber, int LP_sp_nBlock, int *LP_sp_index);
+    ~SparseLinearSpace();
 
-  void setZero();
-  void setIdentity(dd_real scalar = 1.0);
-  // no check
-  bool sortSparseIndex(int&l , int& i, int& j);
+    // dense form of block index
+    void initialize(int SDP_nBlock, int *SDP_blockStruct, int *SDP_NonZeroNumber, int SOCP_nBlock, int *SOCP_blockStruct, int *SOCP_NonZeroNumber, int LP_nBlock, bool *LP_NonZeroNumber);
+    // sparse form of block index      2008/02/27 kazuhide nakata
+    void initialize(int SDP_sp_nBlock, int *SDP_sp_index, int *SDP_sp_blockStruct, int *SDP_sp_NonZeroNumber, int SOCP_sp_nBlock, int *SOCP_sp_index, int *SOCP_sp_blockStruct, int *SOCP_sp_NonZeroNumber, int LP_sp_nBlock, int *LP_sp_index);
+    void terminate();
+
+    void changeToDense(bool forceChange = false);
+    void display(FILE *fpout = stdout);
+    bool copyFrom(SparseLinearSpace &other);
+
+    void setElement_SDP(int block, int nCol, int nRow, dd_real ele);
+    void setElement_SOCP(int block, int nCol, int nRow, dd_real ele);
+    void setElement_LP(int block, dd_real ele);
+
+    void setZero();
+    void setIdentity(dd_real scalar = 1.0);
+    // no check
+    bool sortSparseIndex(int &l, int &i, int &j);
 };
 
-class DenseLinearSpace
-{
- public:
-  int  SDP_nBlock;
-  int  SOCP_nBlock;
-  int  LP_nBlock;
+class DenseLinearSpace {
+  public:
+    int SDP_nBlock;
+    int SOCP_nBlock;
+    int LP_nBlock;
 
-  DenseMatrix* SDP_block;
-  DenseMatrix* SOCP_block;
-  dd_real* LP_block;
+    DenseMatrix *SDP_block;
+    DenseMatrix *SOCP_block;
+    dd_real *LP_block;
 
-  DenseLinearSpace();
-  DenseLinearSpace(int SDP_nBlock, int* SDP_blockStruct,
-		   int SOCP_nBlock,  int* SOCP_blockStruct,
-		   int LP_nBlock);
-  ~DenseLinearSpace();
-  void initialize(int SDP_nBlock, int* SDP_blockStruct,
-		  int SOCP_nBlock,  int* SOCP_blockStruct,
-		  int LP_nBlock);
-  void terminate();
+    DenseLinearSpace();
+    DenseLinearSpace(int SDP_nBlock, int *SDP_blockStruct, int SOCP_nBlock, int *SOCP_blockStruct, int LP_nBlock);
+    ~DenseLinearSpace();
+    void initialize(int SDP_nBlock, int *SDP_blockStruct, int SOCP_nBlock, int *SOCP_blockStruct, int LP_nBlock);
+    void terminate();
 
-  void display(FILE* fpout = stdout);
-  bool copyFrom(DenseLinearSpace& other);
-  void setElement_SDP(int block, int nCol, int nRow, dd_real ele);
-  void setElement_SOCP(int block, int nCol, int nRow, dd_real ele);
-  void setElement_LP(int block, dd_real ele);
-  void setZero();
-  void setIdentity(dd_real scalar = 1.0);
+    void display(FILE *fpout = stdout);
+    bool copyFrom(DenseLinearSpace &other);
+    void setElement_SDP(int block, int nCol, int nRow, dd_real ele);
+    void setElement_SOCP(int block, int nCol, int nRow, dd_real ele);
+    void setElement_LP(int block, dd_real ele);
+    void setZero();
+    void setIdentity(dd_real scalar = 1.0);
 };
 
-}
+} // namespace sdpa
 
 #endif // __sdpa_struct_h__

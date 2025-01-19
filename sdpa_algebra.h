@@ -10,4 +10,3 @@
 #include "mplapack_dd.h"
 
 #endif // __sdpa_algebra_h__
-

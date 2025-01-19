@@ -37,8 +37,8 @@ namespace sdpa {
 int IZERO = 0;
 int IONE = 1;
 int IMONE = -1;
-dd_real MZERO =  0.0;
-dd_real MONE  =  1.0;
+dd_real MZERO = 0.0;
+dd_real MONE = 1.0;
 dd_real MMONE = -1.0;
 
 } // namespace sdpa
