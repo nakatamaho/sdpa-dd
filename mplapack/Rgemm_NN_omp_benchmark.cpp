@@ -65,8 +65,8 @@ int main() {
     int num_cores = 1;
 #endif
 
-//    std::vector<int> thread_counts = {1, 2, 4, 8, 16, 32};
-    std::vector<int> thread_counts = { num_cores, num_cores/2 };
+    //    std::vector<int> thread_counts = {1, 2, 4, 8, 16, 32};
+    std::vector<int> thread_counts = {num_cores, num_cores / 2};
 
     const int num_trials = 10;
     std::mt19937 mt(std::random_device{}());
