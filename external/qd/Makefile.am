@@ -1,9 +1,15 @@
-QDVERSION=2.3.23
+QDVERSION=2.3.24
 
 if IS_MACOS
 CONFIGURE_ARGS=--prefix=$(abs_builddir)/../i/QD/ --host=$(host)
 else
 CONFIGURE_ARGS=--prefix=$(abs_builddir)/../i/QD/ --host=$(host) --disable-shared
+endif
+
+if HAVE_FMA
+fma_flags = -mfma
+else
+fma_flags =
 endif
 
 EXTRACT_STAMP=.qd_extract_done
@@ -22,10 +28,11 @@ work/$(EXTRACT_STAMP):
 	touch $(abs_builddir)/work/$(EXTRACT_STAMP)
 
 work/$(PATCH_STAMP): work/$(EXTRACT_STAMP)
+	cd $(abs_builddir)/work/internal/qd-$(QDVERSION) ; patch < ../../../patches/patch-configure.ac
 	touch $(abs_builddir)/work/$(PATCH_STAMP)
 
 work/$(CONFIGURE_STAMP): work/$(PATCH_STAMP)
-	cd $(abs_builddir)/work/internal/qd-$(QDVERSION) ; env "CC=$(CC)" "CXX=$(CXX)" "CPPFLAGS=$(CPPFLAGS)" "F77=$(F77)" "LDFLAGS=$(LDFLAGS)" "NM=$(NM)" "RANLIB=$(RANLIB)" ./configure $(CONFIGURE_ARGS) --enable-fortran=no
+	cd $(abs_builddir)/work/internal/qd-$(QDVERSION) ; env "CC=$(CC)" "CXX=$(CXX)"  CFLAGS="$(CFLAGS) -O2 $(fma_flags)" CXXFLAGS="$(CXXFLAGS) -O2 $(fma_flags)" "F77=$(F77)" "LDFLAGS=$(LDFLAGS)" "NM=$(NM)" "RANLIB=$(RANLIB)" ./configure $(CONFIGURE_ARGS) --enable-fortran=no
 	touch $(abs_builddir)/work/$(CONFIGURE_STAMP)
 
 work/$(BUILD_STAMP): work/$(CONFIGURE_STAMP)

@@ -93,10 +93,16 @@ truss7.dat-s.xz \
 truss8.dat-s.xz"
 
 for SDPxz in $SDPxzs; do
+    strip ../sdpa_dd
     SDP="${SDPxz%.xz}"
     rm -f $SDP $SDPxz
     cp data/$SDPxz .
     unxz $SDPxz
+    start_time=$(date +%s%N)
     ../sdpa_dd -ds $SDP -o ${SDP%.*}.result -p ./param.sdpa
-    rm $SDP
+    end_time=$(date +%s%N)
+    duration=$(( (end_time - start_time) / 1000000 ))
+    sed -i '/xVec =/,$d' "${SDP%.*}.result"
+    echo "Execution time: $duration ms"
 done
+

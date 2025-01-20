@@ -113,8 +113,39 @@ LIBS="$LIBS $pthread_lib"
 CXXFLAGS="$CXXFLAGS $pthread_cflags"
 AC_SUBST(pthread_lib)
 
-CFLAGS="$CFLAGS -O2 -funroll-all-loops"
-CXXFLAGS="$CXXFLAGS -O2 -funroll-all-loops"
+AC_ARG_ENABLE([fma],
+  [AS_HELP_STRING([--enable-fma], [Enable fused multiply-add optimizations if supported])],
+  [enable_fma=$enableval],
+  [enable_fma=auto])
+
+if test "x$enable_fma" != "xno"; then
+  AC_MSG_CHECKING([for compiler support of -mfma])
+
+  save_CFLAGS="$CFLAGS"
+  save_CXXFLAGS="$CXXFLAGS"
+
+  CFLAGS="$CFLAGS -mfma"
+  CXXFLAGS="$CXXFLAGS -mfma"
+  
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([[
+         double test_fma(double a, double b, double c) {
+           return __builtin_fma(a, b, c);
+         }
+       ]], [])],
+    [AC_MSG_RESULT([yes])
+     AC_DEFINE([HAVE_FMA], [1], [Define if fused multiply-add is supported])
+    ],
+    [AC_MSG_RESULT([no])
+     CFLAGS="$save_CFLAGS"
+     CXXFLAGS="$save_CXXFLAGS"
+    ])
+fi
+
+AM_CONDITIONAL(HAVE_FMA, test x$HAVE_FMA = x1)
+
+CFLAGS="$CFLAGS -O2"
+CXXFLAGS="$CXXFLAGS -O2"
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 

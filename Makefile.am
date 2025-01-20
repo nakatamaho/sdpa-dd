@@ -50,8 +50,10 @@ endif
 
 AUTOMAKE_OPTIONS = subdir-objects
 
-sdpa_dd_LDADD = $(pthread_lib) -L$(SPOOLES_LIBDIR) -lspooles -L$(QD_LIBDIR) -lqd -L$(MPLAPACK_LIBDIR)
-sdpa_dd_CXXFLAGS= $(OPENMP_CXXFLAGS) $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -DUseMETIS=0 -I$(QD_INCLUDEDIR) $(OPENMPFLAGS) -I$(MPLAPACK_INCLUDEDIR)
+sdpa_dd_LDFLAGS = -Wl,-rpath,$(QD_LIBDIR)
+sdpa_dd_LDADD = $(pthread_lib) -L$(SPOOLES_LIBDIR) -lspooles -L$(QD_LIBDIR) $(OPENMP_CXXFLAGS) -L$(MPLAPACK_LIBDIR)
+AM_CXXFLAGS = -O2 -march=native $(pthread_cflags) -I$(SPOOLES_INCLUDEDIR) -DUseMETIS=0 -I$(QD_INCLUDEDIR) $(OPENMP_CXXFLAGS) -I$(MPLAPACK_INCLUDEDIR)
+sdpa_dd_LDADD +=-lqd
 
 SUBDIRS = external
 

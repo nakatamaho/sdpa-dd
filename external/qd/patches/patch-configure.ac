@@ -1,0 +1,205 @@
+--- configure.ac~	2023-11-05 00:07:44.000000000 +0900
++++ configure.ac	2025-01-20 09:25:36.013069150 +0900
+@@ -88,6 +88,9 @@
+       ia64-*)
+         AX_CXX_FMA(["ia64 gnu"])
+       ;;
++      *) 
++        AX_CXX_FMA(["gnu"])
++      ;;
+     esac
+   ;;
+   no) 
+--- configure~	2023-11-05 00:07:44.000000000 +0900
++++ configure	2025-01-20 09:28:31.908618672 +0900
+@@ -6425,6 +6425,190 @@
+ fi
+ 
+       ;;
++      *)
++
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for fused multiply-add/subtract" >&5
++printf %s "checking for fused multiply-add/subtract... " >&6; }
++ac_ext=cpp
++ac_cpp='$CXXCPP $CPPFLAGS'
++ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
++
++ax_cxx_fma_list="gnu"
++if test "x$ax_cxx_fma_list" = "x"; then
++  ax_cxx_fma_list="ibm gnu c99 compiler"
++fi
++ax_cxx_fma=
++ax_cxx_fms=
++for name in $ax_cxx_fma_list; do
++  if test "x$ax_cxx_fma" = "x"; then
++    case $name in
++      ibm)
++        # IBM VisualAge C++ __fmadd / __fmsub.
++        if test "$cross_compiling" = yes
++then :
++  { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "cannot run test program while cross compiling
++See \`config.log' for more details" "$LINENO" 5; }
++else $as_nop
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <cmath>
++                       #include <builtins.h>
++                       int main() {
++                         double d = std::ldexp(1.0, -52);
++                         double x = __fmadd(1.0 + d, 1.0 - d, -1.0);
++                         double y = __fmsub(1.0 + d, 1.0 - d, 1.0);
++                         return (x == -d*d && y == -d*d) ? 0 : 1;
++                       }
++_ACEOF
++if ac_fn_cxx_try_run "$LINENO"
++then :
++  ax_cxx_fma="__fmadd(x,y,z)"
++                       ax_cxx_fms="__fmsub(x,y,z)"
++
++printf "%s\n" "#define QD_VACPP_BUILTINS_H 1" >>confdefs.h
++
++fi
++rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
++  conftest.$ac_objext conftest.beam conftest.$ac_ext
++fi
++
++      ;;
++      gnu)
++        # Later gcc (3.4 and later) have __builtin_fma that seems to work.
++        if test "$cross_compiling" = yes
++then :
++  { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "cannot run test program while cross compiling
++See \`config.log' for more details" "$LINENO" 5; }
++else $as_nop
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <cmath>
++                       int main() {
++                         double d = std::ldexp(1.0, -52);
++                         return (__builtin_fma(1.0 + d, 1.0 - d, -1.0) == -d*d ? 0 : 1);
++                       }
++_ACEOF
++if ac_fn_cxx_try_run "$LINENO"
++then :
++  ax_cxx_fma="__builtin_fma(x,y,z)"
++                       ax_cxx_fms="__builtin_fma(x,y,-z)"
++fi
++rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
++  conftest.$ac_objext conftest.beam conftest.$ac_ext
++fi
++
++      ;;
++      ia64)
++        # Intel and HP compilers for IA 64 architecture seems to have
++        # _Asm_fma/fms macros.  Not much documentation is available for
++        # these...
++        if test "$cross_compiling" = yes
++then :
++  { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "cannot run test program while cross compiling
++See \`config.log' for more details" "$LINENO" 5; }
++else $as_nop
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <cmath>
++                       int main() {
++                         double d = std::ldexp(1.0, -52);
++                         return (_Asm_fma(2, 1.0 + d, 1.0 - d, -1.0) == -d*d ? 0 : 1);
++                       }
++_ACEOF
++if ac_fn_cxx_try_run "$LINENO"
++then :
++  ax_cxx_fma="_Asm_fma(2, x,y,z)"
++                       ax_cxx_fms="_Asm_fms(2, x,y,z)"
++fi
++rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
++  conftest.$ac_objext conftest.beam conftest.$ac_ext
++fi
++
++      ;;
++      c99)
++        # Try C99 fma() function.  Some platforms doesn't seem to implement this
++        # correctly (Apple gcc-3.3 for example).
++        if test "$cross_compiling" = yes
++then :
++  { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "cannot run test program while cross compiling
++See \`config.log' for more details" "$LINENO" 5; }
++else $as_nop
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <cmath>
++                       int main() {
++                         double d = std::ldexp(1.0, -52);
++                         return (fma(1.0 + d, 1.0 - d, -1.0) == -d*d ? 0 : 1);
++                       }
++_ACEOF
++if ac_fn_cxx_try_run "$LINENO"
++then :
++  ax_cxx_fma="fma(x,y,z)"
++                       ax_cxx_fms="fma(x,y,-z)"
++fi
++rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
++  conftest.$ac_objext conftest.beam conftest.$ac_ext
++fi
++
++      ;;
++      compiler)
++        # Try relying on the compiler to optimize x * y + z into an fma.
++        # This method is not recommended since if it is inlined it does not
++        # always produce the same correct code.
++        if test "$cross_compiling" = yes
++then :
++  { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "cannot run test program while cross compiling
++See \`config.log' for more details" "$LINENO" 5; }
++else $as_nop
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <cmath>
++                       int main() {
++                         double d = std::ldexp(1.0, -52);
++                         return ( (1.0 + d) * (1.0 - d) - 1.0 == -d*d ? 0 : 1);
++                       }
++_ACEOF
++if ac_fn_cxx_try_run "$LINENO"
++then :
++  ax_cxx_fma="((x)*(y) + (z))"
++                        ax_cxx_fms="((x)*(y) - (z))"
++fi
++rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
++  conftest.$ac_objext conftest.beam conftest.$ac_ext
++fi
++
++      ;;
++      *) as_fn_error $? "Unknown option $name to --enable-fma." "$LINENO" 5 ;;
++    esac
++  fi
++done
++ac_ext=cpp
++ac_cpp='$CXXCPP $CPPFLAGS'
++ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
++
++if test "x$ax_cxx_fma" != "x"; then
++  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ax_cxx_fma, $ax_cxx_fms" >&5
++printf "%s\n" "$ax_cxx_fma, $ax_cxx_fms" >&6; }
++else
++  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: none" >&5
++printf "%s\n" "none" >&6; }
++fi
++
++      ;;
+     esac
+   ;;
+   no)
