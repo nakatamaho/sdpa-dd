@@ -10,8 +10,15 @@ OBJS_BLOCKED = $(SRCS_BLOCKED:.cpp=.o)
 ASM_BLOCKED = $(SRCS_BLOCKED:.cpp=.s)
 TARGET_BLOCKED = Rgemm_NN_blocked_omp_benchmark
 
+
+# Source files for macro'ed benchmark
+SRCS_MACRO = Rgemm_NN_macro_omp.cpp Rgemm_NN_macro_omp_benchmark.cpp
+OBJS_MACRO = $(SRCS_MACRO:.cpp=.o)
+ASM_MACRO = $(SRCS_MACRO:.cpp=.s)
+TARGET_MACRO = Rgemm_NN_macro_omp_benchmark
+
 # Build targets
-all: $(TARGET_ORIG) $(TARGET_BLOCKED)
+all: $(TARGET_ORIG) $(TARGET_BLOCKED) $(TARGET_MACRO)
 
 # Compiler and flags
 CXX = g++
@@ -27,11 +34,15 @@ $(TARGET_ORIG): $(OBJS_ORIG)
 $(TARGET_BLOCKED): $(OBJS_BLOCKED)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
+# Build blocked benchmark executable
+$(TARGET_MACRO): $(OBJS_MACRO)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
 # Generating assembly files
 %.s: %.cpp
 	$(CXX) $(CXXFLAGS) -S -o $@ $<
 
-asm: $(ASM_ORIG) $(ASM_BLOCKED)
+asm: $(ASM_ORIG) $(ASM_BLOCKED) $(ASM_MACRO)
 
 # Clean up
 clean:
