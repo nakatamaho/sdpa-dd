@@ -58,7 +58,7 @@ int main() {
     std::cout << "OpenMP is not enabled.\n";
 #endif
 
-    std::vector<mplapackint> sizes = {256, 512, 768, 1024};
+    std::vector<mplapackint> sizes = {512, 768, 1024, 2048 };
 #ifdef _OPENMP
     int num_cores = omp_get_num_procs();
 #else

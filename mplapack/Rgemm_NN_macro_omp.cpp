@@ -35,34 +35,50 @@
 
 #include "dd_macro.h"
 
+#define PREFETCH_DISTANCE 64
+
 void Rgemm_NN_macro_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
     mplapackint i, j, l;
-    dd_real temp;
+    dd_real temp, prod, new_val;
 
     // Form C := alpha*A*B + beta*C.
+#pragma omp parallel for private(i, new_val) schedule(static)
     for (j = 0; j < n; j++) {
         if (beta == 0.0) {
             for (i = 0; i < m; i++) {
                 C[i + j * ldc] = 0.0;
+                if (i + PREFETCH_DISTANCE < m) {
+                    __builtin_prefetch(&C[(i + PREFETCH_DISTANCE) + j * ldc], 1, 3);
+                }
             }
         } else if (beta != 1.0) {
             for (i = 0; i < m; i++) {
-                C[i + j * ldc] = beta * C[i + j * ldc];
+                // C[i + j * ldc] = beta * C[i + j * ldc];
+                QUAD_MUL_SLOPPY(beta, C[i + j * ldc], new_val);
+                C[i + j * ldc] = new_val;
+                if (i + PREFETCH_DISTANCE < m) {
+                    __builtin_prefetch(&C[(i + PREFETCH_DISTANCE) + j * ldc], 1, 3);
+                }
             }
         }
     }
 // main loop
 #ifdef _OPENMP
-#pragma omp parallel for private(i, j, l, temp)
+#pragma omp parallel for collapse(2) private(temp, prod, new_val)
 #endif
     for (j = 0; j < n; j++) {
         for (l = 0; l < k; l++) {
             // temp = alpha * B[l + j * ldb];
-            dd_real temp, prod, new_val;
             QUAD_MUL(alpha, B[l + j * ldb], temp);
+            if (l + PREFETCH_DISTANCE < k) {
+                __builtin_prefetch(&B[(l + PREFETCH_DISTANCE) + j * ldb], 0, 3);
+            }
             for (i = 0; i < m; i++) {
                 // prod = temp * A[i + l * lda];
                 QUAD_MUL_SLOPPY(temp, A[i + l * lda], prod);
+                if (i + PREFETCH_DISTANCE < m) {
+                    __builtin_prefetch(&A[(i + PREFETCH_DISTANCE) + l * lda], 0, 3);
+                }
                 // C[i + j * ldc] += prod;
                 QUAD_ADD_SLOPPY(C[i + j * ldc], prod, new_val);
                 C[i + j * ldc] = new_val;
