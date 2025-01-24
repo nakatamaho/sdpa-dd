@@ -69,7 +69,7 @@ void Rgemm_NN_macro_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alp
     for (j = 0; j < n; j++) {
         for (l = 0; l < k; l++) {
             // temp = alpha * B[l + j * ldb];
-            QUAD_MUL(alpha, B[l + j * ldb], temp);
+            QUAD_MUL_SLOPPY(alpha, B[l + j * ldb], temp);
             if (l + PREFETCH_DISTANCE < k) {
                 __builtin_prefetch(&B[(l + PREFETCH_DISTANCE) + j * ldb], 0, 3);
             }
