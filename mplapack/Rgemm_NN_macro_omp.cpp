@@ -59,9 +59,7 @@ void Rgemm_NN_macro_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alp
         for (l = 0; l < k; l++) {
             // temp = alpha * B[l + j * ldb];
             dd_real temp, prod, new_val;
-
             QUAD_MUL(alpha, B[l + j * ldb], temp);
-
             for (i = 0; i < m; i++) {
                 // prod = temp * A[i + l * lda];
                 QUAD_MUL_SLOPPY(temp, A[i + l * lda], prod);
