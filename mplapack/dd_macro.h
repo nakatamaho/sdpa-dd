@@ -49,11 +49,12 @@ do {                                            \
 
 #define QUAD_ADD_IEEE(A, B, C)                                    \
 do {                                                              \
-    double s1, s2, t1, t2;                                        \
+    double s1, s11, s2, t1, t2;                                   \
     TWO_SUM((A).x[0], (B).x[0], s1, s2);                          \
     TWO_SUM((A).x[1], (B).x[1], t1, t2);                          \
     s2 += t1;                                                     \
-    QUICK_TWO_SUM(s1, s2, s1, s2);                                \
+    s11 = s1;                                                     \  //this code workarounds the side effect of the macro expansion.
+    QUICK_TWO_SUM(s11, s2, s1, s2);                               \
     s2 += t2;                                                     \
     QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                    \
 } while (0)
