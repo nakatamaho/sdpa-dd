@@ -1,5 +1,5 @@
 # Source files for original benchmark
-SRCS_ORIG = Rgemm_NN_omp.cpp Rgemm_NN_omp_benchmark.cpp
+SRCS_ORIG = Rgemm_ref.cpp Mlsame.cpp Mxerbla.cpp Rgemm_NN_omp.cpp Rgemm_NN_omp_benchmark.cpp
 OBJS_ORIG = $(SRCS_ORIG:.cpp=.o)
 ASM_ORIG = $(SRCS_ORIG:.cpp=.s)
 TARGET_ORIG = Rgemm_NN_omp_benchmark

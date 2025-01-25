@@ -1,9 +1,7 @@
 /*
- * Copyright (c) 2010-2012
+ * Copyright (c) 2010-2025
  *	Nakata, Maho
  * 	All rights reserved.
- *
- * $Id: Rgemm_NN.cpp,v 1.1 2010/12/28 06:13:53 nakatamaho Exp $
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,59 +30,74 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+#include "dd_macro.h"
+
+#define PREFETCH_DISTANCE 64
+
+#define BLOCK_M 2
+#define BLOCK_N 2
+#define BLOCK_K 2
+
+void Rgemm_block_2x2_kernel(mplapackint x, mplapackint y, const dd_real *A, mplapackint lda, const dd_real *B, mplapackint ldb, dd_real *C, mplapackint ldc, mplapackint K, dd_real alpha, dd_real beta) {
+    dd_real c00 = 0.0;
+    dd_real c01 = 0.0;
+    dd_real c10 = 0.0;
+    dd_real c11 = 0.0;
+
+    for (mplapackint k = 0; k < K; k++) {
+        dd_real a0 = A[x + k * lda];     // A(x, k)
+        dd_real a1 = A[x + 1 + k * lda]; // A(x+1, k)
+
+        dd_real b0 = B[k + (y)*ldb];       // B(k, y)
+        dd_real b1 = B[k + (y + 1) * ldb]; // B(k, y+1)
+
+        c00 += a0 * b0;
+        c01 += a0 * b1;
+        c10 += a1 * b0;
+        c11 += a1 * b1;
+    }
+    C[x + y * ldc] = beta * C[x + y * ldc] + alpha * c00;
+    C[x + (y + 1) * ldc] = beta * C[x + (y + 1) * ldc] + alpha * c01;
+    C[x + 1 + y * ldc] = beta * C[x + 1 + y * ldc] + alpha * c10;
+    C[x + 1 + (y + 1) * ldc] = beta * C[x + 1 + (y + 1) * ldc] + alpha * c11;
+}
 
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
-    mplapackint i, j, l;
-    dd_real temp;
-
-    const mplapackint Bm = 16;
-    const mplapackint Bn = 16;
-    const mplapackint Bk = 16;
-
-    const mplapackint Bn_init = 16;
-
-#ifdef _OPENMP
-#pragma omp parallel for schedule(dynamic) private(i, j)
-#endif
-    for (mplapackint jj = 0; jj < n; jj += Bn_init) {
-        mplapackint j_end = MIN(jj + Bn_init, n);
-        for (j = jj; j < j_end; j++) {
-            if (beta == 0.0) {
-                for (i = 0; i < m; i++) {
-                    C[i + j * ldc] = 0.0;
+#pragma omp parallel for schedule(static)
+    for (mplapackint j = 0; j < n; j++) {
+        if (beta == 0.0) {
+            for (mplapackint i = 0; i < m; i++) {
+                C[i + j * ldc] = 0.0;
+                if (i + PREFETCH_DISTANCE < m) {
+                    __builtin_prefetch(&C[(i + PREFETCH_DISTANCE) + j * ldc], 1, 3);
                 }
-            } else if (beta != 1.0) {
-                for (i = 0; i < m; i++) {
-                    C[i + j * ldc] = beta * C[i + j * ldc];
+            }
+        } else if (beta != 1.0) {
+            dd_real new_val;
+            for (mplapackint i = 0; i < m; i++) {
+                // C[i + j * ldc] *= beta
+                QUAD_MUL_SLOPPY(beta, C[i + j * ldc], new_val);
+                C[i + j * ldc] = new_val;
+                if (i + PREFETCH_DISTANCE < m) {
+                    __builtin_prefetch(&C[(i + PREFETCH_DISTANCE) + j * ldc], 1, 3);
                 }
             }
         }
     }
-
 #ifdef _OPENMP
-#pragma omp parallel for schedule(dynamic) private(j, l, i, temp)
+#pragma omp parallel for collapse(2) schedule(static)
 #endif
-    for (mplapackint jj = 0; jj < n; jj += Bn) {
-        for (mplapackint ll = 0; ll < k; ll += Bk) {
-            for (mplapackint ii = 0; ii < m; ii += Bm) {
-                for (j = jj; j < MIN(jj + Bn, n); j++) {
-                    for (l = ll; l < MIN(ll + Bk, k); l++) {
-                        // プリフェッチ: 次のループ反復で使用されるデータを事前に読み込む
-                        if (l + 1 < MIN(ll + Bk, k)) {
-                            __builtin_prefetch(&B[(l + 1) + j * ldb], 0, 3);
-                        }
-                        temp = alpha * B[l + j * ldb];
-                        for (i = ii; i < MIN(ii + Bm, m); i++) {
-                            // プリフェッチ: 次の行のデータを事前にキャッシュにロード
-                            if (i + 1 < MIN(ii + Bm, m)) {
-                                __builtin_prefetch(&A[(i + 1) + l * lda], 0, 3);
-                                __builtin_prefetch(&C[(i + 1) + j * ldc], 1, 3);
-                            }
-                            C[i + j * ldc] += temp * A[i + l * lda];
-                        }
-                    }
-                }
+    for (mplapackint j0 = 0; j0 < n; j0 += BLOCK_N) {
+        for (mplapackint i0 = 0; i0 < m; i0 += BLOCK_M) {
+            for (mplapackint k0 = 0; k0 < k; k0 += BLOCK_K) {
+                mplapackint jb = (j0 + BLOCK_N <= n) ? BLOCK_N : (n - j0);
+                mplapackint ib = (i0 + BLOCK_M <= m) ? BLOCK_M : (m - i0);
+                mplapackint kb = (k0 + BLOCK_K <= k) ? BLOCK_K : (k - k0);
+                dd_real *Ablk = &A[i0 + (size_t)k0 * lda];
+                dd_real *Bblk = &B[k0 + (size_t)j0 * ldb];
+                dd_real *Cblk = &C[i0 + (size_t)j0 * ldc];
+                Rgemm_block_2x2_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
             }
         }
     }
