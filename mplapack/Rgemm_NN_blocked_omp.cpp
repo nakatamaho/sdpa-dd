@@ -91,6 +91,8 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
     for (mplapackint j0 = 0; j0 < n; j0 += BLOCK_N) {
         for (mplapackint i0 = 0; i0 < m; i0 += BLOCK_M) {
             for (mplapackint k0 = 0; k0 < k; k0 += BLOCK_K) {
+                // Pointer redirecting by Nath et al
+		// cf. https://doi.org/10.1007/978-3-642-19328-6_10
                 mplapackint jb = (j0 + BLOCK_N <= n) ? BLOCK_N : (n - j0);
                 mplapackint ib = (i0 + BLOCK_M <= m) ? BLOCK_M : (m - i0);
                 mplapackint kb = (k0 + BLOCK_K <= k) ? BLOCK_K : (k - k0);
