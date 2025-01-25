@@ -53,7 +53,7 @@ do {                                                              \
     TWO_SUM((A).x[0], (B).x[0], s1, s2);                          \
     TWO_SUM((A).x[1], (B).x[1], t1, t2);                          \
     s2 += t1;                                                     \
-    s11 = s1;                                                     \  //this code workarounds the side effect of the macro expansion.
+    s11 = s1;/*workarounds the side effect of the macro expansion.*/\  
     QUICK_TWO_SUM(s11, s2, s1, s2);                               \
     s2 += t2;                                                     \
     QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                    \
