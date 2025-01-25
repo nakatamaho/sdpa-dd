@@ -1,9 +1,7 @@
 /*
- * Copyright (c) 2010-2012
+ * Copyright (c) 2010-2025
  *	Nakata, Maho
  * 	All rights reserved.
- *
- * $Id: Rgemm_NN.cpp,v 1.1 2010/12/28 06:13:53 nakatamaho Exp $
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
