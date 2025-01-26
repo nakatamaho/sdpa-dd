@@ -175,7 +175,7 @@ do {                                                             \
                                                                  \
     __m256d t = _mm256_fmadd_pd(q, b_hi, p);                     \
     r = _mm256_fmsub_pd(q, b_hi, t);                             \
-    __m256d u = _mm256_add_pd(r, p);                             \
+    q = _mm256_add_pd(r, p);                                     \
                                                                  \
     p = _mm256_add_pd(c_hi, t);                                  \
     r = _mm256_sub_pd(p, c_hi);                                  \
@@ -184,7 +184,7 @@ do {                                                             \
         _mm256_sub_pd(t, r)                                      \
     );                                                           \
                                                                  \
-    r = _mm256_add_pd(r, _mm256_add_pd(c_lo, u));                \
+    r = _mm256_add_pd(r, _mm256_add_pd(c_lo, q));                \
                                                                  \
     q = _mm256_add_pd(p, r);                                     \
     s = _mm256_sub_pd(r, _mm256_sub_pd(q, p));                   \
