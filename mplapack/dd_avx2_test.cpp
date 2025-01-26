@@ -95,11 +95,11 @@ do {                                                             \
     __m256d s_new = _mm256_add_pd(s, e);                         \
     __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
                                                                  \
-    __m256d c0 = _mm256_unpacklo_pd(s_new, e_new);               \
-    __m256d c1 = _mm256_unpackhi_pd(s_new, e_new);               \
+    __m256d c_lo = _mm256_unpacklo_pd(s_new, e_new);             \
+    __m256d c_hi = _mm256_unpackhi_pd(s_new, e_new);             \
                                                                  \
-    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(c0, c1, 0x20)); \
-    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(c0, c1, 0x31)); \
+    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(c_lo, c_hi, 0x20)); \
+    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(c_lo, c_hi, 0x31)); \
 } while(0)
 
 #define QUAD_MUL(A, B, C)                                        \
@@ -144,12 +144,9 @@ do {                                                             \
     __m256d res_lo = _mm256_unpacklo_pd(c_hi, c_lo);             \
     __m256d res_hi = _mm256_unpackhi_pd(c_hi, c_lo);             \
                                                                  \
-    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(       \
-        res_lo, res_hi, 0x20));                                  \
-    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(       \
-        res_lo, res_hi, 0x31));                                  \
+    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(res_lo, res_hi, 0x20)); \
+    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(res_lo, res_hi, 0x31)); \
 } while(0)
-
 // clang-format on
 
 int main() {
@@ -163,11 +160,10 @@ int main() {
     {
         dd_real A[4], B[4], C[4], D[4];
         for (int i = 0; i < 4; ++i) {
-            A[i].x[0] = dist(gen);
-            A[i].x[1] = dist(gen) * 1e-16;
-
-            B[i].x[0] = dist(gen);
-            B[i].x[1] = dist(gen) * 1e-16;
+            double upper = dist(gen);
+            double lower = dist(gen) * 1e-15;
+            QUICK_TWO_SUM(upper, lower, A[i].x[0], A[i].x[1]);
+            QUICK_TWO_SUM(upper, lower, B[i].x[0], B[i].x[1]);
         }
 
         QUAD_ADD_4_SLOPPY_AVX256(A, B, C);
@@ -191,11 +187,10 @@ int main() {
     {
         dd_real A[4], B[4], C[4], D[4];
         for (int i = 0; i < 4; ++i) {
-            A[i].x[0] = dist(gen);
-            A[i].x[1] = dist(gen) * 1e-16;
-
-            B[i].x[0] = dist(gen);
-            B[i].x[1] = dist(gen) * 1e-16;
+            double upper = dist(gen);
+            double lower = dist(gen) * 1e-15;
+            QUICK_TWO_SUM(upper, lower, A[i].x[0], A[i].x[1]);
+            QUICK_TWO_SUM(upper, lower, B[i].x[0], B[i].x[1]);
         }
 
         QUAD_MUL_4_SLOPPY_AVX256(A, B, C);
