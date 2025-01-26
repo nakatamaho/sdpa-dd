@@ -203,10 +203,10 @@ inline void Rgemm_block_4x4_macro_kernel(mplapackint &x, mplapackint &y, mplapac
     QUAD_MUL_SLOPPY(alpha, c[3][1], alpha_c[3][1]);
     QUAD_MUL_SLOPPY(alpha, c[3][2], alpha_c[3][2]);
     QUAD_MUL_SLOPPY(alpha, c[3][3], alpha_c[3][3]);
-QUAD_ADD_4_SLOPPY_AVX256(alpha_c[0], &C[x + 0 + y * ldc], &C[x + 0 + y * ldc]);
-QUAD_ADD_4_SLOPPY_AVX256(alpha_c[1], &C[x + 1 + y * ldc], &C[x + 1 + y * ldc]);
-QUAD_ADD_4_SLOPPY_AVX256(alpha_c[2], &C[x + 2 + y * ldc], &C[x + 2 + y * ldc]);
-QUAD_ADD_4_SLOPPY_AVX256(alpha_c[3], &C[x + 3 + y * ldc], &C[x + 3 + y * ldc]);
+    QUAD_ADD_4_SLOPPY_AVX256(alpha_c[0], &C[x + 0 + y * ldc], &C[x + 0 + y * ldc]);
+    QUAD_ADD_4_SLOPPY_AVX256(alpha_c[1], &C[x + 1 + y * ldc], &C[x + 1 + y * ldc]);
+    QUAD_ADD_4_SLOPPY_AVX256(alpha_c[2], &C[x + 2 + y * ldc], &C[x + 2 + y * ldc]);
+    QUAD_ADD_4_SLOPPY_AVX256(alpha_c[3], &C[x + 3 + y * ldc], &C[x + 3 + y * ldc]);
 }
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
 #pragma omp parallel for schedule(static)
@@ -249,7 +249,7 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
                 Rgemm_block_2x2_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
 //                Rgemm_block_2x2_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
 #elif (BLOCK_N == 4 && BLOCK_M == 4 && BLOCK_K == 4)
-//              Rgemm_block_4x4_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
+                //              Rgemm_block_4x4_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
                 Rgemm_block_4x4_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
 #else
 #error "BLOCK_N, BLOCK_M, and BLOCK_K must all be either 2 or all be 4."
