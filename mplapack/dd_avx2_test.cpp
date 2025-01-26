@@ -137,8 +137,7 @@ do {                                                             \
     __m256d t = _mm256_add_pd(p, q);                             \
                                                                  \
     __m256d c_hi = _mm256_fmadd_pd(a_hi, b_hi, t);               \
-    __m256d a_hi_b_hi = _mm256_mul_pd(a_hi, b_hi);               \
-    __m256d e = _mm256_sub_pd(a_hi_b_hi, _mm256_sub_pd(c_hi, t));\
+    __m256d e = _mm256_fmsub_pd(a_hi, b_hi, c_hi);               \
     __m256d c_lo = _mm256_add_pd(e, t);                          \
                                                                  \
     __m256d res_lo = _mm256_unpacklo_pd(c_hi, c_lo);             \
