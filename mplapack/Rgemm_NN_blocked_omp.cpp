@@ -35,9 +35,9 @@
 
 #define PREFETCH_DISTANCE 64
 
-#define BLOCK_M 4
-#define BLOCK_N 4
-#define BLOCK_K 4
+#define BLOCK_M 2
+#define BLOCK_N 2
+#define BLOCK_K 2
 
 void Rgemm_block_2x2_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c00 = 0.0;
@@ -290,10 +290,10 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
                 dd_real *Cblk = &C[i0 + (size_t)j0 * ldc];
 
 #if (BLOCK_N == 2 && BLOCK_M == 2 && BLOCK_K == 2)
-//                Rgemm_block_2x2_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
-                Rgemm_block_2x2_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
+                //                Rgemm_block_2x2_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
+                Rgemm_block_2x2_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
 #elif (BLOCK_N == 4 && BLOCK_M == 4 && BLOCK_K == 4)
-//                Rgemm_block_4x4_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
+                //                Rgemm_block_4x4_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
                 Rgemm_block_4x4_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
 #else
 #error "BLOCK_N, BLOCK_M, and BLOCK_K must all be either 2 or all be 4."
