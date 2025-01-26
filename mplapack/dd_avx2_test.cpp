@@ -98,8 +98,8 @@ do {                                                             \
     __m256d c_lo = _mm256_unpacklo_pd(s_new, e_new);             \
     __m256d c_hi = _mm256_unpackhi_pd(s_new, e_new);             \
                                                                  \
-    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(c_lo, c_hi, 0x20)); \
-    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(c_lo, c_hi, 0x31)); \
+    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
+    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
 } while(0)
 
 #define QUAD_MUL(A, B, C)                                        \
@@ -143,8 +143,8 @@ do {                                                             \
     __m256d res_lo = _mm256_unpacklo_pd(c_hi, c_lo);             \
     __m256d res_hi = _mm256_unpackhi_pd(c_hi, c_lo);             \
                                                                  \
-    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(res_lo, res_hi, 0x20)); \
-    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(res_lo, res_hi, 0x31)); \
+    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
+    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
 } while(0)
 // clang-format on
 
