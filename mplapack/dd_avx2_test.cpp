@@ -146,7 +146,6 @@ do {                                                             \
     _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
 } while(0)
-
 #define QUAD_alpha_MAD_4_SLOPPY_AVX256(alpha, A, B, C)           \
 do {                                                             \
     __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);             \
@@ -165,35 +164,33 @@ do {                                                             \
         (C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);     \
                                                                  \
     __m256d p = _mm256_mul_pd(alpha_hi, a_lo);                   \
-    __m256d q = _mm256_mul_pd(alpha_lo, a_hi);                   \
-    p = _mm256_add_pd(p, q);                                     \
+    p = _mm256_add_pd(p, _mm256_mul_pd(alpha_lo, a_hi));         \
                                                                  \
-    __m256d r = _mm256_fmadd_pd(alpha_hi, a_hi, p);              \
-    q = _mm256_fmsub_pd(alpha_hi, a_hi, r);                      \
-    __m256d s = _mm256_add_pd(q, p);                             \
+    __m256d q = _mm256_fmadd_pd(alpha_hi, a_hi, p);              \
+    __m256d r = _mm256_fmsub_pd(alpha_hi, a_hi, q);              \
+    __m256d s = _mm256_add_pd(r, p);                             \
                                                                  \
-    p = _mm256_mul_pd(r, b_lo);                                  \
-    q = _mm256_mul_pd(s, b_hi);                                  \
-    p = _mm256_add_pd(p, q);                                     \
+    p = _mm256_mul_pd(q, b_lo);                                  \
+    p = _mm256_add_pd(p, _mm256_mul_pd(s, b_hi));                \
                                                                  \
-    __m256d t = _mm256_fmadd_pd(r, b_hi, p);                     \
-    q = _mm256_fmsub_pd(r, b_hi, t);                             \
-    __m256d u = _mm256_add_pd(q, p);                             \
+    __m256d t = _mm256_fmadd_pd(q, b_hi, p);                     \
+    r = _mm256_fmsub_pd(q, b_hi, t);                             \
+    __m256d u = _mm256_add_pd(r, p);                             \
                                                                  \
     p = _mm256_add_pd(c_hi, t);                                  \
-    q = _mm256_sub_pd(p, c_hi);                                  \
-    q = _mm256_add_pd(                                           \
-        _mm256_sub_pd(c_hi, _mm256_sub_pd(p, q)),                \
-        _mm256_sub_pd(t, q)                                      \
+    r = _mm256_sub_pd(p, c_hi);                                  \
+    r = _mm256_add_pd(                                           \
+        _mm256_sub_pd(c_hi, _mm256_sub_pd(p, r)),                \
+        _mm256_sub_pd(t, r)                                      \
     );                                                           \
                                                                  \
-    q = _mm256_add_pd(q, _mm256_add_pd(c_lo, u));                \
+    r = _mm256_add_pd(r, _mm256_add_pd(c_lo, u));                \
                                                                  \
-    r = _mm256_add_pd(p, q);                                     \
-    s = _mm256_sub_pd(q, _mm256_sub_pd(r, p));                   \
+    q = _mm256_add_pd(p, r);                                     \
+    s = _mm256_sub_pd(r, _mm256_sub_pd(q, p));                   \
                                                                  \
-    c_lo = _mm256_unpacklo_pd(r, s);                             \
-    c_hi = _mm256_unpackhi_pd(r, s);                             \
+    c_lo = _mm256_unpacklo_pd(q, s);                             \
+    c_hi = _mm256_unpackhi_pd(q, s);                             \
                                                                  \
     _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
