@@ -166,34 +166,34 @@ do {                                                             \
                                                                  \
     __m256d p = _mm256_mul_pd(alpha_hi, a_lo);                   \
     __m256d q = _mm256_mul_pd(alpha_lo, a_hi);                   \
-    __m256d t = _mm256_add_pd(p, q);                             \
+    p = _mm256_add_pd(p, q);                                     \
                                                                  \
-    __m256d tmp1_hi = _mm256_fmadd_pd(alpha_hi, a_hi, t);        \
-    __m256d e = _mm256_fmsub_pd(alpha_hi, a_hi, tmp1_hi);        \
-    __m256d tmp1_lo = _mm256_add_pd(e, t);                       \
+    __m256d r = _mm256_fmadd_pd(alpha_hi, a_hi, p);              \
+    q = _mm256_fmsub_pd(alpha_hi, a_hi, r);                      \
+    __m256d s = _mm256_add_pd(q, p);                             \
                                                                  \
-    p = _mm256_mul_pd(tmp1_hi, b_lo);                            \
-    q = _mm256_mul_pd(tmp1_lo, b_hi);                            \
-    t = _mm256_add_pd(p, q);                                     \
+    p = _mm256_mul_pd(r, b_lo);                                  \
+    q = _mm256_mul_pd(s, b_hi);                                  \
+    p = _mm256_add_pd(p, q);                                     \
                                                                  \
-    __m256d tmp2_hi = _mm256_fmadd_pd(tmp1_hi, b_hi, t);         \
-    e = _mm256_fmsub_pd(tmp1_hi, b_hi, tmp2_hi);                 \
-    __m256d tmp2_lo = _mm256_add_pd(e, t);                       \
+    __m256d t = _mm256_fmadd_pd(r, b_hi, p);                     \
+    q = _mm256_fmsub_pd(r, b_hi, t);                             \
+    __m256d u = _mm256_add_pd(q, p);                             \
                                                                  \
-    p = _mm256_add_pd(c_hi, tmp2_hi);                            \
+    p = _mm256_add_pd(c_hi, t);                                  \
     q = _mm256_sub_pd(p, c_hi);                                  \
-    e = _mm256_add_pd(                                           \
+    q = _mm256_add_pd(                                           \
         _mm256_sub_pd(c_hi, _mm256_sub_pd(p, q)),                \
-        _mm256_sub_pd(tmp2_hi, q)                                \
+        _mm256_sub_pd(t, q)                                      \
     );                                                           \
                                                                  \
-    e = _mm256_add_pd(e, _mm256_add_pd(c_lo, tmp2_lo));          \
+    q = _mm256_add_pd(q, _mm256_add_pd(c_lo, u));                \
                                                                  \
-    tmp1_hi = _mm256_add_pd(p, e);                               \
-    tmp1_lo = _mm256_sub_pd(e, _mm256_sub_pd(tmp1_hi, p));       \
+    r = _mm256_add_pd(p, q);                                     \
+    s = _mm256_sub_pd(q, _mm256_sub_pd(r, p));                   \
                                                                  \
-    c_lo = _mm256_unpacklo_pd(tmp1_hi, tmp1_lo);                 \
-    c_hi = _mm256_unpackhi_pd(tmp1_hi, tmp1_lo);                 \
+    c_lo = _mm256_unpacklo_pd(r, s);                             \
+    c_hi = _mm256_unpackhi_pd(r, s);                             \
                                                                  \
     _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
@@ -313,4 +313,3 @@ int main() {
     }
     return 0;
 }
-
