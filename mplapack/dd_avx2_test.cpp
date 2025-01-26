@@ -146,6 +146,7 @@ do {                                                             \
     _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
 } while(0)
+
 #define QUAD_alpha_MAD_4_SLOPPY_AVX256(alpha, A, B, C)           \
 do {                                                             \
     __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);             \
@@ -185,7 +186,6 @@ do {                                                             \
     );                                                           \
                                                                  \
     r = _mm256_add_pd(r, _mm256_add_pd(c_lo, q));                \
-                                                                 \
     q = _mm256_add_pd(p, r);                                     \
     s = _mm256_sub_pd(r, _mm256_sub_pd(q, p));                   \
                                                                  \
@@ -195,6 +195,7 @@ do {                                                             \
     _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
 } while (0)
+
 // clang-format on
 
 int main() {
