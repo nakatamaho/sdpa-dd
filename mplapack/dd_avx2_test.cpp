@@ -208,8 +208,10 @@ int main() {
     random_device rd;
     mt19937 gen(rd());
     uniform_real_distribution<double> dist(-1.0, 1.0);
-    {
-        std::cout << "Addition test C = A + B" <<std::endl;
+
+    for (int test = 0; test < 100; ++test) {
+        std::cout << "Test #" << test + 1 << ": Addition test C = A + B" << std::endl;
+
         dd_real A[4], B[4], C[4], D[4];
         for (int i = 0; i < 4; ++i) {
             double upper = dist(gen);
@@ -220,25 +222,36 @@ int main() {
             lower = dist(gen) * 1e-15;
             QUICK_TWO_SUM(upper, lower, B[i].x[0], B[i].x[1]);
         }
-
         QUAD_ADD_4_SLOPPY_AVX256(A, B, C);
-
         for (int i = 0; i < 4; ++i) {
             D[i] = A[i] + B[i];
         }
-
+        bool error_found = false;
         for (int i = 0; i < 4; ++i) {
-            cout << "A[" << i << "]: "
-                 << "hi = " << A[i].x[0] << ", lo = " << A[i].x[1] << endl;
-            cout << "B[" << i << "]: "
-                 << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << endl;
-            cout << "C[" << i << "] (AVX256): "
-                 << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << endl;
-            cout << "D[" << i << "] (Direct): "
-                 << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << endl;
-            cout << endl;
+            double abs_diff_hi = std::fabs(C[i].x[0] - D[i].x[0]);
+            double abs_diff_lo = std::fabs(C[i].x[1] - D[i].x[1]);
+
+            if (abs_diff_hi > 1e-20 || abs_diff_lo > 1e-20) {
+                error_found = true;
+                std::cerr << "Error detected!" << std::endl;
+                std::cerr << "A[" << i << "]: "
+                          << "hi = " << A[i].x[0] << ", lo = " << A[i].x[1] << std::endl;
+                std::cerr << "B[" << i << "]: "
+                          << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << std::endl;
+                std::cerr << "C[" << i << "] (AVX256): "
+                          << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << std::endl;
+                std::cerr << "D[" << i << "] (Direct): "
+                          << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << std::endl;
+                std::cerr << "Absolute difference: hi = " << abs_diff_hi
+                          << ", lo = " << abs_diff_lo << std::endl;
+                std::cerr << std::endl;
+            }
+        }
+        if (!error_found) {
+            std::cout << "Test #" << test + 1 << " passed without errors." << std::endl;
         }
     }
+
     {
         std::cout << "Multiplication test C = A * B" <<std::endl;
         dd_real A[4], B[4], C[4], D[4];
@@ -270,10 +283,12 @@ int main() {
             cout << endl;
         }
     }
-    {
-        std::cout << "alpha MAD test C = alpha * A * B + C" <<std::endl;
+    for (int test = 0; test < 100; ++test) {
+        std::cout << "Test #" << test + 1 << ": alpha MAD test C = alpha * A * B + C" << std::endl;
+
         dd_real alpha;
         dd_real A[4], B[4], C[4], Corg[4], D[4];
+
         for (int i = 0; i < 4; ++i) {
             double upper = dist(gen);
             double lower = dist(gen) * 1e-15;
@@ -286,30 +301,46 @@ int main() {
             upper = dist(gen);
             lower = dist(gen) * 1e-15;
             QUICK_TWO_SUM(upper, lower, C[i].x[0], C[i].x[1]);
-            Corg[i].x[0] = C[i].x[0];
-            Corg[i].x[1] = C[i].x[1];
+            Corg[i] = C[i];
         }
+
         double upper = dist(gen);
         double lower = dist(gen) * 1e-15;
         QUICK_TWO_SUM(upper, lower, alpha.x[0], alpha.x[1]);
 
         QUAD_alpha_MAD_4_SLOPPY_AVX256(alpha, A, B, C);
+
         for (int i = 0; i < 4; ++i) {
             D[i] = alpha * A[i] * B[i] + Corg[i];
         }
 
-        cout << "alpha: " << "hi = " << alpha.x[0] << ", lo = " << alpha.x[1] << endl;
+        bool error_found = false;
         for (int i = 0; i < 4; ++i) {
-            cout << "A[" << i << "]: "
-                 << "hi = " << A[i].x[0] << ", lo = " << A[i].x[1] << endl;
-            cout << "B[" << i << "]: "
-                 << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << endl;
-            cout << "C[" << i << "] (AVX256): "
-                 << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << endl;
-            cout << "D[" << i << "] (Direct): "
-                 << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << endl;
-            cout << endl;
+            double abs_diff_hi = std::fabs(C[i].x[0] - D[i].x[0]);
+            double abs_diff_lo = std::fabs(C[i].x[1] - D[i].x[1]);
+
+            if (abs_diff_hi > 1e-20 || abs_diff_lo > 1e-20) {
+                error_found = true;
+                std::cerr << "Error detected!" << std::endl;
+                std::cerr << "alpha: hi = " << alpha.x[0] << ", lo = " << alpha.x[1] << std::endl;
+                std::cerr << "A[" << i << "]: "
+                          << "hi = " << A[i].x[0] << ", lo = " << A[i].x[1] << std::endl;
+                std::cerr << "B[" << i << "]: "
+                          << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << std::endl;
+                std::cerr << "C[" << i << "] (AVX256): "
+                          << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << std::endl;
+                std::cerr << "D[" << i << "] (Direct): "
+                          << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << std::endl;
+                std::cerr << "Absolute difference: hi = " << abs_diff_hi
+                          << ", lo = " << abs_diff_lo << std::endl;
+                std::cerr << std::endl;
+            }
+        }
+
+        if (!error_found) {
+            std::cout << "Test #" << test + 1 << " passed without errors." << std::endl;
         }
     }
+
     return 0;
 }
