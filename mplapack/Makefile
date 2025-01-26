@@ -61,7 +61,7 @@ $(DD_TEST_ASM): $(DD_TEST_SRC)
 	$(CXX) $(CXXFLAGS) -S -o $@ $<
 
 $(DD_AVX2_TEST_ASM): $(DD_AVX2_TEST_SRC)
-	$(CXX) $(CXXFLAGS) -S -o $@ $<
+	$(CXX) $(CXXFLAGS) -fverbose-asm -S -o $@ $<
 
 # Clean and dependencies
 clean:

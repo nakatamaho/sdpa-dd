@@ -180,17 +180,17 @@ do {                                                             \
     e = _mm256_fmsub_pd(tmp1_hi, b_hi, tmp2_hi);                 \
     __m256d tmp2_lo = _mm256_add_pd(e, t);                       \
                                                                  \
-    __m256d s = _mm256_add_pd(c_hi, tmp2_hi);                    \
-    __m256d v = _mm256_sub_pd(s, c_hi);                          \
+    p = _mm256_add_pd(c_hi, tmp2_hi);                            \
+    q = _mm256_sub_pd(p, c_hi);                                  \
     e = _mm256_add_pd(                                           \
-        _mm256_sub_pd(c_hi, _mm256_sub_pd(s, v)),                \
-        _mm256_sub_pd(tmp2_hi, v)                                \
+        _mm256_sub_pd(c_hi, _mm256_sub_pd(p, q)),                \
+        _mm256_sub_pd(tmp2_hi, q)                                \
     );                                                           \
                                                                  \
     e = _mm256_add_pd(e, _mm256_add_pd(c_lo, tmp2_lo));          \
                                                                  \
-    tmp1_hi = _mm256_add_pd(s, e);                               \
-    tmp1_lo = _mm256_sub_pd(e, _mm256_sub_pd(tmp1_hi, s));       \
+    tmp1_hi = _mm256_add_pd(p, e);                               \
+    tmp1_lo = _mm256_sub_pd(e, _mm256_sub_pd(tmp1_hi, p));       \
                                                                  \
     c_lo = _mm256_unpacklo_pd(tmp1_hi, tmp1_lo);                 \
     c_hi = _mm256_unpackhi_pd(tmp1_hi, tmp1_lo);                 \
