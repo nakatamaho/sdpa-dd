@@ -132,28 +132,35 @@ int main() {
     using namespace qd;
     cout.precision(17);
 
-    dd_real A[4] = {
-        {1.0, 1e-17},   // [0] 1 + 1e-16
-        {2.0, 2e-17},   // [1] 2 + 2e-16
-        {3.0, 3e-17},   // [2] 3 + 3e-16
-        {4.0, 4e-17}    // [3] 4 + 4e-16
-    };
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<double> dist(-1.0, 1.0);
 
-    dd_real B[4] = {
-        {5.0, 5e-17},   // [0] 5 + 5e-16
-        {6.0, 6e-17},   // [1] 6 + 6e-16
-        {7.0, 7e-17},   // [2] 7 + 7e-16
-        {8.0, 8e-17}    // [3] 8 + 8e-16
-    };
+    dd_real A[4], B[4], C[4], D[4];
+    for (int i = 0; i < 4; ++i) {
+        A[i].x[0] = dist(gen);
+        A[i].x[1] = dist(gen) * 1e-16;
 
-    dd_real C[4];
+        B[i].x[0] = dist(gen);
+        B[i].x[1] = B[i].x[0] * 1e-16;
+    }
 
     QUAD_ADD_4_SLOPPY_AVX256(A, B, C);
 
     for (int i = 0; i < 4; ++i) {
-        cout << "C[" << i << "]: "
-             << "hi = " << C[i].x[0] << ", "
-             << "lo = " << C[i].x[1] << endl;
+        D[i] = A[i] + B[i];
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        cout << "A[" << i << "]: "
+             << "hi = " << A[i].x[0] << ", lo = " << A[i].x[1] << endl;
+        cout << "B[" << i << "]: "
+             << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << endl;
+        cout << "C[" << i << "] (AVX256): "
+             << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << endl;
+        cout << "D[" << i << "] (Direct): "
+             << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << endl;
+        cout << endl;
     }
 
     return 0;

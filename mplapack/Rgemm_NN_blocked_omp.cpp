@@ -209,7 +209,6 @@ QUAD_ADD_4_SLOPPY_AVX256(alpha_c[2], &C[x + 2 + y * ldc], &C[x + 2 + y * ldc]);
 QUAD_ADD_4_SLOPPY_AVX256(alpha_c[3], &C[x + 3 + y * ldc], &C[x + 3 + y * ldc]);
 }
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
-printf("hoge\n");
 #pragma omp parallel for schedule(static)
     for (mplapackint j = 0; j < n; j++) {
         if (beta == 0.0) {
@@ -247,8 +246,8 @@ printf("hoge\n");
                 dd_real *Cblk = &C[i0 + (size_t)j0 * ldc];
 
 #if (BLOCK_N == 2 && BLOCK_M == 2 && BLOCK_K == 2)
-//              Rgemm_block_2x2_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
-                Rgemm_block_2x2_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
+                Rgemm_block_2x2_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
+//                Rgemm_block_2x2_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
 #elif (BLOCK_N == 4 && BLOCK_M == 4 && BLOCK_K == 4)
 //              Rgemm_block_4x4_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
                 Rgemm_block_4x4_macro_kernel(ib, jb, kb, alpha, Ablk, lda, Bblk, ldb, Cblk, ldc);
