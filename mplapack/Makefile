@@ -22,8 +22,13 @@ DD_TEST_OBJ = dd_test.o
 DD_TEST_BIN = dd_test
 DD_TEST_ASM = dd_test.s
 
+DD_AVX2_TEST_SRC = dd_avx2_test.cpp
+DD_AVX2_TEST_OBJ = dd_avx2_test.o
+DD_AVX2_TEST_BIN = dd_avx2_test
+DD_AVX2_TEST_ASM = dd_avx2_test.s
+
 # Targets
-all: $(DD_TEST_BIN) $(DD_TEST_ASM) $(TARGET_ORIG) $(ASM_ORIG) $(TARGET_MACRO) $(TARGET_BLOCKED)
+all: $(DD_TEST_BIN) $(DD_TEST_ASM) $(DD_AVX2_TEST_BIN) $(DD_AVX2_TEST_ASM) $(TARGET_ORIG) $(ASM_ORIG) $(TARGET_MACRO) $(TARGET_BLOCKED)
 
 # Build rules
 $(TARGET_ORIG): $(OBJS_ORIG)
@@ -41,6 +46,12 @@ $(DD_TEST_OBJ): $(DD_TEST_SRC)
 $(DD_TEST_BIN): $(DD_TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
+$(DD_AVX2_TEST_OBJ): $(DD_AVX2_TEST_SRC)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(DD_AVX2_TEST_BIN): $(DD_AVX2_TEST_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
 # Generate Rgemm_NN_omp.s
 $(ASM_ORIG): Rgemm_NN_omp.cpp
 	$(CXX) $(CXXFLAGS) -S -o $@ $<
@@ -49,11 +60,15 @@ $(ASM_ORIG): Rgemm_NN_omp.cpp
 $(DD_TEST_ASM): $(DD_TEST_SRC)
 	$(CXX) $(CXXFLAGS) -S -o $@ $<
 
+$(DD_AVX2_TEST_ASM): $(DD_AVX2_TEST_SRC)
+	$(CXX) $(CXXFLAGS) -S -o $@ $<
+
 # Clean and dependencies
 clean:
 	rm -f $(OBJS_ORIG) $(OBJS_BLOCKED) $(OBJS_MACRO) $(DD_TEST_OBJ) \
 	      $(TARGET_ORIG) $(TARGET_BLOCKED) $(TARGET_MACRO) $(DD_TEST_BIN) \
 	      $(ASM_ORIG) $(DD_TEST_ASM)
+	rm -f $(DD_AVX2_TEST_OBJ) $(DD_AVX2_TEST_BIN) $(DD_AVX2_TEST_ASM)
 
 .depend: $(SRCS_ORIG) $(SRCS_BLOCKED) $(SRCS_MACRO) $(DD_TEST_SRC)
 	$(CXX) $(CXXFLAGS) -MM $^ > .depend
