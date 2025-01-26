@@ -9,7 +9,7 @@ OBJS_ORIG = $(SRCS_ORIG:.cpp=.o)
 TARGET_ORIG = Rgemm_NN_omp_benchmark
 ASM_ORIG = Rgemm_NN_omp.s
 
-SRCS_BLOCKED = Rgemm_NN_blocked_omp.cpp Rgemm_NN_blocked_omp_benchmark.cpp
+SRCS_BLOCKED = Rgemm_NN_blocked_omp.cpp Rgemm_NN_omp.cpp Rgemm_NN_blocked_omp_benchmark.cpp
 OBJS_BLOCKED = $(SRCS_BLOCKED:.cpp=.o)
 TARGET_BLOCKED = Rgemm_NN_blocked_omp_benchmark
 
@@ -23,7 +23,7 @@ DD_TEST_BIN = dd_test
 DD_TEST_ASM = dd_test.s
 
 # Targets
-all: $(DD_TEST_BIN) $(DD_TEST_ASM) $(TARGET_ORIG) $(ASM_ORIG) $(TARGET_MACRO) #$(TARGET_BLOCKED)
+all: $(DD_TEST_BIN) $(DD_TEST_ASM) $(TARGET_ORIG) $(ASM_ORIG) $(TARGET_MACRO) $(TARGET_BLOCKED)
 
 # Build rules
 $(TARGET_ORIG): $(OBJS_ORIG)

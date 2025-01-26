@@ -39,13 +39,13 @@
 #define BLOCK_N 2
 #define BLOCK_K 2
 
-void Rgemm_block_2x2_kernel(mplapackint x, mplapackint y, const dd_real *A, mplapackint lda, const dd_real *B, mplapackint ldb, dd_real *C, mplapackint ldc, mplapackint K, dd_real alpha, dd_real beta) {
+void Rgemm_block_2x2_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c00 = 0.0;
     dd_real c01 = 0.0;
     dd_real c10 = 0.0;
     dd_real c11 = 0.0;
 
-    for (mplapackint k = 0; k < K; k++) {
+    for (mplapackint k = 0; k < z; k++) {
         dd_real a0 = A[x + k * lda];     // A(x, k)
         dd_real a1 = A[x + 1 + k * lda]; // A(x+1, k)
 
@@ -57,10 +57,10 @@ void Rgemm_block_2x2_kernel(mplapackint x, mplapackint y, const dd_real *A, mpla
         c10 += a1 * b0;
         c11 += a1 * b1;
     }
-    C[x + y * ldc] = beta * C[x + y * ldc] + alpha * c00;
-    C[x + (y + 1) * ldc] = beta * C[x + (y + 1) * ldc] + alpha * c01;
-    C[x + 1 + y * ldc] = beta * C[x + 1 + y * ldc] + alpha * c10;
-    C[x + 1 + (y + 1) * ldc] = beta * C[x + 1 + (y + 1) * ldc] + alpha * c11;
+    C[x + y * ldc] = C[x + y * ldc] + alpha * c00;
+    C[x + (y + 1) * ldc] = C[x + (y + 1) * ldc] + alpha * c01;
+    C[x + 1 + y * ldc] = C[x + 1 + y * ldc] + alpha * c10;
+    C[x + 1 + (y + 1) * ldc] = C[x + 1 + (y + 1) * ldc] + alpha * c11;
 }
 
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {

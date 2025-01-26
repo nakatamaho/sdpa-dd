@@ -10,7 +10,7 @@
 #endif
 
 void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
-void Rgemm_ref(const char *transa, const char *transb, mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
+void Rgemm_NN_blocked_omp(const char *transa, const char *transb, mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
 
 void generate_random_matrix(mplapackint rows, mplapackint cols, dd_real *matrix) {
     unsigned int seed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
@@ -70,7 +70,8 @@ int main() {
 #else
     std::cout << "OpenMP is not enabled.\n";
 #endif
-    std::vector<mplapackint> sizes = {256, 512};
+//    std::vector<mplapackint> sizes = {256, 512, 768, 1000, 1024, 1029, 2048, 2050};
+    std::vector<mplapackint> sizes = {1000, 1024, 1029, 2048, 2050};
 
 #ifdef _OPENMP
     int num_cores = omp_get_num_procs();
@@ -101,7 +102,7 @@ int main() {
                 generate_random_matrix(m, n, C.data());
 
                 C_ref = C;
-                Rgemm_ref("n", "n", m, n, k, alpha, A.data(), m, B.data(), k, beta, C_ref.data(), m);
+                Rgemm_NN_omp(m, n, k, alpha, A.data(), m, B.data(), k, beta, C_ref.data(), m);
 
                 std::cout << "Benchmarking m=" << m << ", n=" << n << ", k=" << k << ":\n";
 
