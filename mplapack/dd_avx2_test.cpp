@@ -40,35 +40,10 @@ do {                                               \
     (e) = ((a) - ((s) - v)) + ((b) - v);           \
 } while (0)
 
-#define TWO_SUM_2_AVX256(a, b, s, e)                            \
-do {                                                            \
-    __m256d a_vec = _mm256_loadu_pd(&(a[0].x[0]));              \
-    __m256d b_vec = _mm256_loadu_pd(&(b[0].x[0]));              \
-    __m256d s_vec = _mm256_add_pd(a_vec, b_vec);                \
-    __m256d v_vec = _mm256_sub_pd(s_vec, a_vec);                \
-    __m256d temp = _mm256_sub_pd(s_vec, v_vec);                 \
-    __m256d a_minus_temp = _mm256_sub_pd(a_vec, temp);          \
-    __m256d b_minus_v = _mm256_sub_pd(b_vec, v_vec);            \
-    __m256d e_vec = _mm256_add_pd(a_minus_temp, b_minus_v);     \
-    _mm256_storeu_pd(&(s[0].x[0]), s_vec);                      \
-    _mm256_storeu_pd(&(e[0].x[0]), e_vec);                      \
-} while (0)
-
 #define QUICK_TWO_SUM(a, b, s, e)                \
 do {                                             \
     (s) = (a) + (b);                             \
     (e) = (b) - ((s) - (a));                     \
-} while (0)
-
-#define QUICK_TWO_SUM_2_AVX(a, b, s, e)                             \
-do {                                                                \
-    __m256d a_vec = _mm256_loadu_pd(&(a[0].x[0]));                  \
-    __m256d b_vec = _mm256_loadu_pd(&(b[0].x[0]));                  \
-    __m256d s_vec = _mm256_add_pd(a_vec, b_vec);                    \
-    __m256d v_vec = _mm256_sub_pd(s_vec, a_vec);                    \
-    __m256d e_vec = _mm256_sub_pd(b_vec, v_vec);                    \
-    _mm256_storeu_pd(&(s[0].x[0]), s_vec);                          \
-    _mm256_storeu_pd(&(e[0].x[0]), e_vec);                          \
 } while (0)
 
 #define TWO_PROD_FMA(a, b, p, e)                \
@@ -77,24 +52,13 @@ do {                                            \
     (e) = __FMA((a), (b), -(p));                \
 } while (0)
 
-#define TWO_PROD_FMA_2_AVX(a, b, p, e)                              \
-do {                                                                \
-    __m256d a_vec = _mm256_loadu_pd(&(a[0].x[0]));                  \
-    __m256d b_vec = _mm256_loadu_pd(&(b[0].x[0]));                  \
-    __m256d p_vec = _mm256_mul_pd(a_vec, b_vec);                    \
-    __m256d neg_p_vec = _mm256_sub_pd(_mm256_setzero_pd(), p_vec);  \
-    __m256d e_vec = _mm256_fmadd_pd(a_vec, b_vec, neg_p_vec);       \
-    _mm256_storeu_pd(&(p[0].x[0]), p_vec);                          \
-    _mm256_storeu_pd(&(e[0].x[0]), e_vec);                          \
-} while (0)
-
 #define QUAD_ADD_IEEE(A, B, C)                                       \
 do {                                                                 \
     double s1, s11, s2, t1, t2;                                      \
     TWO_SUM((A).x[0], (B).x[0], s1, s2);                             \
     TWO_SUM((A).x[1], (B).x[1], t1, t2);                             \
     s2 += t1;                                                        \
-    s11 = s1;/*workarounds the side effect of the macro expansion.*/ \ 
+    s11 = s1;                                                        \ 
     QUICK_TWO_SUM(s11, s2, s1, s2);                                  \
     s2 += t2;                                                        \
     QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                       \
@@ -107,6 +71,42 @@ do {                                                             \
     e += (A).x[1] + (B).x[1];                                    \
     QUICK_TWO_SUM(s, e, (C).x[0], (C).x[1]);                     \
 } while (0)
+
+#define QUAD_ADD_4_SLOPPY_AVX256(A, B, C)                        \
+do {                                                             \
+    /* AoSからSoA形式へのロード (インデックス順に注意) */         \
+    __m256d a_hi = _mm256_setr_pd((A)[0].x[0], (A)[1].x[0],      \
+                                 (A)[2].x[0], (A)[3].x[0]);      \
+    __m256d a_lo = _mm256_setr_pd((A)[0].x[1], (A)[1].x[1],      \
+                                 (A)[2].x[1], (A)[3].x[1]);      \
+    __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0],      \
+                                 (B)[2].x[0], (B)[3].x[0]);      \
+    __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1],      \
+                                 (B)[2].x[1], (B)[3].x[1]);      \
+                                                                 \
+    /* TWO_SUMのSIMD演算 */                                      \
+    __m256d s = _mm256_add_pd(a_hi, b_hi);                       \
+    __m256d v = _mm256_sub_pd(s, a_hi);                          \
+    __m256d e = _mm256_add_pd(                                   \
+        _mm256_sub_pd(a_hi, _mm256_sub_pd(s, v)),                \
+        _mm256_sub_pd(b_hi, v)                                   \
+    );                                                           \
+                                                                 \
+    /* ローパートの加算 */                                       \
+    e = _mm256_add_pd(e, _mm256_add_pd(a_lo, b_lo));             \
+                                                                 \
+    /* QUICK_TWO_SUMのSIMD演算 */                                \
+    __m256d s_new = _mm256_add_pd(s, e);                         \
+    __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
+                                                                 \
+    /* 結果をAoS形式でストア */                                  \
+    __m256d c0 = _mm256_unpacklo_pd(s_new, e_new);               \
+    __m256d c1 = _mm256_unpackhi_pd(s_new, e_new);               \
+                                                                 \
+    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(c0, c1, 0x20)); \
+    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(c0, c1, 0x31)); \
+} while(0)
+
 
 #define QUAD_MUL(A, B, C)                                        \
 do {                                                             \
@@ -130,41 +130,31 @@ do {                                                              \
 int main() {
     using namespace std;
     using namespace qd;
+    cout.precision(17);
 
-    cout.precision(33);
+    dd_real A[4] = {
+        {1.0, 1e-17},   // [0] 1 + 1e-16
+        {2.0, 2e-17},   // [1] 2 + 2e-16
+        {3.0, 3e-17},   // [2] 3 + 3e-16
+        {4.0, 4e-17}    // [3] 4 + 4e-16
+    };
 
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> dist(-1.0, 1.0);
+    dd_real B[4] = {
+        {5.0, 5e-17},   // [0] 5 + 5e-16
+        {6.0, 6e-17},   // [1] 6 + 6e-16
+        {7.0, 7e-17},   // [2] 7 + 7e-16
+        {8.0, 8e-17}    // [3] 8 + 8e-16
+    };
 
-    dd_real a_val, b_val;
-    a_val.x[0] = dist(mt);
-    a_val.x[1] = dist(mt) * 1e-16;
-    b_val.x[0] = dist(mt);
-    b_val.x[1] = dist(mt) * 1e-16;
+    dd_real C[4];
 
-    cout << "a_val = " << a_val << endl;
-    cout << "b_val = " << b_val << endl;
+    QUAD_ADD_4_SLOPPY_AVX256(A, B, C);
 
-    cout << "### addition and multiplication test ###" << endl;
-
-    dd_real sum = a_val + b_val;
-    cout << "a_val + b_val = " << sum << " qdlib" << endl;
-    QUAD_ADD_IEEE(a_val, b_val, sum);
-    cout << "a_val + b_val = " << sum << " macro" << endl;
-    QUAD_ADD_SLOPPY(a_val, b_val, sum);
-    cout << "a_val + b_val = " << sum << " sloppy" << endl;
-
-    cout << endl;
-
-    dd_real product = a_val * b_val;
-    cout << "a_val * b_val = " << product << " qdlib" << endl;
-    QUAD_MUL(a_val, b_val, product);
-    cout << "a_val * b_val = " << product << " macro" << endl;
-    QUAD_MUL_SLOPPY(a_val, b_val, product);
-    cout << "a_val * b_val = " << product << " sloppy" << endl;
+    for (int i = 0; i < 4; ++i) {
+        cout << "C[" << i << "]: "
+             << "hi = " << C[i].x[0] << ", "
+             << "lo = " << C[i].x[1] << endl;
+    }
 
     return 0;
 }
-
-

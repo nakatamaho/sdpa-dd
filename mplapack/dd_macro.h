@@ -85,3 +85,38 @@ do {                                                              \
     e = __FMA((A).x[0], (B).x[0], -(C).x[0]);                     \
     (C).x[1] = e + t;                                             \
 } while (0)
+
+#define QUAD_ADD_4_SLOPPY_AVX256(A, B, C)                        \
+do {                                                             \
+    /* AoSからSoA形式へのロード (インデックス順に注意) */         \
+    __m256d a_hi = _mm256_setr_pd((A)[0].x[0], (A)[1].x[0],      \
+                                 (A)[2].x[0], (A)[3].x[0]);      \
+    __m256d a_lo = _mm256_setr_pd((A)[0].x[1], (A)[1].x[1],      \
+                                 (A)[2].x[1], (A)[3].x[1]);      \
+    __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0],      \
+                                 (B)[2].x[0], (B)[3].x[0]);      \
+    __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1],      \
+                                 (B)[2].x[1], (B)[3].x[1]);      \
+                                                                 \
+    /* TWO_SUMのSIMD演算 */                                      \
+    __m256d s = _mm256_add_pd(a_hi, b_hi);                       \
+    __m256d v = _mm256_sub_pd(s, a_hi);                          \
+    __m256d e = _mm256_add_pd(                                   \
+        _mm256_sub_pd(a_hi, _mm256_sub_pd(s, v)),                \
+        _mm256_sub_pd(b_hi, v)                                   \
+    );                                                           \
+                                                                 \
+    /* ローパートの加算 */                                       \
+    e = _mm256_add_pd(e, _mm256_add_pd(a_lo, b_lo));             \
+                                                                 \
+    /* QUICK_TWO_SUMのSIMD演算 */                                \
+    __m256d s_new = _mm256_add_pd(s, e);                         \
+    __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
+                                                                 \
+    /* 結果をAoS形式でストア */                                  \
+    __m256d c0 = _mm256_unpacklo_pd(s_new, e_new);               \
+    __m256d c1 = _mm256_unpackhi_pd(s_new, e_new);               \
+                                                                 \
+    _mm256_storeu_pd(&(C)[0].x[0], _mm256_permute2f128_pd(c0, c1, 0x20)); \
+    _mm256_storeu_pd(&(C)[2].x[0], _mm256_permute2f128_pd(c0, c1, 0x31)); \
+} while(0)

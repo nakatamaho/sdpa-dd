@@ -31,6 +31,7 @@
 #include <omp.h>
 #endif
 
+#include <immintrin.h>
 #include "dd_macro.h"
 
 #define PREFETCH_DISTANCE 64
@@ -139,7 +140,6 @@ inline void Rgemm_block_4x4_kernel(mplapackint &x, mplapackint &y, mplapackint &
 
 inline void Rgemm_block_4x4_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c[4][4] = {{{0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}}, {{0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}}, {{0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}}, {{0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}, {0.0, 0.0}}};
-
     for (mplapackint k = 0; k < z; k++) {
         dd_real a[4];
         a[0] = A[x + 0 + k * lda]; // A(x, k)
@@ -203,25 +203,13 @@ inline void Rgemm_block_4x4_macro_kernel(mplapackint &x, mplapackint &y, mplapac
     QUAD_MUL_SLOPPY(alpha, c[3][1], alpha_c[3][1]);
     QUAD_MUL_SLOPPY(alpha, c[3][2], alpha_c[3][2]);
     QUAD_MUL_SLOPPY(alpha, c[3][3], alpha_c[3][3]);
-
-    QUAD_ADD_SLOPPY(C[x + 0 + (y + 0) * ldc], alpha_c[0][0], C[x + 0 + (y + 0) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 0 + (y + 1) * ldc], alpha_c[0][1], C[x + 0 + (y + 1) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 0 + (y + 2) * ldc], alpha_c[0][2], C[x + 0 + (y + 2) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 0 + (y + 3) * ldc], alpha_c[0][3], C[x + 0 + (y + 3) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 1 + (y + 0) * ldc], alpha_c[1][0], C[x + 1 + (y + 0) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 1 + (y + 1) * ldc], alpha_c[1][1], C[x + 1 + (y + 1) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 1 + (y + 2) * ldc], alpha_c[1][2], C[x + 1 + (y + 2) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 1 + (y + 3) * ldc], alpha_c[1][3], C[x + 1 + (y + 3) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 2 + (y + 0) * ldc], alpha_c[2][0], C[x + 2 + (y + 0) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 2 + (y + 1) * ldc], alpha_c[2][1], C[x + 2 + (y + 1) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 2 + (y + 2) * ldc], alpha_c[2][2], C[x + 2 + (y + 2) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 2 + (y + 3) * ldc], alpha_c[2][3], C[x + 2 + (y + 3) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 3 + (y + 0) * ldc], alpha_c[3][0], C[x + 3 + (y + 0) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 3 + (y + 1) * ldc], alpha_c[3][1], C[x + 3 + (y + 1) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 3 + (y + 2) * ldc], alpha_c[3][2], C[x + 3 + (y + 2) * ldc]);
-    QUAD_ADD_SLOPPY(C[x + 3 + (y + 3) * ldc], alpha_c[3][3], C[x + 3 + (y + 3) * ldc]);
+QUAD_ADD_4_SLOPPY_AVX256(alpha_c[0], &C[x + 0 + y * ldc], &C[x + 0 + y * ldc]);
+QUAD_ADD_4_SLOPPY_AVX256(alpha_c[1], &C[x + 1 + y * ldc], &C[x + 1 + y * ldc]);
+QUAD_ADD_4_SLOPPY_AVX256(alpha_c[2], &C[x + 2 + y * ldc], &C[x + 2 + y * ldc]);
+QUAD_ADD_4_SLOPPY_AVX256(alpha_c[3], &C[x + 3 + y * ldc], &C[x + 3 + y * ldc]);
 }
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
+printf("hoge\n");
 #pragma omp parallel for schedule(static)
     for (mplapackint j = 0; j < n; j++) {
         if (beta == 0.0) {

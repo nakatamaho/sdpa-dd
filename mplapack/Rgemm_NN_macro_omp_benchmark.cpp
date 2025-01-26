@@ -10,7 +10,7 @@
 #endif
 
 void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
-void Rgemm_NN_macro_omp(const char *transa, const char *transb, mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
+void Rgemm_NN_macro_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
 
 void generate_random_matrix(mplapackint rows, mplapackint cols, dd_real *matrix) {
     unsigned int seed = static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count());
@@ -115,7 +115,7 @@ int main() {
                     for (int trial = 0; trial < num_trials; ++trial) {
                         std::vector<dd_real> C_test = C;
 
-                        double elapsed = benchmark([&]() { Rgemm_NN_omp(m, n, k, alpha, A.data(), m, B.data(), k, beta, C_test.data(), m); });
+                        double elapsed = benchmark([&]() { Rgemm_NN_macro_omp(m, n, k, alpha, A.data(), m, B.data(), k, beta, C_test.data(), m); });
 
                         double flops = flop_count / elapsed / 1.0e6;
                         flops_results.push_back(flops);
