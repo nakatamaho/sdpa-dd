@@ -39,7 +39,7 @@
 #define BLOCK_N 2
 #define BLOCK_K 2
 
-void Rgemm_block_2x2_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
+inline void Rgemm_block_2x2_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c00 = 0.0;
     dd_real c01 = 0.0;
     dd_real c10 = 0.0;
@@ -63,7 +63,7 @@ void Rgemm_block_2x2_kernel(mplapackint &x, mplapackint &y, mplapackint &z, cons
     C[x + 1 + (y + 1) * ldc] = C[x + 1 + (y + 1) * ldc] + alpha * c11;
 }
 
-void Rgemm_block_2x2_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
+inline void Rgemm_block_2x2_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c00 = {0.0, 0.0};
     dd_real c01 = {0.0, 0.0};
     dd_real c10 = {0.0, 0.0};
@@ -87,7 +87,6 @@ void Rgemm_block_2x2_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z
         QUAD_MUL_SLOPPY(a1, b1, temp3);
         QUAD_ADD_SLOPPY(c11, temp3, c11);
     }
-    // alpha * c00
     dd_real alpha_c00, alpha_c01, alpha_c10, alpha_c11;
     QUAD_MUL_SLOPPY(alpha, c00, alpha_c00);
     QUAD_MUL_SLOPPY(alpha, c01, alpha_c01);
@@ -100,7 +99,7 @@ void Rgemm_block_2x2_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z
     QUAD_ADD_SLOPPY(C[x + 1 + (y + 1) * ldc], alpha_c11, C[x + 1 + (y + 1) * ldc]);
 }
 
-void Rgemm_block_4x4_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
+inline void Rgemm_block_4x4_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c00 = 0.0, c01 = 0.0, c02 = 0.0, c03 = 0.0;
     dd_real c10 = 0.0, c11 = 0.0, c12 = 0.0, c13 = 0.0;
     dd_real c20 = 0.0, c21 = 0.0, c22 = 0.0, c23 = 0.0;
@@ -158,7 +157,7 @@ void Rgemm_block_4x4_kernel(mplapackint &x, mplapackint &y, mplapackint &z, cons
     C[x + 3 + (y + 3) * ldc] += alpha * c33;
 }
 
-void Rgemm_block_4x4_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
+inline void Rgemm_block_4x4_macro_kernel(mplapackint &x, mplapackint &y, mplapackint &z, const dd_real &alpha, const dd_real *A, mplapackint &lda, const dd_real *B, mplapackint &ldb, dd_real *C, mplapackint &ldc) {
     dd_real c00 = {0.0, 0.0}, c01 = {0.0, 0.0}, c02 = {0.0, 0.0}, c03 = {0.0, 0.0};
     dd_real c10 = {0.0, 0.0}, c11 = {0.0, 0.0}, c12 = {0.0, 0.0}, c13 = {0.0, 0.0};
     dd_real c20 = {0.0, 0.0}, c21 = {0.0, 0.0}, c22 = {0.0, 0.0}, c23 = {0.0, 0.0};
