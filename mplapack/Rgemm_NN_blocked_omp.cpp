@@ -40,14 +40,14 @@
 
 #define PREFETCH_DISTANCE 64
 
-static inline void Rgemm_block_4x4_kernel(const dd_real (&A_block)[16], const dd_real (&B_block)[16], dd_real (&C_block)[16]) {
+static inline void Rgemm_block_4x4_kernel(const dd_real *A_ptr, mplapackint lda, const dd_real *B_ptr, mplapackint ldb, dd_real *C_block) {
     for (mplapackint ii = 0; ii < 4; ++ii) {
         for (mplapackint jj = 0; jj < 4; ++jj) {
-            dd_real sum = C_block[ii * 4 + jj];
+            dd_real sum = 0.0;
             for (mplapackint kk = 0; kk < 4; ++kk) {
-                sum += A_block[ii * 4 + kk] * B_block[kk * 4 + jj];
+                sum += A_ptr[ii + kk * lda] * B_ptr[kk + jj * ldb];
             }
-            C_block[ii * 4 + jj] = sum;
+            C_block[ii * 4 + jj] += sum;
         }
     }
 }
@@ -82,18 +82,9 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
         for (mplapackint i0 = 0; i0 < m; i0 += 4) {
             dd_real C_block[16] = {0};
             for (mplapackint k0 = 0; k0 < k; k0 += 4) {
-                dd_real A_block[16], B_block[16];
-                for (mplapackint ii = 0; ii < 4; ++ii) {
-                    for (mplapackint kk = 0; kk < 4; ++kk) {
-                        A_block[ii * 4 + kk] = A[(i0 + ii) + (k0 + kk) * lda];
-                    }
-                }
-                for (mplapackint kk = 0; kk < 4; ++kk) {
-                    for (mplapackint jj = 0; jj < 4; ++jj) {
-                        B_block[kk * 4 + jj] = B[(k0 + kk) + (j0 + jj) * ldb];
-                    }
-                }
-                Rgemm_block_4x4_kernel(A_block, B_block, C_block);
+                const dd_real *A_block_ptr = &A[i0 + k0 * lda];
+                const dd_real *B_block_ptr = &B[k0 + j0 * ldb];
+                Rgemm_block_4x4_kernel(A_block_ptr, lda, B_block_ptr, ldb, C_block);
             }
             for (mplapackint ii = 0; ii < 4; ++ii) {
                 for (mplapackint jj = 0; jj < 4; ++jj) {
