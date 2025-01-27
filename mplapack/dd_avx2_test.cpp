@@ -196,6 +196,46 @@ do {                                                             \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
 } while (0)
 
+#define QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, B, C)        \
+do {                                                             \
+    __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);             \
+    __m256d alpha_lo = _mm256_set1_pd((alpha).x[1]);             \
+    __m256d b_hi = _mm256_setr_pd(                               \
+        (B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);     \
+    __m256d b_lo = _mm256_setr_pd(                               \
+        (B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);     \
+    __m256d c_hi = _mm256_setr_pd(                               \
+        (C)[0].x[0], (C)[1].x[0], (C)[2].x[0], (C)[3].x[0]);     \
+    __m256d c_lo = _mm256_setr_pd(                               \
+        (C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);     \
+                                                                 \
+    __m256d p = _mm256_mul_pd(alpha_hi, b_lo);                   \
+    __m256d q = _mm256_mul_pd(alpha_lo, b_hi);                   \
+    __m256d t = _mm256_add_pd(p, q);                             \
+                                                                 \
+    __m256d d_hi = _mm256_fmadd_pd(alpha_hi, b_hi, t);           \
+    __m256d e = _mm256_fmsub_pd(alpha_hi, b_hi, d_hi);           \
+    __m256d d_lo = _mm256_add_pd(e, t);                          \
+                                                                 \
+    __m256d s = _mm256_add_pd(d_hi, c_hi);                       \
+    __m256d v = _mm256_sub_pd(s, d_hi);                          \
+    e = _mm256_add_pd(                                           \
+        _mm256_sub_pd(d_hi, _mm256_sub_pd(s, v)),                \
+        _mm256_sub_pd(c_hi, v)                                   \
+        );                                                       \
+                                                                 \
+    e = _mm256_add_pd(e, _mm256_add_pd(d_lo, c_lo));             \
+                                                                 \
+    __m256d s_new = _mm256_add_pd(s, e);                         \
+    __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
+                                                                 \
+    __m256d res_lo = _mm256_unpacklo_pd(s_new, e_new);           \
+    __m256d res_hi = _mm256_unpackhi_pd(s_new, e_new);           \
+                                                                 \
+    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
+    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
+} while (0)
+
 // clang-format on
 
 int main() {
@@ -322,6 +362,58 @@ int main() {
                 std::cerr << "alpha: hi = " << alpha.x[0] << ", lo = " << alpha.x[1] << std::endl;
                 std::cerr << "A[" << i << "]: "
                           << "hi = " << A[i].x[0] << ", lo = " << A[i].x[1] << std::endl;
+                std::cerr << "B[" << i << "]: "
+                          << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << std::endl;
+                std::cerr << "C[" << i << "] (AVX256): "
+                          << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << std::endl;
+                std::cerr << "D[" << i << "] (Direct): "
+                          << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << std::endl;
+                std::cerr << "Absolute difference: hi = " << abs_diff_hi << ", lo = " << abs_diff_lo << std::endl;
+                std::cerr << std::endl;
+            }
+        }
+
+        if (!error_found) {
+            std::cout << "Test #" << test + 1 << " passed without errors." << std::endl;
+        }
+    }
+
+    for (int test = 0; test < 100; ++test) {
+        std::cout << "Test #" << test + 1 << ": alpha MAD test C <- alpha * B + C" << std::endl;
+
+        dd_real alpha;
+        dd_real B[4], C[4], Corg[4], D[4];
+
+        for (int i = 0; i < 4; ++i) {
+            double upper = dist(gen);
+            double lower = dist(gen) * 1e-15;
+            QUICK_TWO_SUM(upper, lower, B[i].x[0], B[i].x[1]);
+
+            upper = dist(gen);
+            lower = dist(gen) * 1e-15;
+            QUICK_TWO_SUM(upper, lower, C[i].x[0], C[i].x[1]);
+            Corg[i] = C[i];
+        }
+
+        double upper = dist(gen);
+        double lower = dist(gen) * 1e-15;
+        QUICK_TWO_SUM(upper, lower, alpha.x[0], alpha.x[1]);
+
+        QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, B, C);
+
+        for (int i = 0; i < 4; ++i) {
+            D[i] = alpha * B[i] + Corg[i];
+        }
+
+        bool error_found = false;
+        for (int i = 0; i < 4; ++i) {
+            double abs_diff_hi = std::fabs(C[i].x[0] - D[i].x[0]);
+            double abs_diff_lo = std::fabs(C[i].x[1] - D[i].x[1]);
+
+            if (abs_diff_hi > 1e-20 || abs_diff_lo > 1e-20) {
+                error_found = true;
+                std::cerr << "Error detected!" << std::endl;
+                std::cerr << "alpha: hi = " << alpha.x[0] << ", lo = " << alpha.x[1] << std::endl;
                 std::cerr << "B[" << i << "]: "
                           << "hi = " << B[i].x[0] << ", lo = " << B[i].x[1] << std::endl;
                 std::cerr << "C[" << i << "] (AVX256): "

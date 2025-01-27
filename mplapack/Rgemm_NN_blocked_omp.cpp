@@ -40,16 +40,46 @@
 
 #define PREFETCH_DISTANCE 64
 
-static inline void Rgemm_block_4x4_kernel(const dd_real *A_ptr, mplapackint lda, const dd_real *B_ptr, mplapackint ldb, dd_real *C_block) {
-    for (mplapackint ii = 0; ii < 4; ++ii) {
-        for (mplapackint jj = 0; jj < 4; ++jj) {
-            dd_real sum = 0.0;
-            for (mplapackint kk = 0; kk < 4; ++kk) {
-                sum += A_ptr[ii + kk * lda] * B_ptr[kk + jj * ldb];
-            }
-            C_block[ii * 4 + jj] += sum;
-        }
+static inline void Rgemm_block_4x4_kernel(const dd_real &alpha, mplapackint k, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real *C, mplapackint ldc) {
+    dd_real c[4][4] = {0.0};
+    dd_real b[4];
+    dd_real *b_p0 = B;
+    dd_real *b_p1 = B + ldb;
+    dd_real *b_p2 = B + 2 * ldb;
+    dd_real *b_p3 = B + 3 * ldb;
+
+    for (int p = 0; p < k; ++p) {
+        b[0] = *b_p0++;
+        b[1] = *b_p1++;
+        b[2] = *b_p2++;
+        b[3] = *b_p3++;
+
+        QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[0], b, c[0]);
+        QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[1], b, c[1]);
+        QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[2], b, c[2]);
+        QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[3], b, c[3]);
+
+        A += lda;
     }
+    C[0 + 0 * ldc] += alpha * c[0][0];
+    C[0 + 1 * ldc] += alpha * c[0][1];
+    C[0 + 2 * ldc] += alpha * c[0][2];
+    C[0 + 3 * ldc] += alpha * c[0][3];
+
+    C[1 + 0 * ldc] += alpha * c[1][0];
+    C[1 + 1 * ldc] += alpha * c[1][1];
+    C[1 + 2 * ldc] += alpha * c[1][2];
+    C[1 + 3 * ldc] += alpha * c[1][3];
+
+    C[2 + 0 * ldc] += alpha * c[2][0];
+    C[2 + 1 * ldc] += alpha * c[2][1];
+    C[2 + 2 * ldc] += alpha * c[2][2];
+    C[2 + 3 * ldc] += alpha * c[2][3];
+
+    C[3 + 0 * ldc] += alpha * c[3][0];
+    C[3 + 1 * ldc] += alpha * c[3][1];
+    C[3 + 2 * ldc] += alpha * c[3][2];
+    C[3 + 3 * ldc] += alpha * c[3][3];
 }
 
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
@@ -80,17 +110,7 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
 #endif
     for (mplapackint j0 = 0; j0 < n; j0 += 4) {
         for (mplapackint i0 = 0; i0 < m; i0 += 4) {
-            dd_real C_block[16] = {0};
-            for (mplapackint k0 = 0; k0 < k; k0 += 4) {
-                const dd_real *A_block_ptr = &A[i0 + k0 * lda];
-                const dd_real *B_block_ptr = &B[k0 + j0 * ldb];
-                Rgemm_block_4x4_kernel(A_block_ptr, lda, B_block_ptr, ldb, C_block);
-            }
-            for (mplapackint ii = 0; ii < 4; ++ii) {
-                for (mplapackint jj = 0; jj < 4; ++jj) {
-                    C[i0 + ii + (j0 + jj) * ldc] += alpha * C_block[ii * 4 + jj];
-                }
-            }
+            Rgemm_block_4x4_kernel(alpha, k, &A[i0 + 0 * lda], lda, &B[0 + j0 * ldb], ldb, &C[i0 + j0 * ldc], ldc);
         }
     }
 }

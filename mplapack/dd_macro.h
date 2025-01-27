@@ -191,4 +191,44 @@ do {                                                             \
     _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
     _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
 } while (0)
+
+#define QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, B, C)        \
+do {                                                             \
+    __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);             \
+    __m256d alpha_lo = _mm256_set1_pd((alpha).x[1]);             \
+    __m256d b_hi = _mm256_setr_pd(                               \
+        (B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);     \
+    __m256d b_lo = _mm256_setr_pd(                               \
+        (B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);     \
+    __m256d c_hi = _mm256_setr_pd(                               \
+        (C)[0].x[0], (C)[1].x[0], (C)[2].x[0], (C)[3].x[0]);     \
+    __m256d c_lo = _mm256_setr_pd(                               \
+        (C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);     \
+                                                                 \
+    __m256d p = _mm256_mul_pd(alpha_hi, b_lo);                   \
+    __m256d q = _mm256_mul_pd(alpha_lo, b_hi);                   \
+    __m256d t = _mm256_add_pd(p, q);                             \
+                                                                 \
+    __m256d d_hi = _mm256_fmadd_pd(alpha_hi, b_hi, t);           \
+    __m256d e = _mm256_fmsub_pd(alpha_hi, b_hi, d_hi);           \
+    __m256d d_lo = _mm256_add_pd(e, t);                          \
+                                                                 \
+    __m256d s = _mm256_add_pd(d_hi, c_hi);                       \
+    __m256d v = _mm256_sub_pd(s, d_hi);                          \
+    e = _mm256_add_pd(                                           \
+        _mm256_sub_pd(d_hi, _mm256_sub_pd(s, v)),                \
+        _mm256_sub_pd(c_hi, v)                                   \
+        );                                                       \
+                                                                 \
+    e = _mm256_add_pd(e, _mm256_add_pd(d_lo, c_lo));             \
+                                                                 \
+    __m256d s_new = _mm256_add_pd(s, e);                         \
+    __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
+                                                                 \
+    __m256d res_lo = _mm256_unpacklo_pd(s_new, e_new);           \
+    __m256d res_hi = _mm256_unpackhi_pd(s_new, e_new);           \
+                                                                 \
+    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
+    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
+} while (0)
 // clang-format on
