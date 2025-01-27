@@ -54,9 +54,16 @@ static inline void Rgemm_block_4x4_kernel(const dd_real &alpha, mplapackint k, d
         b[2] = *b_p2++;
         b[3] = *b_p3++;
 
+        // c[0][0,1,2,3] += A[0] * b[0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[0], b, c[0]);
+
+        // c[1][0,1,2,3] += A[1] * b[0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[1], b, c[1]);
+
+        // c[2][0,1,2,3] += A[2] * b[0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[2], b, c[2]);
+
+        // c[3][0,1,2,3] += A[3] * b[0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[3], b, c[3]);
 
         A += lda;
