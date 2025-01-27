@@ -59,7 +59,7 @@ do {                                                                 \
     TWO_SUM((A).x[0], (B).x[0], s1, s2);                             \
     TWO_SUM((A).x[1], (B).x[1], t1, t2);                             \
     s2 += t1;                                                        \
-    s11 = s1;                                                        \ 
+    s11 = s1;                                                        \
     QUICK_TWO_SUM(s11, s2, s1, s2);                                  \
     s2 += t2;                                                        \
     QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                       \
@@ -240,8 +240,7 @@ int main() {
                           << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << std::endl;
                 std::cerr << "D[" << i << "] (Direct): "
                           << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << std::endl;
-                std::cerr << "Absolute difference: hi = " << abs_diff_hi
-                          << ", lo = " << abs_diff_lo << std::endl;
+                std::cerr << "Absolute difference: hi = " << abs_diff_hi << ", lo = " << abs_diff_lo << std::endl;
                 std::cerr << std::endl;
             }
         }
@@ -251,7 +250,7 @@ int main() {
     }
 
     {
-        std::cout << "Multiplication test C = A * B" <<std::endl;
+        std::cout << "Multiplication test C = A * B" << std::endl;
         dd_real A[4], B[4], C[4], D[4];
         for (int i = 0; i < 4; ++i) {
             double upper = dist(gen);
@@ -329,8 +328,7 @@ int main() {
                           << "hi = " << C[i].x[0] << ", lo = " << C[i].x[1] << std::endl;
                 std::cerr << "D[" << i << "] (Direct): "
                           << "hi = " << D[i].x[0] << ", lo = " << D[i].x[1] << std::endl;
-                std::cerr << "Absolute difference: hi = " << abs_diff_hi
-                          << ", lo = " << abs_diff_lo << std::endl;
+                std::cerr << "Absolute difference: hi = " << abs_diff_hi << ", lo = " << abs_diff_lo << std::endl;
                 std::cerr << std::endl;
             }
         }
