@@ -40,14 +40,14 @@
 
 #define PREFETCH_DISTANCE 64
 
-static inline void Rgemm_block_4x4_kernel(const dd_real (&A_block)[4][4], const dd_real (&B_block)[4][4], dd_real (&C_block)[4][4]) {
+static inline void Rgemm_block_4x4_kernel(const dd_real (&A_block)[16], const dd_real (&B_block)[16], dd_real (&C_block)[16]) {
     for (mplapackint ii = 0; ii < 4; ++ii) {
         for (mplapackint jj = 0; jj < 4; ++jj) {
-            dd_real sum = C_block[ii][jj];
+            dd_real sum = C_block[ii * 4 + jj];
             for (mplapackint kk = 0; kk < 4; ++kk) {
-                sum += A_block[ii][kk] * B_block[kk][jj];
+                sum += A_block[ii * 4 + kk] * B_block[kk * 4 + jj];
             }
-            C_block[ii][jj] = sum;
+            C_block[ii * 4 + jj] = sum;
         }
     }
 }
@@ -80,24 +80,24 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
 #endif
     for (mplapackint j0 = 0; j0 < n; j0 += 4) {
         for (mplapackint i0 = 0; i0 < m; i0 += 4) {
-            dd_real C_block[4][4] = {{0}};
+            dd_real C_block[16] = {0};
             for (mplapackint k0 = 0; k0 < k; k0 += 4) {
-                dd_real A_block[4][4], B_block[4][4];
+                dd_real A_block[16], B_block[16];
                 for (mplapackint ii = 0; ii < 4; ++ii) {
                     for (mplapackint kk = 0; kk < 4; ++kk) {
-                        A_block[ii][kk] = A[(i0 + ii) + (k0 + kk) * lda];
+                        A_block[ii * 4 + kk] = A[(i0 + ii) + (k0 + kk) * lda];
                     }
                 }
                 for (mplapackint kk = 0; kk < 4; ++kk) {
                     for (mplapackint jj = 0; jj < 4; ++jj) {
-                        B_block[kk][jj] = B[(k0 + kk) + (j0 + jj) * ldb];
+                        B_block[kk * 4 + jj] = B[(k0 + kk) + (j0 + jj) * ldb];
                     }
                 }
                 Rgemm_block_4x4_kernel(A_block, B_block, C_block);
             }
             for (mplapackint ii = 0; ii < 4; ++ii) {
                 for (mplapackint jj = 0; jj < 4; ++jj) {
-                    C[i0 + ii + (j0 + jj) * ldc] += alpha * C_block[ii][jj];
+                    C[i0 + ii + (j0 + jj) * ldc] += alpha * C_block[ii * 4 + jj];
                 }
             }
         }
