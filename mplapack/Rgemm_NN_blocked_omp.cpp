@@ -54,20 +54,31 @@ static inline void Rgemm_block_4x4_kernel(const dd_real &alpha, mplapackint k, d
         b[2] = *b_p2++;
         b[3] = *b_p3++;
 
-        // c[0][0,1,2,3] += A[0] * b[0,1,2,3]
+        // c[0][0,1,2,3] += A[0][p] * b[p][0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[0], b, c[0]);
 
-        // c[1][0,1,2,3] += A[1] * b[0,1,2,3]
+        // c[1][0,1,2,3] += A[1][p] * b[p][0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[1], b, c[1]);
 
-        // c[2][0,1,2,3] += A[2] * b[0,1,2,3]
+        // c[2][0,1,2,3] += A[2][p] * b[p][0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[2], b, c[2]);
 
-        // c[3][0,1,2,3] += A[3] * b[0,1,2,3]
+        // c[3][0,1,2,3] += A[3][p] * b[p][0,1,2,3]
         QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(A[3], b, c[3]);
 
         A += lda;
     }
+/*
+    b[0] = C[0 + 0 * ldc];
+    b[1] = C[0 + 1 * ldc];
+    b[2] = C[0 + 2 * ldc];
+    b[3] = C[0 + 3 * ldc];
+    QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, c[0], b);
+    C[0 + 0 * ldc] = b[0];
+    C[0 + 1 * ldc] = b[1];
+    C[0 + 2 * ldc] = b[2];
+    C[0 + 3 * ldc] = b[3];
+*/
     C[0 + 0 * ldc] += alpha * c[0][0];
     C[0 + 1 * ldc] += alpha * c[0][1];
     C[0 + 2 * ldc] += alpha * c[0][2];
