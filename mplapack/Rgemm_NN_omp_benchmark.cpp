@@ -1,9 +1,9 @@
-#include <iostream>
-#include <vector>
 #include <chrono>
 #include <cmath>
+#include <iostream>
 #include <mpblas_dd.h>
 #include <random>
+#include <vector>
 
 #ifdef _OPENMP
 #include <omp.h>

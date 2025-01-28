@@ -26,10 +26,10 @@
  *
  */
 
-#include <iostream>
-#include <random>
-#include <qd/dd_real.h>
 #include <immintrin.h>
+#include <iostream>
+#include <qd/dd_real.h>
+#include <random>
 
 #define __FMA(a, b, c) __builtin_fma((a), (b), (c))
 

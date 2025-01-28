@@ -27,68 +27,69 @@
  */
 
 #include <iostream>
-#include <random>
 #include <qd/dd_real.h>
+#include <random>
 
 #define __FMA(a, b, c) __builtin_fma((a), (b), (c))
 
-#define TWO_SUM(a, b, s, e)                        \
-do {                                               \
-    (s) = (a) + (b);                               \
-    double v = (s) - (a);                          \
-    (e) = ((a) - ((s) - v)) + ((b) - v);           \
-} while (0)
+#define TWO_SUM(a, b, s, e)                                                                        \
+    do {                                                                                           \
+        (s) = (a) + (b);                                                                           \
+        double v = (s) - (a);                                                                      \
+        (e) = ((a) - ((s)-v)) + ((b)-v);                                                           \
+    } while (0)
 
-#define QUICK_TWO_SUM(a, b, s, e)                \
-do {                                             \
-    (s) = (a) + (b);                             \
-    (e) = (b) - ((s) - (a));                     \
-} while (0)
+#define QUICK_TWO_SUM(a, b, s, e)                                                                  \
+    do {                                                                                           \
+        (s) = (a) + (b);                                                                           \
+        (e) = (b) - ((s) - (a));                                                                   \
+    } while (0)
 
-#define TWO_PROD_FMA(a, b, p, e)                \
-do {                                            \
-    (p) = (a) * (b);                            \
-    (e) = __FMA((a), (b), -(p));                \
-} while (0)
+#define TWO_PROD_FMA(a, b, p, e)                                                                   \
+    do {                                                                                           \
+        (p) = (a) * (b);                                                                           \
+        (e) = __FMA((a), (b), -(p));                                                               \
+    } while (0)
 
-#define QUAD_ADD_IEEE(A, B, C)                                    \
-do {                                                              \
-    double s1, s11, s2, t1, t2;                                   \
-    TWO_SUM((A).x[0], (B).x[0], s1, s2);                          \
-    TWO_SUM((A).x[1], (B).x[1], t1, t2);                          \
-    s2 += t1;                                                     \
-    s11 = s1;/*workarounds the side effect of the macro expansion.*/\ 
-    QUICK_TWO_SUM(s11, s2, s1, s2);                               \
-    s2 += t2;                                                     \
-    QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                    \
-} while (0)
+#define QUAD_ADD_IEEE(A, B, C)                                                                     \
+    do {                                                                                           \
+        double s1, s11, s2, t1, t2;                                                                \
+        TWO_SUM((A).x[0], (B).x[0], s1, s2);                                                       \
+        TWO_SUM((A).x[1], (B).x[1], t1, t2);                                                       \
+        s2 += t1;                                                                                  \
+        s11 = s1; /*workarounds the side effect of the macro expansion.*/                          \
+        QUICK_TWO_SUM(s11, s2, s1, s2);                                                            \
+        s2 += t2;                                                                                  \
+        QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                                                 \
+    } while (0)
 
-#define QUAD_ADD_SLOPPY(A, B, C)                                 \
-do {                                                             \
-    double s, e;                                                 \
-    TWO_SUM((A).x[0], (B).x[0], s, e);                           \
-    e += (A).x[1] + (B).x[1];                                    \
-    QUICK_TWO_SUM(s, e, (C).x[0], (C).x[1]);                     \
-} while (0)
+#define QUAD_ADD_SLOPPY(A, B, C)                                                                   \
+    do {                                                                                           \
+        double s, e;                                                                               \
+        TWO_SUM((A).x[0], (B).x[0], s, e);                                                         \
+        e += (A).x[1] + (B).x[1];                                                                  \
+        QUICK_TWO_SUM(s, e, (C).x[0], (C).x[1]);                                                   \
+    } while (0)
 
-#define QUAD_MUL(A, B, C)                                        \
-do {                                                             \
-    double p1, p2;                                               \
-    TWO_PROD_FMA((A).x[0], (B).x[0], p1, p2);                    \
-    p2 += ((A).x[0] * (B).x[1]) + ((A).x[1] * (B).x[0]);         \
-    QUICK_TWO_SUM(p1, p2, (C).x[0], (C).x[1]);                   \
-} while (0)
+#define QUAD_MUL(A, B, C)                                                                          \
+    do {                                                                                           \
+        double p1, p2;                                                                             \
+        TWO_PROD_FMA((A).x[0], (B).x[0], p1, p2);                                                  \
+        p2 += ((A).x[0] * (B).x[1]) + ((A).x[1] * (B).x[0]);                                       \
+        QUICK_TWO_SUM(p1, p2, (C).x[0], (C).x[1]);                                                 \
+    } while (0)
 
-#define QUAD_MUL_SLOPPY(A, B, C)                                  \
-do {                                                              \
-    double p, q, t, e;                                            \
-    p = (A).x[0] * (B).x[1];                                      \
-    q = (A).x[1] * (B).x[0];                                      \
-    t = p + q;                                                    \
-    (C).x[0] = __FMA((A).x[0], (B).x[0], t);                      \
-    e = __FMA((A).x[0], (B).x[0], -(C).x[0]);                     \
-    (C).x[1] = e + t;                                             \
-} while (0)
+#define QUAD_MUL_SLOPPY(A, B, C)                                                                   \
+    do {                                                                                           \
+        double p, q, t, e;                                                                         \
+        p = (A).x[0] * (B).x[1];                                                                   \
+        q = (A).x[1] * (B).x[0];                                                                   \
+        t = p + q;                                                                                 \
+        (C).x[0] = __FMA((A).x[0], (B).x[0], t);                                                   \
+        e = __FMA((A).x[0], (B).x[0], -(C).x[0]);                                                  \
+        (C).x[1] = e + t;                                                                          \
+    } while (0)
+// macro clang off
 
 int main() {
     using namespace std;
@@ -129,5 +130,3 @@ int main() {
 
     return 0;
 }
-
-

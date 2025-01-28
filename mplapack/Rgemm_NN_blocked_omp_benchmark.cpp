@@ -1,9 +1,9 @@
-#include <iostream>
-#include <vector>
 #include <chrono>
 #include <cmath>
+#include <iostream>
 #include <mpblas_dd.h>
 #include <random>
+#include <vector>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -70,7 +70,7 @@ int main() {
 #else
     std::cout << "OpenMP is not enabled.\n";
 #endif
-    std::vector<mplapackint> sizes = {64, 128, 256, 512, 768, 1000, 1024, 2048};
+    std::vector<mplapackint> sizes = {128, 256, 512, 768, 1000, 1024, 2048};
 
 #ifdef _OPENMP
     int num_cores = omp_get_num_procs();
@@ -86,6 +86,8 @@ int main() {
     for (auto m : sizes) {
         for (auto n : sizes) {
             for (auto k : sizes) {
+                if (!(m == n && n == k))
+                    continue; // for debugging purpose
                 double flop_count = static_cast<double>(m) * n * (2.0 * k + 1);
 
                 std::vector<dd_real> A(m * k);

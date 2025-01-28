@@ -31,8 +31,8 @@
 #include <omp.h>
 #endif
 
-#include <immintrin.h>
 #include "dd_macro.h"
+#include <immintrin.h>
 
 #define BLOCK_M 4
 #define BLOCK_N 4
@@ -68,17 +68,17 @@ static inline void Rgemm_block_4x4_kernel(const dd_real &alpha, mplapackint k, d
 
         A += lda;
     }
-/*
-    b[0] = C[0 + 0 * ldc];
-    b[1] = C[0 + 1 * ldc];
-    b[2] = C[0 + 2 * ldc];
-    b[3] = C[0 + 3 * ldc];
-    QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, c[0], b);
-    C[0 + 0 * ldc] = b[0];
-    C[0 + 1 * ldc] = b[1];
-    C[0 + 2 * ldc] = b[2];
-    C[0 + 3 * ldc] = b[3];
-*/
+    /*
+        b[0] = C[0 + 0 * ldc];
+        b[1] = C[0 + 1 * ldc];
+        b[2] = C[0 + 2 * ldc];
+        b[3] = C[0 + 3 * ldc];
+        QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, c[0], b);
+        C[0 + 0 * ldc] = b[0];
+        C[0 + 1 * ldc] = b[1];
+        C[0 + 2 * ldc] = b[2];
+        C[0 + 3 * ldc] = b[3];
+    */
     C[0 + 0 * ldc] += alpha * c[0][0];
     C[0 + 1 * ldc] += alpha * c[0][1];
     C[0 + 2 * ldc] += alpha * c[0][2];

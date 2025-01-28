@@ -29,206 +29,180 @@
 
 #define __FMA(a, b, c) __builtin_fma((a), (b), (c))
 
-// clang-format off
-#define TWO_SUM(a, b, s, e)                        \
-do {                                               \
-    (s) = (a) + (b);                               \
-    double v = (s) - (a);                          \
-    (e) = ((a) - ((s) - v)) + ((b) - v);           \
-} while (0)
+// macro clang on
+#define TWO_SUM(a, b, s, e)                                                                        \
+    do {                                                                                           \
+        (s) = (a) + (b);                                                                           \
+        double v = (s) - (a);                                                                      \
+        (e) = ((a) - ((s)-v)) + ((b)-v);                                                           \
+    } while (0)
 
-#define QUICK_TWO_SUM(a, b, s, e)                \
-do {                                             \
-    (s) = (a) + (b);                             \
-    (e) = (b) - ((s) - (a));                     \
-} while (0)
+#define QUICK_TWO_SUM(a, b, s, e)                                                                  \
+    do {                                                                                           \
+        (s) = (a) + (b);                                                                           \
+        (e) = (b) - ((s) - (a));                                                                   \
+    } while (0)
 
-#define TWO_PROD_FMA(a, b, p, e)                \
-do {                                            \
-    (p) = (a) * (b);                            \
-    (e) = __FMA((a), (b), -(p));                \
-} while (0)
+#define TWO_PROD_FMA(a, b, p, e)                                                                   \
+    do {                                                                                           \
+        (p) = (a) * (b);                                                                           \
+        (e) = __FMA((a), (b), -(p));                                                               \
+    } while (0)
 
-#define QUAD_ADD_IEEE(A, B, C)                                       \
-do {                                                                 \
-    double s1, s11, s2, t1, t2;                                      \
-    TWO_SUM((A).x[0], (B).x[0], s1, s2);                             \
-    TWO_SUM((A).x[1], (B).x[1], t1, t2);                             \
-    s2 += t1;                                                        \
-    s11 = s1;                                                        \
-    QUICK_TWO_SUM(s11, s2, s1, s2);                                  \
-    s2 += t2;                                                        \
-    QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                       \
-} while (0)
+#define QUAD_ADD_IEEE(A, B, C)                                                                     \
+    do {                                                                                           \
+        double s1, s11, s2, t1, t2;                                                                \
+        TWO_SUM((A).x[0], (B).x[0], s1, s2);                                                       \
+        TWO_SUM((A).x[1], (B).x[1], t1, t2);                                                       \
+        s2 += t1;                                                                                  \
+        s11 = s1;                                                                                  \
+        QUICK_TWO_SUM(s11, s2, s1, s2);                                                            \
+        s2 += t2;                                                                                  \
+        QUICK_TWO_SUM(s1, s2, (C).x[0], (C).x[1]);                                                 \
+    } while (0)
 
-#define QUAD_ADD_SLOPPY(A, B, C)                                 \
-do {                                                             \
-    double s, e;                                                 \
-    TWO_SUM((A).x[0], (B).x[0], s, e);                           \
-    e += (A).x[1] + (B).x[1];                                    \
-    QUICK_TWO_SUM(s, e, (C).x[0], (C).x[1]);                     \
-} while (0)
+#define QUAD_ADD_SLOPPY(A, B, C)                                                                   \
+    do {                                                                                           \
+        double s, e;                                                                               \
+        TWO_SUM((A).x[0], (B).x[0], s, e);                                                         \
+        e += (A).x[1] + (B).x[1];                                                                  \
+        QUICK_TWO_SUM(s, e, (C).x[0], (C).x[1]);                                                   \
+    } while (0)
 
-#define QUAD_ADD_4_SLOPPY_AVX256(A, B, C)                        \
-do {                                                             \
-    __m256d a_hi = _mm256_setr_pd((A)[0].x[0], (A)[1].x[0],      \
-                                 (A)[2].x[0], (A)[3].x[0]);      \
-    __m256d a_lo = _mm256_setr_pd((A)[0].x[1], (A)[1].x[1],      \
-                                 (A)[2].x[1], (A)[3].x[1]);      \
-    __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0],      \
-                                 (B)[2].x[0], (B)[3].x[0]);      \
-    __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1],      \
-                                 (B)[2].x[1], (B)[3].x[1]);      \
-    __m256d s = _mm256_add_pd(a_hi, b_hi);                       \
-    __m256d v = _mm256_sub_pd(s, a_hi);                          \
-    __m256d e = _mm256_add_pd(                                   \
-        _mm256_sub_pd(a_hi, _mm256_sub_pd(s, v)),                \
-        _mm256_sub_pd(b_hi, v)                                   \
-    );                                                           \
-                                                                 \
-    e = _mm256_add_pd(e, _mm256_add_pd(a_lo, b_lo));             \
-                                                                 \
-    __m256d s_new = _mm256_add_pd(s, e);                         \
-    __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
-                                                                 \
-    __m256d c_lo = _mm256_unpacklo_pd(s_new, e_new);             \
-    __m256d c_hi = _mm256_unpackhi_pd(s_new, e_new);             \
-                                                                 \
-    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
-    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
-} while(0)
+#define QUAD_ADD_4_SLOPPY_AVX256(A, B, C)                                                          \
+    do {                                                                                           \
+        __m256d a_hi = _mm256_setr_pd((A)[0].x[0], (A)[1].x[0], (A)[2].x[0], (A)[3].x[0]);         \
+        __m256d a_lo = _mm256_setr_pd((A)[0].x[1], (A)[1].x[1], (A)[2].x[1], (A)[3].x[1]);         \
+        __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);         \
+        __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);         \
+        __m256d s = _mm256_add_pd(a_hi, b_hi);                                                     \
+        __m256d v = _mm256_sub_pd(s, a_hi);                                                        \
+        __m256d e =                                                                                \
+            _mm256_add_pd(_mm256_sub_pd(a_hi, _mm256_sub_pd(s, v)), _mm256_sub_pd(b_hi, v));       \
+                                                                                                   \
+        e = _mm256_add_pd(e, _mm256_add_pd(a_lo, b_lo));                                           \
+                                                                                                   \
+        __m256d s_new = _mm256_add_pd(s, e);                                                       \
+        __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));                                 \
+                                                                                                   \
+        __m256d c_lo = _mm256_unpacklo_pd(s_new, e_new);                                           \
+        __m256d c_hi = _mm256_unpackhi_pd(s_new, e_new);                                           \
+                                                                                                   \
+        _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);                                    \
+        _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);                                    \
+    } while (0)
 
-#define QUAD_MUL(A, B, C)                                        \
-do {                                                             \
-    double p1, p2;                                               \
-    TWO_PROD_FMA((A).x[0], (B).x[0], p1, p2);                    \
-    p2 += ((A).x[0] * (B).x[1]) + ((A).x[1] * (B).x[0]);         \
-    QUICK_TWO_SUM(p1, p2, (C).x[0], (C).x[1]);                   \
-} while (0)
+#define QUAD_MUL(A, B, C)                                                                          \
+    do {                                                                                           \
+        double p1, p2;                                                                             \
+        TWO_PROD_FMA((A).x[0], (B).x[0], p1, p2);                                                  \
+        p2 += ((A).x[0] * (B).x[1]) + ((A).x[1] * (B).x[0]);                                       \
+        QUICK_TWO_SUM(p1, p2, (C).x[0], (C).x[1]);                                                 \
+    } while (0)
 
-#define QUAD_MUL_SLOPPY(A, B, C)                                  \
-do {                                                              \
-    double p, q, t, e;                                            \
-    p = (A).x[0] * (B).x[1];                                      \
-    q = (A).x[1] * (B).x[0];                                      \
-    t = p + q;                                                    \
-    (C).x[0] = __FMA((A).x[0], (B).x[0], t);                      \
-    e = __FMA((A).x[0], (B).x[0], -(C).x[0]);                     \
-    (C).x[1] = e + t;                                             \
-} while (0)
+#define QUAD_MUL_SLOPPY(A, B, C)                                                                   \
+    do {                                                                                           \
+        double p, q, t, e;                                                                         \
+        p = (A).x[0] * (B).x[1];                                                                   \
+        q = (A).x[1] * (B).x[0];                                                                   \
+        t = p + q;                                                                                 \
+        (C).x[0] = __FMA((A).x[0], (B).x[0], t);                                                   \
+        e = __FMA((A).x[0], (B).x[0], -(C).x[0]);                                                  \
+        (C).x[1] = e + t;                                                                          \
+    } while (0)
 
-#define QUAD_MUL_4_SLOPPY_AVX256(A, B, C)                        \
-do {                                                             \
-    __m256d a_hi = _mm256_setr_pd(                               \
-        (A)[0].x[0], (A)[1].x[0], (A)[2].x[0], (A)[3].x[0]);     \
-    __m256d a_lo = _mm256_setr_pd(                               \
-        (A)[0].x[1], (A)[1].x[1], (A)[2].x[1], (A)[3].x[1]);     \
-    __m256d b_hi = _mm256_setr_pd(                               \
-        (B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);     \
-    __m256d b_lo = _mm256_setr_pd(                               \
-        (B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);     \
-                                                                 \
-    __m256d p = _mm256_mul_pd(a_hi, b_lo);                       \
-    __m256d q = _mm256_mul_pd(a_lo, b_hi);                       \
-    __m256d t = _mm256_add_pd(p, q);                             \
-                                                                 \
-    __m256d c_hi = _mm256_fmadd_pd(a_hi, b_hi, t);               \
-    __m256d e = _mm256_fmsub_pd(a_hi, b_hi, c_hi);               \
-    __m256d c_lo = _mm256_add_pd(e, t);                          \
-                                                                 \
-    __m256d res_lo = _mm256_unpacklo_pd(c_hi, c_lo);             \
-    __m256d res_hi = _mm256_unpackhi_pd(c_hi, c_lo);             \
-                                                                 \
-    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
-    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
-} while(0)
+#define QUAD_MUL_4_SLOPPY_AVX256(A, B, C)                                                          \
+    do {                                                                                           \
+        __m256d a_hi = _mm256_setr_pd((A)[0].x[0], (A)[1].x[0], (A)[2].x[0], (A)[3].x[0]);         \
+        __m256d a_lo = _mm256_setr_pd((A)[0].x[1], (A)[1].x[1], (A)[2].x[1], (A)[3].x[1]);         \
+        __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);         \
+        __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);         \
+                                                                                                   \
+        __m256d p = _mm256_mul_pd(a_hi, b_lo);                                                     \
+        __m256d q = _mm256_mul_pd(a_lo, b_hi);                                                     \
+        __m256d t = _mm256_add_pd(p, q);                                                           \
+                                                                                                   \
+        __m256d c_hi = _mm256_fmadd_pd(a_hi, b_hi, t);                                             \
+        __m256d e = _mm256_fmsub_pd(a_hi, b_hi, c_hi);                                             \
+        __m256d c_lo = _mm256_add_pd(e, t);                                                        \
+                                                                                                   \
+        __m256d res_lo = _mm256_unpacklo_pd(c_hi, c_lo);                                           \
+        __m256d res_hi = _mm256_unpackhi_pd(c_hi, c_lo);                                           \
+                                                                                                   \
+        _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);                                  \
+        _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);                                  \
+    } while (0)
 
-#define QUAD_alpha_MAD_4_SLOPPY_AVX256(alpha, A, B, C)           \
-do {                                                             \
-    __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);             \
-    __m256d alpha_lo = _mm256_set1_pd((alpha).x[1]);             \
-    __m256d a_hi = _mm256_setr_pd(                               \
-        (A)[0].x[0], (A)[1].x[0], (A)[2].x[0], (A)[3].x[0]);     \
-    __m256d a_lo = _mm256_setr_pd(                               \
-        (A)[0].x[1], (A)[1].x[1], (A)[2].x[1], (A)[3].x[1]);     \
-    __m256d b_hi = _mm256_setr_pd(                               \
-        (B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);     \
-    __m256d b_lo = _mm256_setr_pd(                               \
-        (B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);     \
-    __m256d c_hi = _mm256_setr_pd(                               \
-        (C)[0].x[0], (C)[1].x[0], (C)[2].x[0], (C)[3].x[0]);     \
-    __m256d c_lo = _mm256_setr_pd(                               \
-        (C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);     \
-                                                                 \
-    __m256d p = _mm256_mul_pd(alpha_hi, a_lo);                   \
-    p = _mm256_add_pd(p, _mm256_mul_pd(alpha_lo, a_hi));         \
-                                                                 \
-    __m256d q = _mm256_fmadd_pd(alpha_hi, a_hi, p);              \
-    __m256d r = _mm256_fmsub_pd(alpha_hi, a_hi, q);              \
-    __m256d s = _mm256_add_pd(r, p);                             \
-                                                                 \
-    p = _mm256_mul_pd(q, b_lo);                                  \
-    p = _mm256_add_pd(p, _mm256_mul_pd(s, b_hi));                \
-                                                                 \
-    __m256d t = _mm256_fmadd_pd(q, b_hi, p);                     \
-    r = _mm256_fmsub_pd(q, b_hi, t);                             \
-    q = _mm256_add_pd(r, p);                                     \
-                                                                 \
-    p = _mm256_add_pd(c_hi, t);                                  \
-    r = _mm256_sub_pd(p, c_hi);                                  \
-    r = _mm256_add_pd(                                           \
-        _mm256_sub_pd(c_hi, _mm256_sub_pd(p, r)),                \
-        _mm256_sub_pd(t, r)                                      \
-    );                                                           \
-                                                                 \
-    r = _mm256_add_pd(r, _mm256_add_pd(c_lo, q));                \
-    q = _mm256_add_pd(p, r);                                     \
-    s = _mm256_sub_pd(r, _mm256_sub_pd(q, p));                   \
-                                                                 \
-    c_lo = _mm256_unpacklo_pd(q, s);                             \
-    c_hi = _mm256_unpackhi_pd(q, s);                             \
-                                                                 \
-    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);      \
-    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);      \
-} while (0)
+#define QUAD_alpha_MAD_4_SLOPPY_AVX256(alpha, A, B, C)                                             \
+    do {                                                                                           \
+        __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);                                           \
+        __m256d alpha_lo = _mm256_set1_pd((alpha).x[1]);                                           \
+        __m256d a_hi = _mm256_setr_pd((A)[0].x[0], (A)[1].x[0], (A)[2].x[0], (A)[3].x[0]);         \
+        __m256d a_lo = _mm256_setr_pd((A)[0].x[1], (A)[1].x[1], (A)[2].x[1], (A)[3].x[1]);         \
+        __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);         \
+        __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);         \
+        __m256d c_hi = _mm256_setr_pd((C)[0].x[0], (C)[1].x[0], (C)[2].x[0], (C)[3].x[0]);         \
+        __m256d c_lo = _mm256_setr_pd((C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);         \
+                                                                                                   \
+        __m256d p = _mm256_mul_pd(alpha_hi, a_lo);                                                 \
+        p = _mm256_add_pd(p, _mm256_mul_pd(alpha_lo, a_hi));                                       \
+                                                                                                   \
+        __m256d q = _mm256_fmadd_pd(alpha_hi, a_hi, p);                                            \
+        __m256d r = _mm256_fmsub_pd(alpha_hi, a_hi, q);                                            \
+        __m256d s = _mm256_add_pd(r, p);                                                           \
+                                                                                                   \
+        p = _mm256_mul_pd(q, b_lo);                                                                \
+        p = _mm256_add_pd(p, _mm256_mul_pd(s, b_hi));                                              \
+                                                                                                   \
+        __m256d t = _mm256_fmadd_pd(q, b_hi, p);                                                   \
+        r = _mm256_fmsub_pd(q, b_hi, t);                                                           \
+        q = _mm256_add_pd(r, p);                                                                   \
+                                                                                                   \
+        p = _mm256_add_pd(c_hi, t);                                                                \
+        r = _mm256_sub_pd(p, c_hi);                                                                \
+        r = _mm256_add_pd(_mm256_sub_pd(c_hi, _mm256_sub_pd(p, r)), _mm256_sub_pd(t, r));          \
+                                                                                                   \
+        r = _mm256_add_pd(r, _mm256_add_pd(c_lo, q));                                              \
+        q = _mm256_add_pd(p, r);                                                                   \
+        s = _mm256_sub_pd(r, _mm256_sub_pd(q, p));                                                 \
+                                                                                                   \
+        c_lo = _mm256_unpacklo_pd(q, s);                                                           \
+        c_hi = _mm256_unpackhi_pd(q, s);                                                           \
+                                                                                                   \
+        _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], c_lo);                                    \
+        _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], c_hi);                                    \
+    } while (0)
 
-#define QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, B, C)        \
-do {                                                             \
-    __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);             \
-    __m256d alpha_lo = _mm256_set1_pd((alpha).x[1]);             \
-    __m256d b_hi = _mm256_setr_pd(                               \
-        (B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);     \
-    __m256d b_lo = _mm256_setr_pd(                               \
-        (B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);     \
-    __m256d c_hi = _mm256_setr_pd(                               \
-        (C)[0].x[0], (C)[1].x[0], (C)[2].x[0], (C)[3].x[0]);     \
-    __m256d c_lo = _mm256_setr_pd(                               \
-        (C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);     \
-                                                                 \
-    __m256d p = _mm256_mul_pd(alpha_hi, b_lo);                   \
-    __m256d q = _mm256_mul_pd(alpha_lo, b_hi);                   \
-    __m256d t = _mm256_add_pd(p, q);                             \
-                                                                 \
-    __m256d d_hi = _mm256_fmadd_pd(alpha_hi, b_hi, t);           \
-    __m256d e = _mm256_fmsub_pd(alpha_hi, b_hi, d_hi);           \
-    __m256d d_lo = _mm256_add_pd(e, t);                          \
-                                                                 \
-    __m256d s = _mm256_add_pd(d_hi, c_hi);                       \
-    __m256d v = _mm256_sub_pd(s, d_hi);                          \
-    e = _mm256_add_pd(                                           \
-        _mm256_sub_pd(d_hi, _mm256_sub_pd(s, v)),                \
-        _mm256_sub_pd(c_hi, v)                                   \
-        );                                                       \
-                                                                 \
-    e = _mm256_add_pd(e, _mm256_add_pd(d_lo, c_lo));             \
-                                                                 \
-    __m256d s_new = _mm256_add_pd(s, e);                         \
-    __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));   \
-                                                                 \
-    __m256d res_lo = _mm256_unpacklo_pd(s_new, e_new);           \
-    __m256d res_hi = _mm256_unpackhi_pd(s_new, e_new);           \
-                                                                 \
-    _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);    \
-    _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);    \
-} while (0)
-// clang-format on
+#define QUAD_alpha_MAD_4_TYPE1_SLOPPY_AVX256(alpha, B, C)                                          \
+    do {                                                                                           \
+        __m256d alpha_hi = _mm256_set1_pd((alpha).x[0]);                                           \
+        __m256d alpha_lo = _mm256_set1_pd((alpha).x[1]);                                           \
+        __m256d b_hi = _mm256_setr_pd((B)[0].x[0], (B)[1].x[0], (B)[2].x[0], (B)[3].x[0]);         \
+        __m256d b_lo = _mm256_setr_pd((B)[0].x[1], (B)[1].x[1], (B)[2].x[1], (B)[3].x[1]);         \
+        __m256d c_hi = _mm256_setr_pd((C)[0].x[0], (C)[1].x[0], (C)[2].x[0], (C)[3].x[0]);         \
+        __m256d c_lo = _mm256_setr_pd((C)[0].x[1], (C)[1].x[1], (C)[2].x[1], (C)[3].x[1]);         \
+                                                                                                   \
+        __m256d p = _mm256_mul_pd(alpha_hi, b_lo);                                                 \
+        __m256d q = _mm256_mul_pd(alpha_lo, b_hi);                                                 \
+        __m256d t = _mm256_add_pd(p, q);                                                           \
+                                                                                                   \
+        __m256d d_hi = _mm256_fmadd_pd(alpha_hi, b_hi, t);                                         \
+        __m256d e = _mm256_fmsub_pd(alpha_hi, b_hi, d_hi);                                         \
+        __m256d d_lo = _mm256_add_pd(e, t);                                                        \
+                                                                                                   \
+        __m256d s = _mm256_add_pd(d_hi, c_hi);                                                     \
+        __m256d v = _mm256_sub_pd(s, d_hi);                                                        \
+        e = _mm256_add_pd(_mm256_sub_pd(d_hi, _mm256_sub_pd(s, v)), _mm256_sub_pd(c_hi, v));       \
+                                                                                                   \
+        e = _mm256_add_pd(e, _mm256_add_pd(d_lo, c_lo));                                           \
+                                                                                                   \
+        __m256d s_new = _mm256_add_pd(s, e);                                                       \
+        __m256d e_new = _mm256_sub_pd(e, _mm256_sub_pd(s_new, s));                                 \
+                                                                                                   \
+        __m256d res_lo = _mm256_unpacklo_pd(s_new, e_new);                                         \
+        __m256d res_hi = _mm256_unpackhi_pd(s_new, e_new);                                         \
+                                                                                                   \
+        _mm256_storeu2_m128d(&(C)[2].x[0], &(C)[0].x[0], res_lo);                                  \
+        _mm256_storeu2_m128d(&(C)[3].x[0], &(C)[1].x[0], res_hi);                                  \
+    } while (0)
+// macro clang off
