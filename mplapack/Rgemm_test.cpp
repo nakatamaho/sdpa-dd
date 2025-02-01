@@ -102,7 +102,7 @@ int main() {
         }
     }
 
-    dd_real alpha = 1.0;
+    dd_real alpha = dis(gen);
     dd_real beta = dis(gen);
 
     print_matrix("A", A, m, k, lda);
