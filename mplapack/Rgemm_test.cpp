@@ -32,7 +32,7 @@
 
 #include <mpblas_dd.h>
 
-void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
+void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
 
 void print_matrix(const char *name, const dd_real *M, mplapackint rows, mplapackint cols, mplapackint ld) {
     std::cout << name << " (" << rows << " x " << cols << "):\n";
@@ -104,7 +104,7 @@ int main() {
     print_matrix("Matrix C (before)", C, m, n, ldc);
     std::cout << "alpha = " << alpha << ", beta = " << beta << "\n\n";
 
-    Rgemm_NN_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+    Rgemm_NN_blocked_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 
     print_matrix("Matrix C (after)", C, m, n, ldc);
 
