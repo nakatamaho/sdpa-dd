@@ -32,6 +32,8 @@
 
 #include <mpblas_dd.h>
 
+void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
+
 void print_matrix(const char *name, const dd_real *M, mplapackint rows, mplapackint cols, mplapackint ld) {
     std::cout << name << " (" << rows << " x " << cols << "):\n";
     for (mplapackint j = 0; j < cols; j++) {
@@ -41,21 +43,6 @@ void print_matrix(const char *name, const dd_real *M, mplapackint rows, mplapack
         std::cout << "\n";
     }
     std::cout << "\n";
-}
-
-void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, const dd_real *A, mplapackint lda, const dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
-    for (mplapackint j = 0; j < n; j++) {
-        for (mplapackint i = 0; i < m; i++) {
-            C[i + j * ldc] *= beta;
-        }
-    }
-    for (mplapackint j = 0; j < n; j++) {
-        for (mplapackint p = 0; p < k; p++) {
-            for (mplapackint i = 0; i < m; i++) {
-                C[i + j * ldc] += alpha * A[i + p * lda] * B[p + j * ldb];
-            }
-        }
-    }
 }
 
 int main() {
