@@ -34,15 +34,21 @@
 
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
 
-void print_matrix(const char *name, const dd_real *M, mplapackint rows, mplapackint cols, mplapackint ld) {
-    std::cout << name << " (" << rows << " x " << cols << "):\n";
-    for (mplapackint j = 0; j < cols; j++) {
-        for (mplapackint i = 0; i < rows; i++) {
-            std::cout << std::setw(4) << M[i + j * ld].x[0] << " ";
+static void print_matrix(const char *name, const dd_real *M, mplapackint m, mplapackint n, mplapackint ldm) {
+    std::cout << name << " = [\n";
+    for (mplapackint i = 0; i < m; i++) {
+        std::cout << "      ";
+        for (mplapackint j = 0; j < n; j++) {
+            std::cout << std::setw(4) << M[i + j * ldm].x[0];
+            if (j < n - 1) {
+                std::cout << " ";
+            }
         }
-        std::cout << "\n";
+        if (i < m - 1) {
+            std::cout << ";\n";
+        }
     }
-    std::cout << "\n";
+    std::cout << "\n];\n";
 }
 
 int main() {
@@ -99,14 +105,14 @@ int main() {
     dd_real alpha = 1.0;
     dd_real beta = dis(gen);
 
-    print_matrix("Matrix A", A, m, k, lda);
-    print_matrix("Matrix B", B, k, n, ldb);
-    print_matrix("Matrix C (before)", C, m, n, ldc);
+    print_matrix("A", A, m, k, lda);
+    print_matrix("B", B, k, n, ldb);
+    print_matrix("C", C, m, n, ldc);
     std::cout << "alpha = " << alpha << ", beta = " << beta << "\n\n";
 
     Rgemm_NN_blocked_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 
-    print_matrix("Matrix C (after)", C, m, n, ldc);
+    print_matrix("Cnew", C, m, n, ldc);
 
     delete[] A;
     delete[] B;
