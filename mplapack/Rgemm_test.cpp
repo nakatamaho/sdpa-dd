@@ -64,8 +64,8 @@ int main() {
     mplapackint k = 20;
 
     mplapackint lda = m + 4;
-    mplapackint ldb = k + 4;
-    mplapackint ldc = m + 4;
+    mplapackint ldb = k + 8;
+    mplapackint ldc = m + 10;
 
     dd_real *A = new dd_real[lda * k];
     dd_real *B = new dd_real[ldb * n];
@@ -73,7 +73,7 @@ int main() {
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(-10, 10);
+    std::uniform_int_distribution<> dis(-9, 9);
 
     for (mplapackint j = 0; j < k; j++) {
         for (mplapackint i = 0; i < lda; i++) {
