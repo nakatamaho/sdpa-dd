@@ -95,7 +95,8 @@ int main() {
                 std::vector<dd_real> C(m * n);
                 std::vector<dd_real> C_ref(m * n);
 
-                dd_real alpha = dd_real(dist(mt)) + dd_real(dist(mt)) * 1.0e-16;
+                //                dd_real alpha = dd_real(dist(mt)) + dd_real(dist(mt)) * 1.0e-16;
+                dd_real alpha = 1.0;
                 dd_real beta = dd_real(dist(mt)) + dd_real(dist(mt)) * 1.0e-16;
 
                 generate_random_matrix(m, k, A.data());
