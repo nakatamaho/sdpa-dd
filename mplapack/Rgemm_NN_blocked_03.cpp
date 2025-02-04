@@ -129,12 +129,12 @@ void Rgemm_NN_blocked_omp(mplapackint M, mplapackint N, mplapackint K, dd_real a
     //#endif
     for (mplapackint j = 0; j < N; j += NC) {
         const mplapackint nc = std::min((mplapackint)NC, N - j);
-        for (mplapackint p = 0; p < K; p += KC) {
-            const mplapackint kc = std::min((mplapackint)KC, K - p);
-            pack_B_block(&B[p + j * ldb], ldb, B_block, kc, nc);
+        for (mplapackint k = 0; k < K; k += KC) {
+            const mplapackint kc = std::min((mplapackint)KC, K - k);
+            pack_B_block(&B[k + j * ldb], ldb, B_block, kc, nc);
             for (mplapackint i = 0; i < M; i += MC) {
                 const mplapackint mc = std::min((mplapackint)MC, M - i);
-                Rgemm_block_mc_nc_kc_kernel(mc, nc, kc, alpha, &A[i + p * lda], lda, B_block, kc, &C[i + j * ldc], ldc);
+                Rgemm_block_mc_nc_kc_kernel(mc, nc, kc, alpha, &A[i + k * lda], lda, B_block, kc, &C[i + j * ldc], ldc);
             }
         }
     }
