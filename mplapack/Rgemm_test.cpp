@@ -69,17 +69,17 @@ int main() {
 
     for (mplapackint j = 0; j < k; j++) {
         for (mplapackint i = 0; i < lda; i++) {
-            A[i + j * lda] = 0.0;
+            A[i + j * lda] = -1000.0;
         }
     }
     for (mplapackint j = 0; j < n; j++) {
         for (mplapackint i = 0; i < ldb; i++) {
-            B[i + j * ldb] = 0.0;
+            B[i + j * ldb] = -1000.0;
         }
     }
     for (mplapackint j = 0; j < n; j++) {
         for (mplapackint i = 0; i < ldc; i++) {
-            C[i + j * ldc] = 0.0;
+            C[i + j * ldc] = -1000.0;
         }
     }
 
