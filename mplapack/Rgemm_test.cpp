@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2025
- *	Nakata, Maho
- * 	All rights reserved.
+ *     Nakata, Maho
+ *     All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,17 +29,16 @@
 #include <iostream>
 #include <iomanip>
 #include <random>
-
 #include <mpblas_dd.h>
 
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
 
-static void print_matrix(const char *name, const dd_real *M, mplapackint m, mplapackint n, mplapackint ldm) {
+static void print_matrix_octave(const char *name, const dd_real *M, mplapackint m, mplapackint n, mplapackint ldm) {
     std::cout << name << " = [\n";
     for (mplapackint i = 0; i < m; i++) {
-        std::cout << "      ";
+        std::cout << "    ";
         for (mplapackint j = 0; j < n; j++) {
-            std::cout << std::setw(4) << M[i + j * ldm].x[0];
+            std::cout << std::setw(5) << M[i + j * ldm].x[0];
             if (j < n - 1) {
                 std::cout << " ";
             }
@@ -48,7 +47,7 @@ static void print_matrix(const char *name, const dd_real *M, mplapackint m, mpla
             std::cout << ";\n";
         }
     }
-    std::cout << "\n];\n";
+    std::cout << "\n];\n\n";
 }
 
 int main() {
@@ -105,14 +104,19 @@ int main() {
     dd_real alpha = dis(gen);
     dd_real beta = dis(gen);
 
-    print_matrix("A", A, m, k, lda);
-    print_matrix("B", B, k, n, ldb);
-    print_matrix("C", C, m, n, ldc);
-    std::cout << "alpha = " << alpha << ", beta = " << beta << "\n\n";
+    print_matrix_octave("A", A, m, k, lda);
+    print_matrix_octave("B", B, k, n, ldb);
+    print_matrix_octave("C", C, m, n, ldc);
+
+    std::cout << "alpha = " << alpha << ";\n";
+    std::cout << "beta  = " << beta << ";\n\n";
+
+    std::cout << "Cnew = alpha * A * B + beta * C;\n\n";
 
     Rgemm_NN_blocked_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
 
-    print_matrix("Cnew", C, m, n, ldc);
+    print_matrix_octave("Ccalc", C, m, n, ldc);
+    std::cout << "Ccalc-Cnew" << std::endl;
 
     delete[] A;
     delete[] B;

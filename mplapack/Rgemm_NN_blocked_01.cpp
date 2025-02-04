@@ -78,7 +78,7 @@ void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real a
         std::cerr << "Error: Matrix dimensions must be multiples of 4" << std::endl;
         exit(1);
     }
-//#pragma omp parallel for schedule(static)
+    //#pragma omp parallel for schedule(static)
     for (mplapackint j = 0; j < n; ++j) {
         if (beta == 0.0) {
             for (mplapackint i = 0; i < m; ++i) {
