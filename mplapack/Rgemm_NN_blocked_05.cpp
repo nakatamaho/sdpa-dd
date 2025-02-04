@@ -83,7 +83,6 @@ static inline void Rgemm_block_mc_nc_kc_kernel(mplapackint mc, mplapackint nc, m
             }
         }
     }
-    print_matrix_octave("Cb_new", Cb, mc, nc, ldcb);
 }
 
 void pack_A_block(dd_real *A, mplapackint lda, dd_real *A_block, mplapackint mc, mplapackint kc) {
