@@ -73,12 +73,12 @@ static void print_matrix_octave(const char *name, const dd_real *M, mplapackint 
     std::cout << "\n];\n\n";
 }
 
-static inline void Rgemm_block_m_n_k_kernel(mplapackint mc, mplapackint nc, mplapackint kc, const dd_real &alpha, dd_real *Ab, mplapackint ldab, dd_real *Bb, mplapackint ldbb, dd_real *Cb, mplapackint ldcb) {
+static inline void Rgemm_block_m_n_kernel(mplapackint mr, mplapackint nr, mplapackint kc, const dd_real &alpha, dd_real *Ab, mplapackint ldab, dd_real *Bb, mplapackint ldbb, dd_real *Cb, mplapackint ldcb) {
     dd_real temp;
-    for (mplapackint j = 0; j < nc; j++) {
+    for (mplapackint j = 0; j < nr; j++) {
         for (mplapackint l = 0; l < kc; l++) {
             temp = alpha * Bb[l + j * ldbb];
-            for (mplapackint i = 0; i < mc; i++) {
+            for (mplapackint i = 0; i < mr; i++) {
                 Cb[i + j * ldcb] += temp * Ab[i + l * ldab];
             }
         }
@@ -139,7 +139,7 @@ void Rgemm_NN_blocked_omp(mplapackint M, mplapackint N, mplapackint K, dd_real a
                     for (mplapackint ir = 0; ir < mc; ir += MR) {
                         const mplapackint mr = std::min((mplapackint)MR, mc - ir);
                         const mplapackint nr = std::min((mplapackint)NR, nc - jr);
-                        Rgemm_block_m_n_k_kernel(mr, nr, kc, alpha, &A_block[ir], mc, &B_block[jr * kc], kc, &C[(i + ir) + (j + jr) * ldc], ldc);
+                        Rgemm_block_m_n_kernel(mr, nr, kc, alpha, &A_block[ir], mc, &B_block[jr * kc], kc, &C[(i + ir) + (j + jr) * ldc], ldc);
                     }
                 }
             }
