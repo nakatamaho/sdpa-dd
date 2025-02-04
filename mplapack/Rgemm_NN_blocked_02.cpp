@@ -81,6 +81,7 @@ static inline void Rgemm_block_mc_nc_kc_kernel(mplapackint mc, mplapackint nc, m
             }
         }
     }
+    print_matrix_octave("Cb_new", Cb, mc, nc, ldcb);
 }
 
 void Rgemm_NN_blocked_omp(mplapackint M, mplapackint N, mplapackint K, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc) {
@@ -115,7 +116,10 @@ void Rgemm_NN_blocked_omp(mplapackint M, mplapackint N, mplapackint K, dd_real a
             const mplapackint kc = std::min((mplapackint)KC, K - p);
             for (mplapackint i = 0; i < M; i += MC) {
                 const mplapackint mc = std::min((mplapackint)MC, M - i);
-                Rgemm_block_mc_nc_kc_kernel(mc, nc, kc, alpha, &A[i + p * mc], lda, &B[p + j * nc], ldb, &C[i + j * ldc], ldc);
+                std::cout << "i " << i << std::endl;
+                std::cout << "j " << j << std::endl;
+                std::cout << "p " << p << std::endl;
+                Rgemm_block_mc_nc_kc_kernel(mc, nc, kc, alpha, &A[i + p * lda], lda, &B[p + j * ldb], ldb, &C[i + j * ldc], ldc);
             }
         }
     }
