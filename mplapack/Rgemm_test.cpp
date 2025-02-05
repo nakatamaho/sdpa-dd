@@ -52,9 +52,9 @@ static void print_matrix_octave(const char *name, const dd_real *M, mplapackint 
 }
 
 int main() {
-    mplapackint m = 16;
-    mplapackint n = 24;
-    mplapackint k = 20;
+    mplapackint m = 17;
+    mplapackint n = 21;
+    mplapackint k = 23;
 
     mplapackint lda = m + 4;
     mplapackint ldb = k + 8;
