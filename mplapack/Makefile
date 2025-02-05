@@ -27,7 +27,7 @@ DD_AVX2_TEST_OBJ = dd_avx2_test.o
 DD_AVX2_TEST_BIN = dd_avx2_test
 DD_AVX2_TEST_ASM = dd_avx2_test.s
 
-RGEMM_KERNEL_SRC = Rgemm_NN_blocked_07.cpp
+RGEMM_KERNEL_SRC = Rgemm_NN_blocked_08.cpp
 RGEMM_KERNEL_OBJ = $(RGEMM_KERNEL_SRC:.cpp=.o)
 
 RGEMM_REF_SRC = Rgemm_NN_omp.cpp
