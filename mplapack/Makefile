@@ -30,6 +30,9 @@ DD_AVX2_TEST_ASM = dd_avx2_test.s
 RGEMM_KERNEL_SRC = Rgemm_NN_blocked_06.cpp
 RGEMM_KERNEL_OBJ = $(RGEMM_KERNEL_SRC:.cpp=.o)
 
+RGEMM_REF_SRC = Rgemm_NN_omp.cpp
+RGEMM_REF_OBJ = $(RGEMM_REF_SRC:.cpp=.o)
+
 Rgemm_test_SRC = Rgemm_test.cpp
 Rgemm_test_OBJ = $(Rgemm_test_SRC:.cpp=.o)
 Rgemm_test_BIN = Rgemm_test
@@ -61,7 +64,7 @@ $(DD_AVX2_TEST_BIN): $(DD_AVX2_TEST_OBJ)
 $(Rgemm_test_OBJ): $(Rgemm_test_SRC)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(Rgemm_test_BIN): $(Rgemm_test_OBJ) $(RGEMM_KERNEL_OBJ)
+$(Rgemm_test_BIN): $(Rgemm_test_OBJ) $(RGEMM_KERNEL_OBJ) $(RGEMM_REF_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(ASM_ORIG): $(RGEMM_KERNEL_SRC)

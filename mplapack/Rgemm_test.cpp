@@ -32,6 +32,7 @@
 #include <mpblas_dd.h>
 
 void Rgemm_NN_blocked_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
+void Rgemm_NN_omp(mplapackint m, mplapackint n, mplapackint k, dd_real alpha, dd_real *A, mplapackint lda, dd_real *B, mplapackint ldb, dd_real beta, dd_real *C, mplapackint ldc);
 
 static void print_matrix_octave(const char *name, const dd_real *M, mplapackint m, mplapackint n, mplapackint ldm) {
     std::cout << name << " = [\n";
@@ -62,6 +63,7 @@ int main() {
     dd_real *A = new dd_real[lda * k];
     dd_real *B = new dd_real[ldb * n];
     dd_real *C = new dd_real[ldc * n];
+    dd_real *Cref = new dd_real[ldc * n];
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -80,6 +82,7 @@ int main() {
     for (mplapackint j = 0; j < n; j++) {
         for (mplapackint i = 0; i < ldc; i++) {
             C[i + j * ldc] = -1000.0;
+            Cref[i + j * ldc] = -1000.0;
         }
     }
 
@@ -98,6 +101,7 @@ int main() {
     for (mplapackint j = 0; j < n; j++) {
         for (mplapackint i = 0; i < m; i++) {
             C[i + j * ldc] = dis(gen);
+            Cref[i + j * ldc] = C[i + j * ldc];
         }
     }
 
@@ -114,12 +118,22 @@ int main() {
     std::cout << "Cnew = alpha * A * B + beta * C;\n\n";
 
     Rgemm_NN_blocked_omp(m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
-
     print_matrix_octave("Ccalc", C, m, n, ldc);
     std::cout << "Ccalc-Cnew" << std::endl;
+
+    Rgemm_NN_omp(m, n, k, alpha, A, lda, B, ldb, beta, Cref, ldc);
+
+    dd_real diff = 0.0;
+    for (mplapackint j = 0; j < n; j++) {
+        for (mplapackint i = 0; i < m; i++) {
+            diff += abs(C[i + j * ldc].x[0] - Cref[i + j * ldc].x[0]);
+        }
+    }
+    std::cout << "diff: " << diff << std::endl;
 
     delete[] A;
     delete[] B;
     delete[] C;
+    delete[] Cref;
     return 0;
 }
