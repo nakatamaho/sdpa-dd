@@ -14,7 +14,7 @@
  # CFLAGS = -Wall -pg
  # CFLAGS = $(OPTLEVEL) -D_POSIX_C_SOURCE=199506L
 -  CFLAGS = $(OPTLEVEL)
-+  CFLAGS += -O2 -funroll-all-loops $(pthead_cflags)
++  CFLAGS += -O2 -funroll-all-loops -Wno-int-conversion -Wno-implicit-function-declaration -Wno-implicit-int $(pthead_cflags)
  # CFLAGS = -Wall $(OPTLEVEL)
  #
  #----------------------------------------
