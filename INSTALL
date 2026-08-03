@@ -9,6 +9,28 @@ are permitted in any medium without royalty provided the copyright
 notice and this notice are preserved.  This file is offered as-is,
 without warranty of any kind.
 
+Known issues on macOS / Apple Silicon
+======================================
+
+   Building on macOS (verified on an Apple Silicon Mac running macOS 26
+with the Xcode command-line tools) fails out of the box because of one
+problem in the vendored SPOOLES sources; it does not affect the Ubuntu
+20.04 build described in 'README.md'.
+
+   The vendored SPOOLES 2.2 sources (1999-era C, patched under
+'external/spooles/patches') pass 'NULL' where an 'int' parameter is
+expected (e.g. 'IVinit(nfront, NULL)') and call some functions without
+a prototype in scope.  Older compilers only warned about this; recent
+clang treats both as hard errors by default, so the build fails with
+"incompatible pointer to integer conversion" in 'ETree/src/transform.c'.
+'external/spooles/patches/patch-Make.inc' now adds
+'-Wno-int-conversion -Wno-implicit-function-declaration
+-Wno-implicit-int' to SPOOLES's 'CFLAGS' to restore the old, warn-only
+behavior rather than patching the many call sites individually.  (See
+the sibling 'sdpa-gmp' repository for the same fix plus two other
+GMP-related macOS issues that do not apply here since sdpa-dd does not
+use GMP.)
+
 Basic Installation
 ==================
 
